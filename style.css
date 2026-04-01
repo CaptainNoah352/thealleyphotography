@@ -152,8 +152,8 @@ p {
 .site-nav {
   display: inline-flex;
   align-items: center;
-  padding-left: var(--nav-gap);
-  margin-right: auto;
+  padding-left: 0;
+  margin-left: auto;
 }
 
 .site-nav a + a {
@@ -195,7 +195,7 @@ p {
   align-items: center;
   gap: 1rem;
   flex: 0 1 auto;
-  margin-left: 1rem;
+  margin-left: var(--nav-gap);
 }
 
 .social-icon {
