@@ -152,6 +152,10 @@ p {
 }
 
 .hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
   padding: 3.4rem 0 2.8rem;
 }
 
