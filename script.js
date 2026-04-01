@@ -128,6 +128,8 @@ const galleryImages = [];
 const pageType = document.body.dataset.page || "home";
 let seededFallbackImages = [...galleryImages];
 let orderedGalleryImages = [...galleryImages];
+const initialHash = window.location.hash;
+let hasAlignedInitialHash = false;
 
 
 let availableLightboxItems = [];
@@ -190,6 +192,18 @@ function initializeScrollReveal() {
       node.classList.add("is-revealed");
     }
   });
+}
+
+function alignInitialHashTarget() {
+  if (hasAlignedInitialHash) return;
+  if (!initialHash) return;
+  if (pageType !== "home") return;
+
+  const target = document.querySelector(initialHash);
+  if (!target) return;
+
+  target.scrollIntoView({ block: "start", behavior: "auto" });
+  hasAlignedInitialHash = true;
 }
 
 function refreshLightboxItems() {
@@ -512,4 +526,9 @@ if (portfolioFilters) {
 
   renderForActiveFilter();
   initializeScrollReveal();
+  requestAnimationFrame(alignInitialHashTarget);
 })();
+
+window.addEventListener("load", () => {
+  alignInitialHashTarget();
+});
