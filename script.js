@@ -355,6 +355,15 @@ document.addEventListener("keydown", (event) => {
   revealLightboxUi();
 });
 
+function shuffleArray(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 let activeFilter = "all";
 
 function filterGallery(tag) {
@@ -362,7 +371,7 @@ function filterGallery(tag) {
   const filtered = tag === "all"
     ? galleryImages
     : galleryImages.filter((img) => img.tags && img.tags.includes(tag));
-  renderGallery(filtered);
+  renderGallery(shuffleArray(filtered));
 }
 
 const filterBar = document.getElementById("filterBar");
@@ -381,4 +390,4 @@ if (filterBar) {
   });
 }
 
-renderGallery(galleryImages);
+renderGallery(shuffleArray(galleryImages));
