@@ -222,6 +222,15 @@ p {
   cursor: pointer;
   z-index: 200;
   flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.burger:focus,
+.burger:focus-visible,
+.header-burger-btn:focus,
+.header-burger-btn:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 
 .burger-box {
