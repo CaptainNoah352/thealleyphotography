@@ -231,7 +231,6 @@ p {
 }
 
 .gallery-item:hover {
-  transform: translateY(-4px);
   box-shadow: 0 16px 28px rgba(77, 62, 48, 0.14);
 }
 
@@ -711,13 +710,18 @@ p {
 }
 
 @media (max-width: 1024px) {
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
   .gallery {
     column-count: 2;
-    column-gap: 18px;
+    column-gap: 14px;
   }
 
   .gallery-item {
-    margin-bottom: 18px;
+    margin-bottom: 14px;
   }
 
   .contact-grid {
@@ -743,6 +747,11 @@ p {
 }
 
 @media (max-width: 600px) {
+  .container {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
   .site-nav {
     gap: 1rem;
   }
@@ -753,11 +762,11 @@ p {
 
   .gallery {
     column-count: 2;
-    column-gap: 10px;
+    column-gap: 6px;
   }
 
   .gallery-item {
-    margin-bottom: 10px;
+    margin-bottom: 6px;
   }
 
   .lightbox {
