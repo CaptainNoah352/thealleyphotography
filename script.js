@@ -218,6 +218,27 @@ let touchStartX = 0;
 let touchStartY = 0;
 
 const CONTROL_HIDE_DELAY_MS = 1500;
+const imageObserver = "IntersectionObserver" in window
+  ? new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const imageNode = entry.target;
+          if (!imageNode.dataset.src) {
+            observer.unobserve(imageNode);
+            return;
+          }
+          imageNode.src = imageNode.dataset.src;
+          imageNode.removeAttribute("data-src");
+          observer.unobserve(imageNode);
+        });
+      },
+      {
+        rootMargin: "220px 0px",
+        threshold: 0.01,
+      }
+    )
+  : null;
 
 function refreshLightboxItems() {
   if (!gallery) return;
@@ -329,13 +350,14 @@ function renderGallery(images) {
     article.className = "gallery-item";
 
     const img = document.createElement("img");
-    img.src = image.src;
+    img.dataset.src = image.src;
     img.alt = image.alt;
     img.loading = "lazy";
     img.decoding = "async";
     img.dataset.index = String(index);
 
     img.addEventListener("load", () => {
+      img.classList.add("is-visible");
       refreshLightboxItems();
     });
 
@@ -347,11 +369,18 @@ function renderGallery(images) {
 
     article.addEventListener("click", () => {
       if (img.dataset.broken === "true") return;
+      if (!img.currentSrc) return;
       openLightboxByImageNode(img);
     });
 
     article.appendChild(img);
     gallery.appendChild(article);
+
+    if (imageObserver) {
+      imageObserver.observe(img);
+    } else {
+      img.src = image.src;
+    }
   });
 }
 

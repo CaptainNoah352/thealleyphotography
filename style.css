@@ -412,6 +412,14 @@ p {
   width: 100%;
   height: auto;
   display: block;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.gallery-item img.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .gallery-item.is-broken {
@@ -871,8 +879,7 @@ p {
 
 @media (max-width: 768px) {
   .header-burger-btn {
-    order: -1;
-    margin-right: 0.6rem;
+    margin-left: auto;
   }
 
   .site-nav {
