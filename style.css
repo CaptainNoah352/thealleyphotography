@@ -231,7 +231,6 @@ p {
 }
 
 .gallery-item:hover {
-  transform: translateY(-4px);
   box-shadow: 0 16px 28px rgba(77, 62, 48, 0.14);
 }
 
@@ -753,11 +752,11 @@ p {
 
   .gallery {
     column-count: 2;
-    column-gap: 10px;
+    column-gap: 4px;
   }
 
   .gallery-item {
-    margin-bottom: 10px;
+    margin-bottom: 4px;
   }
 
   .lightbox {
