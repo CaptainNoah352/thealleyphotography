@@ -355,23 +355,47 @@ document.addEventListener("keydown", (event) => {
   revealLightboxUi();
 });
 
-function shuffleArray(array) {
+const GALLERY_VERSION = "v1";
+
+function createSeededRandom(seedText) {
+  let hash = 2166136261;
+  for (let i = 0; i < seedText.length; i += 1) {
+    hash ^= seedText.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+
+  return function seededRandom() {
+    hash += 0x6d2b79f5;
+    let t = hash;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function seededShuffle(array, seedText) {
   const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+  const random = createSeededRandom(seedText);
+
+  for (let i = shuffled.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
+
   return shuffled;
 }
+
+// Change GALLERY_VERSION when releasing a new build to reshuffle photo order.
+const orderedGalleryImages = seededShuffle(galleryImages, GALLERY_VERSION);
 
 let activeFilter = "all";
 
 function filterGallery(tag) {
   activeFilter = tag;
   const filtered = tag === "all"
-    ? galleryImages
-    : galleryImages.filter((img) => img.tags && img.tags.includes(tag));
-  renderGallery(shuffleArray(filtered));
+    ? orderedGalleryImages
+    : orderedGalleryImages.filter((img) => img.tags && img.tags.includes(tag));
+  renderGallery(filtered);
 }
 
 const filterDropdown = document.getElementById("filterDropdown");
@@ -381,4 +405,4 @@ if (filterDropdown) {
   });
 }
 
-renderGallery(shuffleArray(galleryImages));
+renderGallery(orderedGalleryImages);

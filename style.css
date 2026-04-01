@@ -22,7 +22,7 @@ html {
 
 body {
   margin: 0;
-  font-family: "Poppins", "Source Sans 3", Arial, sans-serif;
+  font-family: "Poppins", Arial, sans-serif;
   font-size: 16px;
   font-weight: 400;
   color: var(--text);
@@ -63,7 +63,7 @@ h2,
 h3 {
   margin-top: 0;
   line-height: 1.2;
-  font-family: "Libre Baskerville", Georgia, serif;
+  font-family: "Poppins", Arial, sans-serif;
 }
 
 h1 {
@@ -110,7 +110,7 @@ p {
 .logo {
   display: inline-block;
   color: var(--earth);
-  font-family: "Libre Baskerville", Georgia, serif;
+  font-family: "Poppins", Arial, sans-serif;
   text-decoration: none;
   font-size: clamp(2.8rem, 5vw, 4.2rem);
   font-weight: 700;
@@ -314,7 +314,7 @@ p {
   padding: 2rem 2.5rem;
   border-left: 3px solid var(--terracotta);
   background: linear-gradient(135deg, rgba(180, 112, 77, 0.06), transparent);
-  font-family: "Libre Baskerville", Georgia, serif;
+  font-family: "Poppins", Arial, sans-serif;
   font-size: clamp(1.2rem, 1.8vw, 1.45rem);
   font-style: italic;
   line-height: 1.7;
@@ -347,7 +347,7 @@ p {
 }
 
 .about-detail-card h4 {
-  font-family: "Libre Baskerville", Georgia, serif;
+  font-family: "Poppins", Arial, sans-serif;
   font-size: 0.95rem;
   margin: 0 0 0.4rem;
   color: var(--text);
@@ -469,7 +469,7 @@ p {
 
 .contact-info-item strong {
   display: block;
-  font-family: "Libre Baskerville", Georgia, serif;
+  font-family: "Poppins", Arial, sans-serif;
   font-size: 0.82rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
