@@ -114,12 +114,14 @@ p {
 /* ── Header ── */
 
 .site-header {
-  position: absolute;
+  position: sticky;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 100;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.96);
+  border-bottom: 1px solid rgba(138, 100, 66, 0.14);
+  backdrop-filter: blur(8px);
 }
 
 .header-shell {
