@@ -38,20 +38,18 @@ img {
   width: 100%;
   max-width: none;
   margin: 0;
-  padding-left: 0;
-  padding-right: 0;
+  padding-left: clamp(1.2rem, 3vw, 2.5rem);
+  padding-right: clamp(1.2rem, 3vw, 2.5rem);
 }
 
 .layout-container {
   max-width: none;
   margin: 0;
-  padding: 0;
 }
 
 .text-container {
   max-width: none;
   margin: 0;
-  padding: 0;
 }
 
 .section-padding {
@@ -184,8 +182,7 @@ p {
 }
 
 .gallery {
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
+  width: 100%;
   column-count: 3;
   column-gap: 12px;
 }
