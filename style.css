@@ -58,6 +58,10 @@ img {
   padding: 5rem 0;
 }
 
+#portfolio.section-padding {
+  padding-top: 2rem;
+}
+
 h1,
 h2,
 h3 {
@@ -111,6 +115,8 @@ p {
   z-index: 100;
   background: var(--bg);
   border-bottom: none;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
   padding-left: clamp(1.5rem, 3vw, 3rem);
   padding-right: clamp(1.5rem, 3vw, 3rem);
 }
@@ -120,7 +126,7 @@ p {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.65rem 0;
+  padding: 0.25rem 0;
 }
 
 .logo {
@@ -306,65 +312,6 @@ p {
 .section-heading {
   margin-bottom: 2rem;
   max-width: none;
-}
-
-.portfolio-header {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin-bottom: 1.4rem;
-}
-
-.filter-dropdown {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  border: 0;
-  background: transparent;
-  color: transparent;
-  font-size: 0;
-  cursor: pointer;
-  z-index: 2;
-}
-
-.filter-button-wrap {
-  position: relative;
-  display: inline-flex;
-}
-
-.filter-control {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 999px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: rgb(0, 0, 0);
-  background: rgba(0, 0, 0, 0.02);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  transition: background-color 0.2s ease, transform 0.16s ease;
-  pointer-events: none;
-}
-
-.filter-control svg {
-  display: block;
-}
-
-.filter-button-wrap:hover .filter-control {
-  background: rgba(0, 0, 0, 0.05);
-}
-
-.filter-button-wrap:active .filter-control {
-  transform: translateY(0.5px);
-}
-
-.filter-dropdown:focus-visible {
-  outline: none;
-}
-
-.filter-dropdown:focus-visible + .filter-control {
-  background: rgba(0, 0, 0, 0.06);
-  border-color: rgba(0, 0, 0, 0.22);
 }
 
 .gallery {
@@ -917,17 +864,12 @@ p {
 
 @media (max-width: 600px) {
   .container {
-    padding-left: 6px;
-    padding-right: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
   }
 
   .section-padding {
     padding: 4rem 0;
-  }
-
-  .portfolio-header {
-    margin-bottom: 0.8rem;
-    padding-right: 0.15rem;
   }
 
   .site-header {
@@ -945,11 +887,11 @@ p {
 
   .gallery {
     column-count: 2;
-    column-gap: 6px;
+    column-gap: 8px;
   }
 
   .gallery-item {
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
 
   .lightbox {

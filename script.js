@@ -464,21 +464,4 @@ function seededShuffle(array, seedText) {
 // Change GALLERY_VERSION when releasing a new build to reshuffle photo order.
 const orderedGalleryImages = seededShuffle(galleryImages, GALLERY_VERSION);
 
-let activeFilter = "all";
-
-function filterGallery(tag) {
-  activeFilter = tag;
-  const filtered = tag === "all"
-    ? orderedGalleryImages
-    : orderedGalleryImages.filter((img) => img.tags && img.tags.includes(tag));
-  renderGallery(filtered);
-}
-
-const filterDropdown = document.getElementById("filterDropdown");
-if (filterDropdown) {
-  filterDropdown.addEventListener("change", (event) => {
-    filterGallery(event.target.value);
-  });
-}
-
 renderGallery(orderedGalleryImages);
