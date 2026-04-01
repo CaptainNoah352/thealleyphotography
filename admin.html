@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin | Brandon Alley Photography</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body data-page="admin">
+    <main class="admin-page">
+      <div class="admin-shell">
+        <header class="admin-header">
+          <div>
+            <p class="eyebrow">Dashboard</p>
+            <h1>Photo Admin Panel</h1>
+            <p>Manage portfolio photos without editing code.</p>
+          </div>
+          <button id="logoutBtn" class="admin-btn admin-btn-secondary" type="button" hidden>Logout</button>
+        </header>
+
+        <section id="adminMessage" class="admin-message" aria-live="polite"></section>
+
+        <section id="loginSection" class="admin-card">
+          <h2>Admin Sign In</h2>
+          <form id="loginForm" class="admin-form">
+            <label>Email
+              <input id="loginEmail" type="email" required autocomplete="email" />
+            </label>
+            <label>Password
+              <input id="loginPassword" type="password" required autocomplete="current-password" />
+            </label>
+            <button class="admin-btn" type="submit">Sign In</button>
+          </form>
+        </section>
+
+        <section id="dashboardSection" hidden>
+          <div class="admin-card">
+            <h2 id="photoFormTitle">Add Photo</h2>
+            <form id="photoForm" class="admin-form admin-grid-form">
+              <input type="hidden" id="photoId" />
+              <label>Image URL
+                <input id="imageUrl" type="url" required placeholder="https://..." />
+              </label>
+              <label>Title
+                <input id="title" type="text" placeholder="Photo title" />
+              </label>
+              <label>Description
+                <textarea id="description" rows="3" placeholder="Optional description"></textarea>
+              </label>
+              <label>Category
+                <select id="category" required>
+                  <option value="wildlife">Wildlife</option>
+                  <option value="landscape">Landscape</option>
+                  <option value="portrait">Portrait</option>
+                  <option value="street">Street</option>
+                </select>
+              </label>
+              <label>Sort order
+                <input id="sortOrder" type="number" value="0" />
+              </label>
+              <label class="check-row"><input id="showOnHome" type="checkbox" /> Show on homepage</label>
+              <label class="check-row"><input id="isPublished" type="checkbox" checked /> Published</label>
+              <div>
+                <p class="preview-title">Live preview</p>
+                <img id="imagePreview" class="admin-preview" alt="Image preview" />
+              </div>
+              <div class="admin-form-actions">
+                <button class="admin-btn" type="submit">Save Photo</button>
+                <button id="cancelEditBtn" class="admin-btn admin-btn-secondary" type="button" hidden>Cancel Edit</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="admin-card">
+            <div class="admin-toolbar">
+              <h2>Manage Photos</h2>
+              <input id="searchInput" type="search" placeholder="Search title" />
+              <select id="adminCategoryFilter">
+                <option value="all">All categories</option>
+                <option value="wildlife">Wildlife</option>
+                <option value="landscape">Landscape</option>
+                <option value="portrait">Portrait</option>
+                <option value="street">Street</option>
+              </select>
+            </div>
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Photo</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Home</th>
+                    <th>Published</th>
+                    <th>Order</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="photoTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="supabase.js"></script>
+    <script src="admin.js"></script>
+  </body>
+</html>

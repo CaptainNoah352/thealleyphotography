@@ -1,0 +1,150 @@
+.admin-page {
+  min-height: 100vh;
+  background: var(--bg-soft);
+  color: var(--text);
+}
+
+.admin-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.2rem 3rem;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.admin-card {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow-soft);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.admin-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.admin-grid-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.9rem;
+}
+
+.admin-form input,
+.admin-form textarea,
+.admin-form select,
+.admin-toolbar input,
+.admin-toolbar select {
+  font: inherit;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--section-border);
+  background: var(--bg);
+  color: var(--text);
+}
+
+.check-row {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.5rem !important;
+}
+
+.admin-btn {
+  border: none;
+  padding: 0.6rem 0.85rem;
+  background: var(--earth);
+  color: var(--button-text-on-fill);
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.admin-btn:hover {
+  opacity: 0.9;
+}
+
+.admin-btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--section-border);
+}
+
+.admin-preview {
+  width: 100%;
+  max-width: 220px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border: 1px solid var(--section-border);
+  background: var(--bg-soft);
+}
+
+.preview-title {
+  margin: 0 0 0.4rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.admin-form-actions {
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.admin-toolbar h2 {
+  margin: 0;
+  margin-right: auto;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+
+.admin-table th,
+.admin-table td {
+  text-align: left;
+  padding: 0.6rem;
+  border-bottom: 1px solid var(--section-border);
+  vertical-align: middle;
+}
+
+.admin-thumb {
+  width: 60px;
+  height: 45px;
+  object-fit: cover;
+  border: 1px solid var(--section-border);
+}
+
+.admin-message {
+  min-height: 1.25rem;
+  margin-bottom: 0.8rem;
+  font-size: 0.9rem;
+}
+
+.admin-message.error {
+  color: #b42318;
+}
+
+.admin-message.success {
+  color: #2f6f44;
+}
