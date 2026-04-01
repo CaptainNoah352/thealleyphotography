@@ -111,9 +111,9 @@ p {
 .logo {
   display: inline-block;
   color: var(--earth);
-  font-family: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+  font-family: "Playfair Display", "Cormorant Garamond", Georgia, serif;
   text-decoration: none;
-  font-size: 1.8rem;
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
   font-weight: 700;
   letter-spacing: 0.01em;
 }
@@ -157,6 +157,7 @@ p {
 
 .hero-content {
   max-width: none;
+  text-align: center;
 }
 
 .button {
@@ -298,10 +299,10 @@ p {
 
 .footer-inner {
   display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
+  text-align: center;
+  gap: 0.4rem;
 }
 
 .site-footer a {
@@ -512,27 +513,8 @@ p {
 }
 
 @media (max-width: 600px) {
-  .menu-toggle {
-    display: inline-flex;
-    margin-left: auto;
-  }
-
   .site-nav {
-    position: absolute;
-    top: 68px;
-    right: 4%;
-    background: var(--surface);
-    border: 1px solid rgba(166, 124, 82, 0.2);
-    box-shadow: var(--shadow);
-    border-radius: 10px;
-    padding: 0.8rem;
-    min-width: 180px;
-    display: none;
-    flex-direction: column;
-  }
-
-  .site-nav.open {
-    display: flex;
+    gap: 1rem;
   }
 
   .section-padding {
