@@ -16,8 +16,48 @@
   <body>
     <header class="site-header" id="top">
       <div class="container header-inner layout-container">
-        
         <a href="#top" class="logo">Brandon Alley Photography</a>
+
+        <nav class="site-nav" id="siteNav" aria-label="Main navigation">
+          <a href="#portfolio">Portfolio</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+          <div class="nav-social">
+            <a href="https://instagram.com/the.alley.photography" target="_blank" rel="noreferrer" aria-label="Instagram">
+              <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="https://www.flickr.com/photos/204244048@N05/" target="_blank" rel="noreferrer" aria-label="Flickr">
+              <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor"><circle cx="7" cy="12" r="4.5"/><circle cx="17" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+            </a>
+          </div>
+        </nav>
+
+        <button class="header-burger-btn burger" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
+          <span class="visually-hidden js-header-burger-open-title">Open menu</span>
+          <span class="visually-hidden js-header-burger-close-title">Close menu</span>
+          <div class="burger-box">
+            <div class="burger-inner">
+              <div class="top-bun"></div>
+              <div class="patty"></div>
+            </div>
+          </div>
+        </button>
+      </div>
+
+      <div class="mobile-menu-overlay" id="mobileMenu" aria-hidden="true">
+        <nav class="mobile-menu-nav" aria-label="Mobile navigation">
+          <a href="#portfolio">Portfolio</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+          <div class="mobile-menu-social">
+            <a href="https://instagram.com/the.alley.photography" target="_blank" rel="noreferrer" aria-label="Instagram">
+              <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="https://www.flickr.com/photos/204244048@N05/" target="_blank" rel="noreferrer" aria-label="Flickr">
+              <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor"><circle cx="7" cy="12" r="4.5"/><circle cx="17" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+            </a>
+          </div>
+        </nav>
       </div>
     </header>
  
