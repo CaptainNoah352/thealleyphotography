@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Browse Brandon Alley Photography by category including wildlife, landscape, portraits, and street photography."
+    />
+    <title>Portfolio | Brandon Alley Photography</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header" id="top">
+      <div class="header-shell">
+        <div class="header-inner">
+          <a href="index.html#top" class="logo">Brandon Alley Photography</a>
+
+          <nav class="site-nav" id="siteNav" aria-label="Main navigation">
+            <a href="index.html">Home</a>
+            <a href="index.html#portfolio">Main Portfolio</a>
+            <a href="portfolio.html">Portfolio Page</a>
+            <a href="index.html#about">About</a>
+            <a href="index.html#contact">Contact</a>
+          </nav>
+
+          <div class="nav-social" aria-label="Social links">
+            <a href="https://instagram.com/the.alley.photography" target="_blank" rel="noreferrer" aria-label="Instagram">
+              <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="https://www.flickr.com/photos/204244048@N05/" target="_blank" rel="noreferrer" aria-label="Flickr">
+              <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor"><circle cx="7" cy="12" r="4.5"/><circle cx="17" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+            </a>
+          </div>
+
+          <button class="header-burger-btn burger" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
+            <span class="visually-hidden js-header-burger-open-title">Open menu</span>
+            <span class="visually-hidden js-header-burger-close-title">Close menu</span>
+            <div class="burger-box">
+              <div class="burger-inner">
+                <div class="top-bun"></div>
+                <div class="patty"></div>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="mobile-menu-overlay" id="mobileMenu" aria-hidden="true">
+      <button class="mobile-menu-close" id="mobileMenuClose" type="button" aria-label="Close menu">
+        <span aria-hidden="true">✕</span>
+      </button>
+      <nav class="mobile-menu-nav" aria-label="Mobile navigation">
+        <a href="index.html">Home</a>
+        <a href="index.html#portfolio">Main Portfolio</a>
+        <a href="portfolio.html">Portfolio Page</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+
+    <main>
+      <section class="section-padding" aria-label="Filtered portfolio">
+        <div class="container">
+          <div class="portfolio-page-header">
+            <p class="eyebrow">Portfolio</p>
+            <h1>Explore by Category</h1>
+            <p>Select a category to filter the gallery.</p>
+          </div>
+          <div class="portfolio-filters" id="portfolioFilters">
+            <button class="portfolio-filter-btn active" type="button" data-filter="all">All</button>
+            <button class="portfolio-filter-btn" type="button" data-filter="wildlife">Wildlife</button>
+            <button class="portfolio-filter-btn" type="button" data-filter="landscape">Landscape</button>
+            <button class="portfolio-filter-btn" type="button" data-filter="portrait">Portrait</button>
+            <button class="portfolio-filter-btn" type="button" data-filter="street">Street</button>
+          </div>
+          <div class="gallery" id="gallery" aria-live="polite"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner layout-container">
+        <p>© <span id="year"></span> Brandon | Brandon Alley Photography</p>
+      </div>
+    </footer>
+
+    <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Gallery lightbox">
+      <button class="lightbox-control lightbox-close" id="lightboxClose" type="button" aria-label="Close fullscreen image">
+        <span aria-hidden="true">✕</span>
+      </button>
+      <button class="lightbox-tap-zone lightbox-tap-zone-prev" id="lightboxPrevZone" type="button" aria-label="Previous image"></button>
+      <button class="lightbox-tap-zone lightbox-tap-zone-next" id="lightboxNextZone" type="button" aria-label="Next image"></button>
+      <figure class="lightbox-figure" id="lightboxFigure">
+        <img id="lightboxImage" src="" alt="" />
+        <figcaption class="lightbox-meta">
+          <p id="lightboxCaption"></p>
+          <p class="lightbox-counter" id="lightboxCounter" aria-live="polite"></p>
+        </figcaption>
+      </figure>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

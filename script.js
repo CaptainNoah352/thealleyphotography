@@ -107,7 +107,8 @@ function updateActiveNavLink() {
   });
 
   navLinks.forEach((link) => {
-    link.classList.toggle("active", link.getAttribute("href") === "#" + currentId);
+    const href = link.getAttribute("href");
+    link.classList.toggle("active", href === "#" + currentId || (href && href.endsWith("#" + currentId)));
   });
 }
 
@@ -258,20 +259,7 @@ function revealGalleryRow(rowAnchor) {
   });
 }
 
-const galleryRowObserver = "IntersectionObserver" in window
-  ? new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          revealGalleryRow(entry.target);
-        });
-      },
-      {
-        rootMargin: "0px 0px -10% 0px",
-        threshold: 0.2,
-      }
-    )
-  : null;
+const galleryRowObserver = null;
 
 function initializeScrollReveal() {
   const revealTargets = document.querySelectorAll(".scroll-reveal");
@@ -421,12 +409,8 @@ function renderGallery(images) {
     article.appendChild(img);
     gallery.appendChild(article);
 
-    if (galleryRowObserver) {
-      galleryRowObserver.observe(article);
-    } else {
-      article.classList.add("is-revealed");
-      loadGalleryImage(img);
-    }
+    article.classList.add("is-revealed");
+    loadGalleryImage(img);
   });
 }
 
@@ -551,6 +535,24 @@ function seededShuffle(array, seedText) {
 
 // Change GALLERY_VERSION when releasing a new build to reshuffle photo order.
 const orderedGalleryImages = seededShuffle(galleryImages, GALLERY_VERSION);
+
+const portfolioFilters = document.getElementById("portfolioFilters");
+
+if (portfolioFilters) {
+  portfolioFilters.querySelectorAll(".portfolio-filter-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      const tag = button.dataset.filter || "all";
+      portfolioFilters.querySelectorAll(".portfolio-filter-btn").forEach((node) => {
+        node.classList.toggle("active", node === button);
+      });
+
+      const filteredImages = tag === "all"
+        ? orderedGalleryImages
+        : orderedGalleryImages.filter((image) => image.tags.includes(tag));
+      renderGallery(filteredImages);
+    });
+  });
+}
 
 renderGallery(orderedGalleryImages);
 initializeScrollReveal();

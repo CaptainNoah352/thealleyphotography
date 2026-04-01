@@ -447,14 +447,14 @@ p {
 }
 
 .gallery-item {
-  opacity: 0;
-  transform: translate3d(0, 20px, 0);
-  transition: opacity 0.7s ease, transform 0.7s ease, box-shadow 0.25s ease;
+  opacity: 1;
+  transform: none;
+  transition: box-shadow 0.25s ease;
 }
 
 .gallery-item.is-revealed {
   opacity: 1;
-  transform: translate3d(0, 0, 0);
+  transform: none;
 }
 
 .gallery {
@@ -499,14 +499,40 @@ p {
   width: 100%;
   height: auto;
   display: block;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.45s ease, transform 0.45s ease;
+  opacity: 1;
+  transform: none;
+  transition: none;
 }
 
 .gallery-item img.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
+}
+
+.portfolio-page-header {
+  margin-bottom: 1.6rem;
+}
+
+.portfolio-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.portfolio-filter-btn {
+  border: 1px solid var(--card-border);
+  background: var(--surface);
+  color: var(--text);
+  padding: 0.55rem 1rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+.portfolio-filter-btn.active,
+.portfolio-filter-btn:hover {
+  background: var(--text);
+  color: var(--bg);
 }
 
 .gallery-item.is-broken {
