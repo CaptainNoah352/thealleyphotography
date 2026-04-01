@@ -432,6 +432,31 @@ p {
   max-width: none;
 }
 
+/* ── Scroll reveal animation ── */
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  will-change: opacity, transform;
+}
+
+.scroll-reveal.is-revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.gallery-item {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+  transition: opacity 0.7s ease, transform 0.7s ease, box-shadow 0.25s ease;
+}
+
+.gallery-item.is-revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
 .gallery {
   width: 100%;
   column-count: 3;
@@ -443,7 +468,6 @@ p {
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
   position: relative;
   cursor: zoom-in;
   display: inline-block;
@@ -453,6 +477,7 @@ p {
 }
 
 .gallery-item:hover {
+  transform: translate3d(0, -3px, 0);
   box-shadow: var(--gallery-hover-shadow);
 }
 
@@ -486,6 +511,16 @@ p {
 
 .gallery-item.is-broken {
   display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal,
+  .gallery-item,
+  .gallery-item img {
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
 }
 
 /* ── About Section ── */

@@ -218,6 +218,22 @@ let touchStartX = 0;
 let touchStartY = 0;
 
 const CONTROL_HIDE_DELAY_MS = 1500;
+const revealObserver = "IntersectionObserver" in window
+  ? new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-revealed");
+          observer.unobserve(entry.target);
+        });
+      },
+      {
+        rootMargin: "0px 0px -12% 0px",
+        threshold: 0.15,
+      }
+    )
+  : null;
+
 const imageObserver = "IntersectionObserver" in window
   ? new IntersectionObserver(
       (entries, observer) => {
@@ -239,6 +255,18 @@ const imageObserver = "IntersectionObserver" in window
       }
     )
   : null;
+
+function initializeScrollReveal() {
+  const revealTargets = document.querySelectorAll(".scroll-reveal, .gallery-item");
+  revealTargets.forEach((node, index) => {
+    node.style.transitionDelay = `${Math.min(index * 40, 240)}ms`;
+    if (revealObserver) {
+      revealObserver.observe(node);
+    } else {
+      node.classList.add("is-revealed");
+    }
+  });
+}
 
 function refreshLightboxItems() {
   if (!gallery) return;
@@ -376,6 +404,12 @@ function renderGallery(images) {
     article.appendChild(img);
     gallery.appendChild(article);
 
+    if (revealObserver) {
+      revealObserver.observe(article);
+    } else {
+      article.classList.add("is-revealed");
+    }
+
     if (imageObserver) {
       imageObserver.observe(img);
     } else {
@@ -507,3 +541,4 @@ function seededShuffle(array, seedText) {
 const orderedGalleryImages = seededShuffle(galleryImages, GALLERY_VERSION);
 
 renderGallery(orderedGalleryImages);
+initializeScrollReveal();
