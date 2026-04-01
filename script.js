@@ -42,70 +42,87 @@ const galleryImages = [
   {
     src: "https://live.staticflickr.com/65535/55174718119_fcc96e9679_b.jpg",
     alt: "Couple walking through a warm-toned alley",
+    tags: ["street"],
   },
   {
     src: "https://live.staticflickr.com/65535/55174862805_62b4b2bb62_b.jpg",
     alt: "Portrait of a woman in natural light",
+    tags: ["portrait"],
   },
   {
     src: "https://live.staticflickr.com/65535/55174717824_9f229d66e3_b.jpg",
     alt: "Camera and printed photos on a table",
+    tags: ["street"],
   },
   {
     src: "https://live.staticflickr.com/65535/55141237211_d22ab4de9a_b.jpg",
     alt: "Mountain valley at sunrise",
+    tags: ["landscape"],
   },
   {
     src: "https://live.staticflickr.com/65535/55139720299_06e2216dc4_b.jpg",
     alt: "Bride portrait near a bright window",
+    tags: ["portrait"],
   },
   {
     src: "https://live.staticflickr.com/65535/55174862700_704b4310df_b.jpg",
     alt: "Hands holding a bouquet",
+    tags: ["portrait"],
   },
   {
     src: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1000&q=80",
     alt: "City corner with warm evening light",
+    tags: ["street"],
   },
   {
     src: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1000&q=80",
     alt: "Portrait with soft earthy styling",
+    tags: ["portrait"],
   },
   {
     src: "https://live.staticflickr.com/65535/55180059677_8fc0e9a570_b.jpg",
     alt: "Portfolio photo",
+    tags: ["landscape"],
   },
   {
     src: "https://live.staticflickr.com/65535/55181351100_e841fd38d4_b.jpg",
     alt: "Portfolio photo",
+    tags: ["wildlife"],
   },
   {
     src: "https://live.staticflickr.com/65535/55180946771_7b699ca1e8_b.jpg",
     alt: "Portfolio photo",
+    tags: ["landscape"],
   },
   {
     src: "https://live.staticflickr.com/65535/55181203194_3b584271e8_b.jpg",
     alt: "Portfolio photo",
+    tags: ["wildlife"],
   },
   {
     src: "https://live.staticflickr.com/65535/55180946701_05cf5ec6e0_b.jpg",
     alt: "Portfolio photo",
+    tags: ["street"],
   },
   {
     src: "https://live.staticflickr.com/65535/55181350900_a9998e3d82_b.jpg",
     alt: "Portfolio photo",
+    tags: ["portrait"],
   },
   {
     src: "https://live.staticflickr.com/65535/55180946621_427764f2e8_b.jpg",
     alt: "Portfolio photo",
+    tags: ["landscape"],
   },
   {
     src: "https://live.staticflickr.com/65535/55180059172_6dded42ee8_b.jpg",
     alt: "Portfolio photo",
+    tags: ["wildlife"],
   },
   {
     src: "https://live.staticflickr.com/65535/55180946491_8a427c0ca1_b.jpg",
     alt: "Portfolio photo",
+    tags: ["street"],
   },
 ];
 
@@ -337,5 +354,31 @@ document.addEventListener("keydown", (event) => {
   }
   revealLightboxUi();
 });
+
+let activeFilter = "all";
+
+function filterGallery(tag) {
+  activeFilter = tag;
+  const filtered = tag === "all"
+    ? galleryImages
+    : galleryImages.filter((img) => img.tags && img.tags.includes(tag));
+  renderGallery(filtered);
+}
+
+const filterBar = document.getElementById("filterBar");
+if (filterBar) {
+  filterBar.addEventListener("click", (event) => {
+    const btn = event.target.closest(".filter-btn");
+    if (!btn) return;
+    const tag = btn.dataset.filter;
+    filterBar.querySelectorAll(".filter-btn").forEach((b) => {
+      b.classList.remove("active");
+      b.setAttribute("aria-selected", "false");
+    });
+    btn.classList.add("active");
+    btn.setAttribute("aria-selected", "true");
+    filterGallery(tag);
+  });
+}
 
 renderGallery(galleryImages);
