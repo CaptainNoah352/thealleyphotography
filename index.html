@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Brandon is a self-taught wildlife and nature photographer based in Ocala, Florida, shooting film, DSLR, and mirrorless with a patient, honest approach."
+    />
+    <title>Brandon | Photographer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header" id="top">
+      <div class="container header-inner">
+        
+        <a href="#top" class="logo">Brandon Alley</a>
+
+           <nav class="site-nav" id="siteNav" aria-label="Main navigation">
+          <a href="#portfolio">Portfolio</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+    </header>
+ 
+    <main>
+      <section class="hero section-padding" aria-labelledby="hero-title">
+        <div class="container hero-content">
+          <p class="eyebrow">WILDLIFE • STREET • LANDSCAPE • FILM</p>
+          <h1 id="hero-title">Seeing the world frame by frame, one honest shot at a time.</h1>
+          <p>
+            I’m Brandon — a self-taught photographer based in Ocala, Florida. I shoot with a Canon A-1 on film, plus DSLR and mirrorless systems, and I’m most at home photographing Florida wildlife where patience, timing, and quiet observation shape every frame.
+          </p>
+          <a class="button" href="#portfolio">View Portfolio</a>
+        </div>
+      </section>
+
+      <section id="portfolio" class="section-padding" aria-labelledby="portfolio-title">
+        <div class="container">
+          <div class="section-heading">
+            <h2 id="portfolio-title">Portfolio</h2>
+            </p>
+          </div>
+
+          <div class="gallery" id="gallery" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section id="about" class="section-padding" aria-labelledby="about-title">
+        <div class="container about-grid">
+          <div class="about-card">
+            <p class="eyebrow">About</p>
+            <h2 id="about-title">A little about me</h2>
+            <p>
+              I came to photography the way most people do — slowly, then all at once. I started with a Canon A-1 and a roll of film, and it turned into something I couldn't put down. Now I shoot across multiple systems — 35mm film, DSLR, and mirrorless — depending on what the moment calls for.
+            </p>
+            <p>
+              I'm based in Ocala and spend a lot of time out in Florida's parks and natural spaces. Wildlife photography pulled me in early — there's something about waiting for the right moment with a bird or an animal that teaches you a lot about patience and light. I'm still learning, still growing, and this portfolio is where I track that progress.
+            </p>
+          </div>
+          <aside class="about-note" aria-label="Photography approach">
+            <h3>What I shoot</h3>
+            <ul>
+              <li>Florida wildlife &amp; birds</li>
+              <li>Street and documentary</li>
+              <li>Landscape and natural light</li>
+              <li>35mm film photography</li>
+              <li>Canon EOS R100</li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+
+      <section id="contact" class="section-padding" aria-labelledby="contact-title">
+        <div class="container contact-grid">
+          <div>
+            <p class="eyebrow">Contact</p>
+            <h2 id="contact-title">Let’s create something beautiful</h2>
+            <p>
+              I’d love to hear about your session, project, or event. The form below is currently a visual
+              placeholder and can be connected later.
+            </p>
+            <p>
+              Email: <a href="mailto:contact@thealleyphotography.com" class="inline-link">contact@thealleyphotography.com</a>
+            </p>
+          </div>
+
+          <!-- Contact form is intentionally not active yet. -->
+          <!-- To activate later with Formspree, add your endpoint URL in the action attribute below. -->
+          <!-- Example: action="https://formspree.io/f/your-form-id" method="POST" -->
+          <form class="contact-form" action="#" method="post" onsubmit="return false" novalidate>
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Your name" />
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" />
+
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" placeholder="Tell me a little about your project..."></textarea>
+
+            <button type="submit">Send Message (Coming Soon)</button>
+            <p class="form-note">Form submissions are currently disabled.</p>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>© <span id="year"></span> Brandon | The Alley Photography</p>
+
+        <!-- REPLACE EMAIL BELOW -->
+        <a href="mailto:contact@thealleyphotography.com">contact@thealleyphotography.com</a>
+
+        <!-- REPLACE SOCIAL LINKS BELOW -->
+        <div class="social-links" aria-label="Social links">
+          <a href="https://instagram.com/the.alley.photography" target="_blank" rel="noreferrer">Instagram</a>
+          <a href="https://www.flickr.com/photos/204244048@N05/" target="_blank" rel="noreferrer">Flickr</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Fullscreen lightbox carousel -->
+    <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Gallery lightbox">
+      <button class="lightbox-control lightbox-close" id="lightboxClose" type="button" aria-label="Close fullscreen image">
+        <span aria-hidden="true">✕</span>
+      </button>
+      <button class="lightbox-tap-zone lightbox-tap-zone-prev" id="lightboxPrevZone" type="button" aria-label="Previous image"></button>
+      <button class="lightbox-tap-zone lightbox-tap-zone-next" id="lightboxNextZone" type="button" aria-label="Next image"></button>
+      <figure class="lightbox-figure" id="lightboxFigure">
+        <img id="lightboxImage" src="" alt="" />
+        <figcaption class="lightbox-meta">
+          <p id="lightboxCaption"></p>
+          <p class="lightbox-counter" id="lightboxCounter" aria-live="polite"></p>
+        </figcaption>
+      </figure>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
