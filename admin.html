@@ -45,6 +45,10 @@
               <label>Image URL
                 <input id="imageUrl" type="url" required placeholder="https://..." />
               </label>
+              <label>Image URLs (bulk add)
+                <textarea id="bulkImageUrls" rows="4" placeholder="Paste one image URL per line"></textarea>
+              </label>
+              <button id="addBulkUrlsBtn" class="admin-btn admin-btn-secondary" type="button">Add URLs in Bulk</button>
               <label>Title
                 <input id="title" type="text" placeholder="Photo title" />
               </label>
@@ -93,6 +97,7 @@
                   <tr>
                     <th>Photo</th>
                     <th>Title</th>
+                    <th>URL</th>
                     <th>Category</th>
                     <th>Home</th>
                     <th>Published</th>
