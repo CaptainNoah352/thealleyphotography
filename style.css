@@ -170,25 +170,44 @@ p {
 .portfolio-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
+  gap: 1.5rem;
   margin-bottom: 40px;
 }
 
 .portfolio-header h2 {
   margin: 0;
+  margin-right: auto;
 }
 
 .filter-dropdown {
-  padding: 8px 20px;
-  border: 2px solid var(--accent, #b08968);
-  background: var(--bg, #fff);
-  color: var(--text, #3e3529);
+  padding: 10px 36px 10px 18px;
+  border: 1.5px solid var(--olive-light);
+  background: var(--bg);
+  color: var(--text);
   border-radius: 999px;
   font-family: inherit;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   cursor: pointer;
-  appearance: auto;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235f6f52' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filter-dropdown:hover {
+  border-color: var(--sage);
+}
+
+.filter-dropdown:focus {
+  outline: none;
+  border-color: var(--sage);
+  box-shadow: 0 0 0 3px rgba(95, 111, 82, 0.15);
 }
 
 .gallery {
