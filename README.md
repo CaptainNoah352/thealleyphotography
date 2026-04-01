@@ -1,93 +1,136 @@
 # The Alley Photography Portfolio
 
-A clean, beginner-friendly, static photography portfolio website for **The Alley Photography**.
+Static photography portfolio site built with plain HTML/CSS/JS and deployable on GitHub Pages.
 
-This project is built with only:
-- HTML
-- CSS
-- JavaScript
-
-No frameworks, no Node tooling, and no build step. It is ready for GitHub Pages.
-
----
-
-## File structure
+## Current structure
 
 ```text
 .
-├─ index.html    # Main page sections + lightbox markup
-├─ style.css     # Theme styles, responsive gallery collage, lightbox design
-├─ script.js     # Mobile menu, gallery image list, ratio detection, lightbox carousel
-└─ README.md     # Editing and setup guide
+├─ index.html             # Homepage (featured gallery section)
+├─ portfolio.html         # Full portfolio page with category filters
+├─ style.css              # Shared public site styling
+├─ script.js              # Mobile menu, public gallery rendering, lightbox, filters
+├─ supabase-config.js     # Place your Supabase URL and anon key here
+├─ supabase.js            # Shared Supabase helpers (public fetch + admin auth/CRUD)
+├─ admin.html             # Protected admin interface page
+├─ admin.css              # Admin-specific styling
+├─ admin.js               # Admin auth and CRUD dashboard logic
+└─ README.md              # Setup guide
 ```
 
----
+## Supabase setup
 
-## Gallery image URLs (beginner-friendly)
+### 1) Fill in frontend config
 
-Open **`script.js`** and find this exact section:
+Edit `supabase-config.js`:
 
 ```js
-/*
-  <!-- REPLACE OR ADD YOUR DIRECT IMAGE URLS BELOW -->
-  ----------------------------------------------------
-*/
-const galleryImages = [
-  ...
-];
+window.SUPABASE_CONFIG = {
+  url: "YOUR_SUPABASE_URL",
+  anonKey: "YOUR_SUPABASE_ANON_KEY",
+};
 ```
 
-### Important Flickr note
-- Use **direct image URLs** (for example from `live.staticflickr.com` ending in `.jpg`).
-- Do **not** use regular Flickr photo page links.
+Use your project URL and **anon public key** only (never service role in frontend).
 
-Each image object only needs:
+### 2) Create `photos` table
 
-```js
-{
-  src: "https://your-direct-image-url.jpg",
-  alt: "Describe the photo"
-}
+Run this SQL in Supabase SQL Editor:
+
+```sql
+create extension if not exists pgcrypto;
+
+create table if not exists public.photos (
+  id uuid primary key default gen_random_uuid(),
+  image_url text not null,
+  title text,
+  description text,
+  category text not null check (category in ('wildlife', 'landscape', 'portrait', 'street')),
+  show_on_home boolean not null default false,
+  is_published boolean not null default true,
+  sort_order integer not null default 0,
+  created_at timestamptz not null default now()
+);
 ```
 
-The site now auto-detects portrait/landscape/square image ratios, so you no longer need a manual `shape` field.
+### 3) Enable RLS + policies
 
----
+```sql
+alter table public.photos enable row level security;
 
-## How the dynamic gallery works
+create policy "Public can read published photos"
+on public.photos
+for select
+using (is_published = true);
 
-- JavaScript reads each image's real dimensions after it loads.
-- It assigns a class (`ratio-landscape`, `ratio-portrait`, `ratio-square`).
-- It also sets a CSS variable for the exact aspect ratio so the tile shape feels natural.
-- CSS grid uses those classes to create an editorial collage layout.
+create policy "Authenticated users can read all photos"
+on public.photos
+for select
+to authenticated
+using (true);
 
-If an image fails to load, that tile is hidden gracefully and removed from lightbox navigation.
+create policy "Authenticated users can insert photos"
+on public.photos
+for insert
+to authenticated
+with check (true);
 
----
+create policy "Authenticated users can update photos"
+on public.photos
+for update
+to authenticated
+using (true)
+with check (true);
 
-## Fullscreen lightbox carousel
+create policy "Authenticated users can delete photos"
+on public.photos
+for delete
+to authenticated
+using (true);
+```
 
-Click any gallery image to open a fullscreen lightbox.
+> For stricter security later, replace generic `authenticated` policies with checks tied to a specific admin user list/role.
 
-Controls:
-- **Next / Previous** buttons
-- **Close** button
-- **Keyboard support**
-  - `Escape` closes
-  - `ArrowLeft` shows previous
-  - `ArrowRight` shows next
-- Click on the backdrop (outside the image) to close
+### 4) Enable email/password auth
 
-The lightbox image uses `object-fit: contain` so the full image stays visible without stretching.
+In Supabase Dashboard:
 
----
+1. Go to **Authentication → Providers → Email**.
+2. Enable Email provider.
+3. (Recommended) Disable open self-signup after creating your first admin user.
+
+### 5) Create your first admin user
+
+Use one of these:
+
+- **Authentication → Users → Add user** (create confirmed user), or
+- temporary sign-up flow from Supabase dashboard tooling.
+
+Then sign in at `/admin.html`.
+
+## How public pages now work
+
+- `index.html` fetches only published photos where `show_on_home = true`, ordered by `sort_order` ascending then `created_at` descending.
+- `portfolio.html` fetches only published photos, ordered by `sort_order` ascending then `created_at` descending.
+- Existing category filter buttons (`wildlife`, `landscape`, `portrait`, `street`) now filter the database-driven results.
+- If Supabase is not configured yet, gallery falls back to existing local `galleryImages` in `script.js`.
+
+## Admin workflow (`/admin.html`)
+
+After login:
+
+- Add photo URL, title, description, category, homepage flag, publish status, and sort order.
+- See live URL preview while typing.
+- Edit any existing photo.
+- Delete with confirmation.
+- Filter admin list by category and search by title.
 
 ## Deploy with GitHub Pages
 
-1. Push the repo to GitHub.
-2. Go to **Settings → Pages**.
-3. Set Source to **Deploy from a branch**.
-4. Select your branch and root folder (`/`).
-5. Save and wait for the Pages URL.
+No build step needed. Keep using branch/root deploy:
 
-Because this is plain static HTML/CSS/JS, no build process is needed.
+1. Push to GitHub.
+2. Go to **Settings → Pages**.
+3. Source: **Deploy from a branch**.
+4. Select branch and root (`/`).
+

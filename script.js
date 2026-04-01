@@ -211,6 +211,11 @@ const galleryImages = [
   },
 ];
 
+const pageType = document.body.dataset.page || "home";
+let seededFallbackImages = [...galleryImages];
+let orderedGalleryImages = [...galleryImages];
+
+
 let availableLightboxItems = [];
 let currentLightboxPosition = 0;
 let lightboxUiVisible = true;
@@ -504,6 +509,8 @@ document.addEventListener("keydown", (event) => {
 });
 
 const GALLERY_VERSION = "v1";
+seededFallbackImages = seededShuffle(galleryImages, GALLERY_VERSION);
+orderedGalleryImages = [...seededFallbackImages];
 
 function createSeededRandom(seedText) {
   let hash = 2166136261;
@@ -533,26 +540,62 @@ function seededShuffle(array, seedText) {
   return shuffled;
 }
 
-// Change GALLERY_VERSION when releasing a new build to reshuffle photo order.
-const orderedGalleryImages = seededShuffle(galleryImages, GALLERY_VERSION);
+
+
+function renderForActiveFilter() {
+  const portfolioFilters = document.getElementById("portfolioFilters");
+  if (!portfolioFilters) {
+    renderGallery(orderedGalleryImages);
+    return;
+  }
+
+  const activeButton = portfolioFilters.querySelector(".portfolio-filter-btn.active");
+  const tag = activeButton?.dataset.filter || "all";
+  const filteredImages = tag === "all"
+    ? orderedGalleryImages
+    : orderedGalleryImages.filter((image) => image.tags.includes(tag));
+
+  renderGallery(filteredImages);
+}
+
+async function loadGalleryFromSupabase() {
+  if (!window.photoDataApi?.hasValidSupabaseConfig || !window.photoDataApi.hasValidSupabaseConfig()) {
+    orderedGalleryImages = [...seededFallbackImages];
+    return;
+  }
+
+  const showOnHomeOnly = pageType === "home";
+  const photos = await window.photoDataApi.fetchPublishedPhotos({ showOnHomeOnly });
+
+  if (photos.length) {
+    orderedGalleryImages = photos;
+    return;
+  }
+
+  orderedGalleryImages = [...seededFallbackImages];
+}
 
 const portfolioFilters = document.getElementById("portfolioFilters");
 
 if (portfolioFilters) {
   portfolioFilters.querySelectorAll(".portfolio-filter-btn").forEach((button) => {
     button.addEventListener("click", () => {
-      const tag = button.dataset.filter || "all";
       portfolioFilters.querySelectorAll(".portfolio-filter-btn").forEach((node) => {
         node.classList.toggle("active", node === button);
       });
-
-      const filteredImages = tag === "all"
-        ? orderedGalleryImages
-        : orderedGalleryImages.filter((image) => image.tags.includes(tag));
-      renderGallery(filteredImages);
+      renderForActiveFilter();
     });
   });
 }
 
-renderGallery(orderedGalleryImages);
-initializeScrollReveal();
+(async function initializeGallery() {
+  try {
+    await loadGalleryFromSupabase();
+  } catch (error) {
+    orderedGalleryImages = [...seededFallbackImages];
+    console.warn("Unable to load photos from Supabase. Falling back to local galleryImages.", error);
+  }
+
+  renderForActiveFilter();
+  initializeScrollReveal();
+})();
