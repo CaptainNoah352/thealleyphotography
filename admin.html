@@ -13,19 +13,11 @@
   <body data-page="admin">
     <main class="admin-page">
       <div class="admin-shell">
-        <header class="admin-header">
-          <div>
-            <p class="eyebrow">Dashboard</p>
-            <h1>Photo Admin Panel</h1>
-            <p>Manage photos, categories, site styling, and global settings.</p>
-          </div>
-          <button id="logoutBtn" class="admin-btn admin-btn-secondary" type="button" hidden>Logout</button>
-        </header>
-
         <section id="adminMessage" class="admin-message" aria-live="polite"></section>
 
-        <section id="loginSection" class="admin-card">
+        <section id="loginSection" class="admin-card auth-card">
           <h2>Admin Sign In</h2>
+          <p class="section-help">Sign in with your administrator account to access content controls.</p>
           <form id="loginForm" class="admin-form">
             <label>Email<input id="loginEmail" type="email" required autocomplete="email" /></label>
             <label>Password<input id="loginPassword" type="password" required autocomplete="current-password" /></label>
@@ -33,165 +25,235 @@
           </form>
         </section>
 
-        <section id="dashboardSection" hidden>
-          <nav class="admin-tabs" aria-label="Admin sections">
-            <button class="admin-tab active" type="button" data-tab="photos">Photos</button>
-            <button class="admin-tab" type="button" data-tab="collections">Collections</button>
-            <button class="admin-tab" type="button" data-tab="appearance">Appearance</button>
-            <button class="admin-tab" type="button" data-tab="settings">Settings</button>
-          </nav>
+        <section id="dashboardSection" class="admin-dashboard" hidden>
+          <aside class="admin-sidebar" aria-label="Admin sections">
+            <div class="brand-block">
+              <p class="eyebrow">The Alley Photography</p>
+              <h1>Admin CMS</h1>
+            </div>
+            <nav class="admin-nav">
+              <button class="admin-nav-btn active" type="button" data-tab="photos">Photos</button>
+              <button class="admin-nav-btn" type="button" data-tab="collections">Collections</button>
+              <button class="admin-nav-btn" type="button" data-tab="appearance">Appearance</button>
+              <button class="admin-nav-btn" type="button" data-tab="settings">Settings</button>
+            </nav>
+          </aside>
 
-          <section class="admin-panel" data-panel="photos">
-            <div class="admin-card">
-              <h2 id="photoFormTitle">Add Photo</h2>
-              <form id="photoForm" class="admin-form admin-grid-form">
-                <input type="hidden" id="photoId" />
-                <label>Image URL<input id="imageUrl" type="url" required placeholder="https://..." /></label>
-                <label>Title<input id="title" type="text" placeholder="Photo title" /></label>
-                <label>Caption<textarea id="caption" rows="2" placeholder="Short caption"></textarea></label>
-                <label>Alt text<input id="altText" type="text" placeholder="Accessible description" /></label>
-                <label>Category<select id="category"></select></label>
-                <label>Tags (comma separated)<input id="tags" type="text" placeholder="bird, wetlands, sunrise" /></label>
-                <label>Orientation
-                  <select id="orientation">
-                    <option value="auto">Auto</option>
-                    <option value="landscape">Landscape</option>
-                    <option value="portrait">Portrait</option>
-                    <option value="square">Square</option>
-                  </select>
-                </label>
-                <label>Sort order<input id="sortOrder" type="number" value="0" /></label>
-                <label class="check-row"><input id="showOnHome" type="checkbox" /> Show on homepage</label>
-                <label class="check-row"><input id="isFeatured" type="checkbox" /> Featured</label>
-                <label class="check-row"><input id="isPublished" type="checkbox" checked /> Visible on site</label>
+          <div class="admin-content-shell">
+            <header class="admin-topbar">
+              <div>
+                <p class="eyebrow">Dashboard</p>
+                <p id="activeSectionTitle" class="active-section-title">Photos</p>
+              </div>
+              <button id="logoutBtn" class="admin-btn admin-btn-secondary" type="button" hidden>Logout</button>
+            </header>
 
-                <div class="cloudinary-panel">
-                  <p class="cloudinary-title">Cloudinary unsigned upload (optional)</p>
-                  <div class="cloudinary-grid">
-                    <label>Cloud name<input id="cloudinaryCloudName" type="text" value="dkcve5kju" /></label>
-                    <label>Unsigned upload preset<input id="cloudinaryUploadPreset" type="text" value="wgbwc0lj" /></label>
-                    <label>Select image file<input id="cloudinaryFile" type="file" accept="image/*" /></label>
-                    <button id="cloudinaryUploadBtn" class="admin-btn admin-btn-secondary" type="button">Upload to Cloudinary</button>
+            <section class="admin-panel" data-panel="photos">
+              <div class="admin-grid-two">
+                <article class="admin-card">
+                  <h2 id="photoFormTitle">Add Photo</h2>
+                  <p class="section-help">Add single images, batch URLs, or upload directly with Cloudinary.</p>
+                  <form id="photoForm" class="admin-form admin-grid-form">
+                    <input type="hidden" id="photoId" />
+                    <label>Image URL<input id="imageUrl" type="url" required placeholder="https://..." /></label>
+                    <label>Title<input id="title" type="text" placeholder="Photo title" /></label>
+                    <label class="span-full">Caption<textarea id="caption" rows="2" placeholder="Short caption"></textarea></label>
+                    <label>Alt text<input id="altText" type="text" placeholder="Accessible description" /></label>
+                    <label>Category<select id="category"></select></label>
+                    <label>Tags (comma separated)<input id="tags" type="text" placeholder="bird, wetlands, sunrise" /></label>
+                    <label>Orientation
+                      <select id="orientation">
+                        <option value="auto">Auto</option>
+                        <option value="landscape">Landscape</option>
+                        <option value="portrait">Portrait</option>
+                        <option value="square">Square</option>
+                      </select>
+                    </label>
+                    <label>Sort order<input id="sortOrder" type="number" value="0" /></label>
+                    <label class="check-row"><input id="showOnHome" type="checkbox" /> Show on homepage</label>
+                    <label class="check-row"><input id="isFeatured" type="checkbox" /> Featured</label>
+                    <label class="check-row"><input id="isPublished" type="checkbox" checked /> Visible on site</label>
+
+                    <div class="cloudinary-panel">
+                      <p class="cloudinary-title">Cloudinary unsigned upload (optional)</p>
+                      <div class="cloudinary-grid">
+                        <label>Cloud name<input id="cloudinaryCloudName" type="text" value="dkcve5kju" /></label>
+                        <label>Unsigned upload preset<input id="cloudinaryUploadPreset" type="text" value="wgbwc0lj" /></label>
+                        <label>Select image file<input id="cloudinaryFile" type="file" accept="image/*" /></label>
+                        <button id="cloudinaryUploadBtn" class="admin-btn admin-btn-secondary" type="button">Upload to Cloudinary</button>
+                      </div>
+                    </div>
+
+                    <label class="span-full">Image URLs (bulk add)<textarea id="bulkImageUrls" rows="4" placeholder="One URL per line"></textarea></label>
+                    <button id="addBulkUrlsBtn" class="admin-btn admin-btn-secondary" type="button">Add URLs in Bulk</button>
+
+                    <div class="preview-card">
+                      <p class="preview-title">Live preview</p>
+                      <img id="imagePreview" class="admin-preview" alt="Image preview" />
+                    </div>
+
+                    <div class="admin-form-actions">
+                      <button class="admin-btn" type="submit">Save Photo</button>
+                      <button id="cancelEditBtn" class="admin-btn admin-btn-secondary" type="button" hidden>Cancel Edit</button>
+                    </div>
+                  </form>
+                </article>
+
+                <article class="admin-card">
+                  <h2>Photo Library</h2>
+                  <p class="section-help">Search, filter, batch-edit visibility, and drag to reorder.</p>
+
+                  <div class="admin-toolbar">
+                    <input id="searchInput" type="search" placeholder="Search title, caption, or tags" />
+                    <select id="adminCategoryFilter"><option value="all">All categories</option></select>
+                    <select id="adminOrientationFilter">
+                      <option value="all">Any orientation</option>
+                      <option value="landscape">Landscape</option>
+                      <option value="portrait">Portrait</option>
+                      <option value="square">Square</option>
+                      <option value="auto">Auto</option>
+                    </select>
+                    <input id="adminTagFilter" type="search" placeholder="Filter tag" />
                   </div>
-                </div>
 
-                <label class="span-full">Image URLs (bulk add)<textarea id="bulkImageUrls" rows="4" placeholder="One URL per line"></textarea></label>
-                <button id="addBulkUrlsBtn" class="admin-btn admin-btn-secondary" type="button">Add URLs in Bulk</button>
+                  <div class="admin-bulk-row">
+                    <label class="check-row"><input id="selectAllPhotos" type="checkbox" /> Select all visible</label>
+                    <div class="bulk-action-group">
+                      <button id="bulkPublishBtn" class="admin-btn admin-btn-secondary" type="button">Bulk show</button>
+                      <button id="bulkHideBtn" class="admin-btn admin-btn-secondary" type="button">Bulk hide</button>
+                      <button id="bulkDeleteBtn" class="admin-btn admin-btn-danger" type="button">Bulk delete</button>
+                    </div>
+                  </div>
 
-                <div>
-                  <p class="preview-title">Live preview</p>
-                  <img id="imagePreview" class="admin-preview" alt="Image preview" />
-                </div>
-                <div class="admin-form-actions">
-                  <button class="admin-btn" type="submit">Save Photo</button>
-                  <button id="cancelEditBtn" class="admin-btn admin-btn-secondary" type="button" hidden>Cancel Edit</button>
-                </div>
-              </form>
-            </div>
-
-            <div class="admin-card">
-              <div class="admin-toolbar">
-                <h2>Manage Photos</h2>
-                <input id="searchInput" type="search" placeholder="Search title, caption, or tags" />
-                <select id="adminCategoryFilter"><option value="all">All categories</option></select>
-                <select id="adminOrientationFilter">
-                  <option value="all">Any orientation</option>
-                  <option value="landscape">Landscape</option>
-                  <option value="portrait">Portrait</option>
-                  <option value="square">Square</option>
-                  <option value="auto">Auto</option>
-                </select>
-                <input id="adminTagFilter" type="search" placeholder="Filter tag" />
+                  <div class="admin-table-wrap">
+                    <table class="admin-table">
+                      <thead>
+                        <tr>
+                          <th></th><th></th><th>Photo</th><th>Details</th><th>Status</th><th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody id="photoTableBody"></tbody>
+                    </table>
+                  </div>
+                </article>
               </div>
+            </section>
 
-              <div class="admin-bulk-row">
-                <label class="check-row"><input id="selectAllPhotos" type="checkbox" /> Select all visible</label>
-                <button id="bulkPublishBtn" class="admin-btn admin-btn-secondary" type="button">Bulk show</button>
-                <button id="bulkHideBtn" class="admin-btn admin-btn-secondary" type="button">Bulk hide</button>
-                <button id="bulkDeleteBtn" class="admin-btn admin-btn-secondary" type="button">Bulk delete</button>
-              </div>
+            <section class="admin-panel" data-panel="collections" hidden>
+              <article class="admin-card">
+                <h2>Collections</h2>
+                <p class="section-help">Control display names, slugs, navigation visibility, and ordering.</p>
+                <form id="collectionCreateForm" class="admin-inline-form">
+                  <input id="newCollectionName" type="text" placeholder="New collection name" required />
+                  <button class="admin-btn" type="submit">Create</button>
+                </form>
+                <ul id="collectionList" class="collection-list"></ul>
+              </article>
+            </section>
 
-              <div class="admin-table-wrap">
-                <table class="admin-table">
-                  <thead>
-                    <tr>
-                      <th></th><th></th><th>Photo</th><th>Title</th><th>Category</th><th>Tags</th><th>Home</th><th>Visible</th><th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody id="photoTableBody"></tbody>
-                </table>
-              </div>
-            </div>
-          </section>
+            <section class="admin-panel" data-panel="appearance" hidden>
+              <article class="admin-card">
+                <h2>Appearance</h2>
+                <form id="appearanceForm" class="admin-form section-stack">
+                  <section class="subsection-card">
+                    <h3>Branding</h3>
+                    <p class="section-help">Core text and type choices for your visual identity.</p>
+                    <div class="admin-grid-form">
+                      <label>Site title<input id="setting_site_title" type="text" /></label>
+                      <label class="span-full">Intro / About highlight<textarea id="setting_site_intro_text" rows="3"></textarea></label>
+                      <label>Heading font
+                        <select id="setting_heading_font"><option>Poppins</option><option>Playfair Display</option><option>Merriweather</option><option>Inter</option></select>
+                      </label>
+                      <label>Body font
+                        <select id="setting_body_font"><option>Poppins</option><option>Inter</option><option>Lora</option><option>Source Sans 3</option></select>
+                      </label>
+                    </div>
+                  </section>
 
-          <section class="admin-panel" data-panel="collections" hidden>
-            <div class="admin-card">
-              <h2>Collections</h2>
-              <form id="collectionCreateForm" class="admin-inline-form">
-                <input id="newCollectionName" type="text" placeholder="New collection name" required />
-                <button class="admin-btn" type="submit">Create</button>
-              </form>
-              <p class="admin-card-intro">Drag to reorder collection order shown on site. Toggle visibility to include/exclude from portfolio filters.</p>
-              <ul id="collectionList" class="collection-list"></ul>
-            </div>
-          </section>
+                  <section class="subsection-card">
+                    <h3>Grid Layout</h3>
+                    <p class="section-help">Tune desktop/mobile density and spacing.</p>
+                    <div class="admin-grid-form">
+                      <label>Header layout
+                        <select id="setting_header_layout"><option value="centered">Centered</option><option value="split">Split</option><option value="compact">Compact</option></select>
+                      </label>
+                      <label>Desktop photos per row<input id="setting_desktop_columns" type="number" min="2" max="6" /></label>
+                      <label>Mobile photos per row<input id="setting_mobile_columns" type="number" min="1" max="4" /></label>
+                      <label>Desktop grid spacing (px)<input id="setting_desktop_grid_gap" type="number" min="0" max="60" /></label>
+                      <label>Mobile grid spacing (px)<input id="setting_mobile_grid_gap" type="number" min="0" max="30" /></label>
+                      <label class="check-row"><input id="setting_keep_original_ratio" type="checkbox" /> Keep original image ratios</label>
+                    </div>
+                  </section>
 
-          <section class="admin-panel" data-panel="appearance" hidden>
-            <div class="admin-card">
-              <h2>Appearance</h2>
-              <form id="appearanceForm" class="admin-form admin-grid-form">
-                <label>Site title<input id="setting_site_title" type="text" /></label>
-                <label>Intro / About highlight<textarea id="setting_site_intro_text" rows="3"></textarea></label>
-                <label>Heading font
-                  <select id="setting_heading_font"><option>Poppins</option><option>Playfair Display</option><option>Merriweather</option><option>Inter</option></select>
-                </label>
-                <label>Body font
-                  <select id="setting_body_font"><option>Poppins</option><option>Inter</option><option>Lora</option><option>Source Sans 3</option></select>
-                </label>
-                <label>Primary color<input id="setting_theme_primary_color" type="color" /></label>
-                <label>Accent color<input id="setting_theme_accent_color" type="color" /></label>
-                <label>Dark mode behavior
-                  <select id="setting_dark_mode_behavior"><option value="system">Follow system</option><option value="light">Force light</option><option value="dark">Force dark</option></select>
-                </label>
-                <label>Header layout
-                  <select id="setting_header_layout"><option value="centered">Centered</option><option value="split">Split</option><option value="compact">Compact</option></select>
-                </label>
-                <label>Desktop photos per row<input id="setting_desktop_columns" type="number" min="2" max="6" /></label>
-                <label>Mobile photos per row<input id="setting_mobile_columns" type="number" min="1" max="4" /></label>
-                <label>Desktop grid spacing (px)<input id="setting_desktop_grid_gap" type="number" min="0" max="60" /></label>
-                <label>Mobile grid spacing (px)<input id="setting_mobile_grid_gap" type="number" min="0" max="30" /></label>
-                <label class="check-row"><input id="setting_keep_original_ratio" type="checkbox" /> Keep original image ratios</label>
-                <label class="check-row"><input id="setting_lightbox_show_arrows" type="checkbox" /> Show lightbox arrows</label>
-                <label>Arrow position
-                  <select id="setting_lightbox_arrow_position"><option value="edges">Edge zones</option><option value="near">Near image</option></select>
-                </label>
-                <label class="check-row"><input id="setting_lightbox_show_captions" type="checkbox" /> Show captions</label>
-                <label class="check-row"><input id="setting_lightbox_show_counter" type="checkbox" /> Show image counter</label>
-                <label>Lightbox background opacity (0.4-1)<input id="setting_lightbox_bg_opacity" type="number" step="0.05" min="0.4" max="1" /></label>
-                <div class="admin-form-actions span-full"><button class="admin-btn" type="submit">Save Appearance</button></div>
-              </form>
-            </div>
-          </section>
+                  <section class="subsection-card">
+                    <h3>Lightbox</h3>
+                    <p class="section-help">Control navigation controls, captions, and backdrop intensity.</p>
+                    <div class="admin-grid-form">
+                      <label class="check-row"><input id="setting_lightbox_show_arrows" type="checkbox" /> Show lightbox arrows</label>
+                      <label>Arrow position
+                        <select id="setting_lightbox_arrow_position"><option value="edges">Edge zones</option><option value="near">Near image</option></select>
+                      </label>
+                      <label class="check-row"><input id="setting_lightbox_show_captions" type="checkbox" /> Show captions</label>
+                      <label class="check-row"><input id="setting_lightbox_show_counter" type="checkbox" /> Show image counter</label>
+                      <label>Lightbox background opacity (0.4-1)<input id="setting_lightbox_bg_opacity" type="number" step="0.05" min="0.4" max="1" /></label>
+                    </div>
+                  </section>
 
-          <section class="admin-panel" data-panel="settings" hidden>
-            <div class="admin-card">
-              <h2>Settings</h2>
-              <form id="settingsForm" class="admin-form admin-grid-form">
-                <label>Contact title<input id="setting_contact_title" type="text" /></label>
-                <label>Contact subtitle<textarea id="setting_contact_subtitle" rows="3"></textarea></label>
-                <label>Contact email<input id="setting_contact_email" type="email" /></label>
-                <label>Instagram URL<input id="setting_instagram_url" type="url" /></label>
-                <label>Instagram label<input id="setting_instagram_label" type="text" /></label>
-                <label>Flickr URL<input id="setting_flickr_url" type="url" /></label>
-                <label>Location text<input id="setting_location_text" type="text" /></label>
-                <label>Availability text<input id="setting_availability_text" type="text" /></label>
-                <label>Response time text<input id="setting_response_time_text" type="text" /></label>
-                <label>SEO title<input id="setting_seo_title" type="text" /></label>
-                <label>SEO description<textarea id="setting_seo_description" rows="3"></textarea></label>
-                <div class="admin-form-actions span-full"><button class="admin-btn" type="submit">Save Settings</button></div>
-              </form>
-            </div>
-          </section>
+                  <section class="subsection-card">
+                    <h3>Theme Mode</h3>
+                    <p class="section-help">Pick color accents and preferred dark-mode behavior.</p>
+                    <div class="admin-grid-form">
+                      <label>Primary color<input id="setting_theme_primary_color" type="color" /></label>
+                      <label>Accent color<input id="setting_theme_accent_color" type="color" /></label>
+                      <label>Dark mode behavior
+                        <select id="setting_dark_mode_behavior"><option value="system">Follow system</option><option value="light">Force light</option><option value="dark">Force dark</option></select>
+                      </label>
+                    </div>
+                  </section>
+
+                  <div class="admin-form-actions"><button class="admin-btn" type="submit">Save Appearance</button></div>
+                </form>
+              </article>
+            </section>
+
+            <section class="admin-panel" data-panel="settings" hidden>
+              <article class="admin-card">
+                <h2>Settings</h2>
+                <form id="settingsForm" class="admin-form section-stack">
+                  <section class="subsection-card">
+                    <h3>Contact</h3>
+                    <div class="admin-grid-form">
+                      <label>Contact title<input id="setting_contact_title" type="text" /></label>
+                      <label class="span-full">Contact subtitle<textarea id="setting_contact_subtitle" rows="3"></textarea></label>
+                      <label>Contact email<input id="setting_contact_email" type="email" /></label>
+                      <label>Location text<input id="setting_location_text" type="text" /></label>
+                      <label>Availability text<input id="setting_availability_text" type="text" /></label>
+                      <label>Response time text<input id="setting_response_time_text" type="text" /></label>
+                    </div>
+                  </section>
+
+                  <section class="subsection-card">
+                    <h3>Social</h3>
+                    <div class="admin-grid-form">
+                      <label>Instagram URL<input id="setting_instagram_url" type="url" /></label>
+                      <label>Instagram label<input id="setting_instagram_label" type="text" /></label>
+                      <label>Flickr URL<input id="setting_flickr_url" type="url" /></label>
+                    </div>
+                  </section>
+
+                  <section class="subsection-card">
+                    <h3>SEO</h3>
+                    <div class="admin-grid-form">
+                      <label>SEO title<input id="setting_seo_title" type="text" /></label>
+                      <label class="span-full">SEO description<textarea id="setting_seo_description" rows="3"></textarea></label>
+                    </div>
+                  </section>
+
+                  <div class="admin-form-actions"><button class="admin-btn" type="submit">Save Settings</button></div>
+                </form>
+              </article>
+            </section>
+          </div>
         </section>
       </div>
     </main>

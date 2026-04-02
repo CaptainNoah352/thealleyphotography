@@ -245,9 +245,7 @@
     if (!supabaseClient) throw new Error("Supabase client is not configured.");
 
     const nextPayload = { ...payload };
-    if (payload?.name) {
-      nextPayload.slug = toSlug(payload.name);
-    }
+    delete nextPayload.slug;
 
     const { error } = await supabaseClient.from("collections").update(nextPayload).eq("slug", slug);
     if (error) throw error;

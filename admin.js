@@ -3,6 +3,8 @@ const dashboardSection = document.getElementById("dashboardSection");
 const loginForm = document.getElementById("loginForm");
 const logoutBtn = document.getElementById("logoutBtn");
 const adminMessage = document.getElementById("adminMessage");
+const activeSectionTitle = document.getElementById("activeSectionTitle");
+
 const photoForm = document.getElementById("photoForm");
 const photoFormTitle = document.getElementById("photoFormTitle");
 const cancelEditBtn = document.getElementById("cancelEditBtn");
@@ -22,9 +24,11 @@ const selectAllPhotos = document.getElementById("selectAllPhotos");
 const bulkPublishBtn = document.getElementById("bulkPublishBtn");
 const bulkHideBtn = document.getElementById("bulkHideBtn");
 const bulkDeleteBtn = document.getElementById("bulkDeleteBtn");
+
 const collectionCreateForm = document.getElementById("collectionCreateForm");
 const newCollectionName = document.getElementById("newCollectionName");
 const collectionList = document.getElementById("collectionList");
+
 const appearanceForm = document.getElementById("appearanceForm");
 const settingsForm = document.getElementById("settingsForm");
 
@@ -75,6 +79,13 @@ const siteSettingFields = {
   seo_description: document.getElementById("setting_seo_description"),
 };
 
+const tabLabels = {
+  photos: "Photos",
+  collections: "Collections",
+  appearance: "Appearance",
+  settings: "Settings",
+};
+
 let allPhotos = [];
 let allCollections = [];
 let selectedPhotoIds = new Set();
@@ -87,11 +98,13 @@ function showMessage(text, type = "") {
   if (type) adminMessage.classList.add(type);
 }
 
-function setAuthUi(session) {
-  const loggedIn = Boolean(session);
-  loginSection.hidden = loggedIn;
-  dashboardSection.hidden = !loggedIn;
-  logoutBtn.hidden = !loggedIn;
+function escapeHtml(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }
 
 function boolToString(value) {
@@ -102,6 +115,22 @@ function stringToBool(value, fallback = false) {
   if (typeof value === "boolean") return value;
   if (typeof value !== "string") return fallback;
   return value.toLowerCase() === "true";
+}
+
+function setAuthUi(session) {
+  const loggedIn = Boolean(session);
+  loginSection.hidden = loggedIn;
+  dashboardSection.hidden = !loggedIn;
+  logoutBtn.hidden = !loggedIn;
+}
+
+function getCollectionPhotoCounts() {
+  return allPhotos.reduce((acc, photo) => {
+    const slug = (photo?.category || "").trim();
+    if (!slug) return acc;
+    acc[slug] = (acc[slug] || 0) + 1;
+    return acc;
+  }, {});
 }
 
 function updatePreview() {
@@ -130,8 +159,9 @@ function syncCollectionDropdowns() {
     : (window.photoDataApi.defaultCategories || []).map((item, index) => ({ ...item, sort_order: index }));
 
   const markup = options
+    .slice()
     .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0))
-    .map((collection) => `<option value="${collection.slug}">${collection.name}</option>`)
+    .map((collection) => `<option value="${escapeHtml(collection.slug)}">${escapeHtml(collection.name)}</option>`)
     .join("");
 
   fields.category.innerHTML = markup;
@@ -190,11 +220,20 @@ function getVisiblePhotos() {
   });
 }
 
+function buildPhotoBadges(photo) {
+  const badges = [];
+  badges.push(`<span class="badge ${photo.is_published ? "badge-visible" : "badge-hidden"}">${photo.is_published ? "Visible" : "Hidden"}</span>`);
+  if (photo.is_featured) badges.push('<span class="badge badge-featured">Featured</span>');
+  if (photo.show_on_home) badges.push('<span class="badge badge-home">Homepage</span>');
+  badges.push(`<span class="badge badge-category">${escapeHtml(photo.category || "uncategorized")}</span>`);
+  return badges.join("");
+}
+
 function renderPhotoTable() {
   const rows = getVisiblePhotos();
   photoTableBody.innerHTML = "";
   if (!rows.length) {
-    photoTableBody.innerHTML = '<tr><td colspan="9">No photos found.</td></tr>';
+    photoTableBody.innerHTML = '<tr><td colspan="6">No photos found.</td></tr>';
     return;
   }
 
@@ -206,24 +245,65 @@ function renderPhotoTable() {
     row.innerHTML = `
       <td><input type="checkbox" data-photo-select="${photo.id}" ${isChecked ? "checked" : ""}/></td>
       <td><span class="drag-handle" aria-hidden="true">⋮⋮</span></td>
-      <td><img class="admin-thumb" src="${photo.image_url}" alt="${photo.alt || photo.title || "Photo"}" /></td>
-      <td>${photo.title || "—"}<br><small>${photo.caption || ""}</small></td>
-      <td>${photo.category}</td>
-      <td>${Array.isArray(photo.tags) ? photo.tags.join(", ") : ""}</td>
-      <td>${photo.show_on_home ? "Yes" : "No"}</td>
-      <td>${photo.is_published ? "Visible" : "Hidden"}</td>
+      <td><img class="admin-thumb" src="${escapeHtml(photo.image_url)}" alt="${escapeHtml(photo.alt || photo.title || "Photo")}" /></td>
       <td>
-        <button class="admin-btn admin-btn-secondary" data-action="edit" data-id="${photo.id}" type="button">Edit</button>
-        <button class="admin-btn admin-btn-secondary" data-action="hide" data-id="${photo.id}" type="button">${photo.is_published ? "Hide" : "Show"}</button>
-        <button class="admin-btn admin-btn-secondary" data-action="delete" data-id="${photo.id}" type="button">Delete</button>
+        <div class="detail-title">${escapeHtml(photo.title || "Untitled")}</div>
+        <div class="detail-caption">${escapeHtml(photo.caption || "No caption")}</div>
+      </td>
+      <td><div class="badge-row">${buildPhotoBadges(photo)}</div></td>
+      <td>
+        <div class="action-stack">
+          <button class="admin-btn admin-btn-secondary" data-action="edit" data-id="${photo.id}" type="button">Edit</button>
+          <button class="admin-btn admin-btn-secondary" data-action="hide" data-id="${photo.id}" type="button">${photo.is_published ? "Hide" : "Show"}</button>
+          <button class="admin-btn admin-btn-secondary" data-action="delete" data-id="${photo.id}" type="button">Delete</button>
+        </div>
       </td>`;
     photoTableBody.appendChild(row);
   });
 }
 
+function renderCollections() {
+  collectionList.innerHTML = "";
+  const countsBySlug = getCollectionPhotoCounts();
+
+  allCollections
+    .slice()
+    .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0))
+    .forEach((collection, index) => {
+      const photoCount = countsBySlug[collection.slug] || 0;
+      const li = document.createElement("li");
+      li.className = "collection-item";
+      li.draggable = true;
+      li.dataset.slug = collection.slug;
+      li.innerHTML = `
+        <span class="drag-handle" aria-hidden="true">⋮⋮</span>
+        <input type="text" value="${escapeHtml(collection.name)}" data-collection-name="${escapeHtml(collection.slug)}" />
+        <label class="check-row"><input type="checkbox" data-collection-nav="${escapeHtml(collection.slug)}" ${collection.show_in_nav ? "checked" : ""}/> Show in navigation</label>
+        <div class="action-stack">
+          <button class="admin-btn admin-btn-secondary" data-collection-save="${escapeHtml(collection.slug)}" type="button">Save</button>
+          <button class="admin-btn admin-btn-secondary" data-collection-delete="${escapeHtml(collection.slug)}" type="button">Delete</button>
+        </div>
+        <div class="collection-meta">
+          <span class="badge badge-category">Slug: ${escapeHtml(collection.slug)}</span>
+          <span class="badge">Sort: ${index + 1}</span>
+          <span class="badge">Photos: ${photoCount}</span>
+          <span class="badge ${collection.show_in_nav ? "badge-visible" : "badge-hidden"}">${collection.show_in_nav ? "Visible in nav" : "Hidden in nav"}</span>
+        </div>
+      `;
+      collectionList.appendChild(li);
+    });
+}
+
 async function loadPhotos() {
   allPhotos = await window.photoDataApi.fetchAllPhotosForAdmin();
   renderPhotoTable();
+  renderCollections();
+}
+
+async function loadCollections() {
+  allCollections = await window.photoDataApi.fetchCollections();
+  syncCollectionDropdowns();
+  renderCollections();
 }
 
 function collectSettings(formType) {
@@ -263,30 +343,17 @@ async function loadSiteSettings() {
   fillSiteSettingsForm(settings);
 }
 
-function renderCollections() {
-  collectionList.innerHTML = "";
-  allCollections
-    .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0))
-    .forEach((collection) => {
-      const li = document.createElement("li");
-      li.className = "collection-item";
-      li.draggable = true;
-      li.dataset.slug = collection.slug;
-      li.innerHTML = `
-        <span class="drag-handle" aria-hidden="true">⋮⋮</span>
-        <input type="text" value="${collection.name}" data-collection-name="${collection.slug}" />
-        <label class="check-row"><input type="checkbox" data-collection-nav="${collection.slug}" ${collection.show_in_nav ? "checked" : ""}/> Show in navigation</label>
-        <button class="admin-btn admin-btn-secondary" data-collection-save="${collection.slug}" type="button">Save</button>
-        <button class="admin-btn admin-btn-secondary" data-collection-delete="${collection.slug}" type="button">Delete</button>
-      `;
-      collectionList.appendChild(li);
+function setupTabNavigation() {
+  document.querySelectorAll(".admin-nav-btn").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".admin-nav-btn").forEach((node) => node.classList.toggle("active", node === tab));
+      const active = tab.dataset.tab;
+      activeSectionTitle.textContent = tabLabels[active] || "Photos";
+      document.querySelectorAll(".admin-panel").forEach((panel) => {
+        panel.hidden = panel.dataset.panel !== active;
+      });
     });
-}
-
-async function loadCollections() {
-  allCollections = await window.photoDataApi.fetchCollections();
-  syncCollectionDropdowns();
-  renderCollections();
+  });
 }
 
 async function uploadToCloudinary() {
@@ -319,6 +386,26 @@ async function uploadToCloudinary() {
   }
 }
 
+async function runBulkAction(kind) {
+  const ids = Array.from(selectedPhotoIds);
+  if (!ids.length) return showMessage("Select at least one photo first.", "error");
+
+  try {
+    if (kind === "show") await window.photoDataApi.bulkUpdatePhotos(ids, { is_published: true });
+    if (kind === "hide") await window.photoDataApi.bulkUpdatePhotos(ids, { is_published: false });
+    if (kind === "delete") {
+      if (!window.confirm(`Delete ${ids.length} selected photos?`)) return;
+      await window.photoDataApi.bulkDeletePhotos(ids);
+    }
+    selectedPhotoIds = new Set();
+    if (selectAllPhotos) selectAllPhotos.checked = false;
+    await loadPhotos();
+    showMessage(`Bulk ${kind} action complete.`, "success");
+  } catch (error) {
+    showMessage(error.message || "Bulk action failed.", "error");
+  }
+}
+
 async function initializeAdmin() {
   if (!window.photoDataApi?.hasValidSupabaseConfig || !window.photoDataApi.hasValidSupabaseConfig()) {
     showMessage("Add your Supabase URL and anon key in supabase-config.js before using admin.", "error");
@@ -343,15 +430,7 @@ async function initializeAdmin() {
   });
 }
 
-document.querySelectorAll(".admin-tab").forEach((tab) => {
-  tab.addEventListener("click", () => {
-    document.querySelectorAll(".admin-tab").forEach((node) => node.classList.toggle("active", node === tab));
-    const active = tab.dataset.tab;
-    document.querySelectorAll(".admin-panel").forEach((panel) => {
-      panel.hidden = panel.dataset.panel !== active;
-    });
-  });
-});
+setupTabNavigation();
 
 loginForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -455,8 +534,7 @@ photoTableBody?.addEventListener("drop", async (event) => {
   const after = event.clientY > target.getBoundingClientRect().top + target.offsetHeight / 2;
   if (after) target.after(dragged); else target.before(dragged);
 
-  const reorderedIds = Array.from(photoTableBody.querySelectorAll("tr[data-id]"))
-    .map((row) => row.dataset.id);
+  const reorderedIds = Array.from(photoTableBody.querySelectorAll("tr[data-id]")).map((row) => row.dataset.id);
 
   await window.photoDataApi.reorderPhotos(reorderedIds);
   await loadPhotos();
@@ -471,26 +549,6 @@ selectAllPhotos?.addEventListener("change", () => {
     if (checked) selectedPhotoIds.add(node.dataset.photoSelect);
   });
 });
-
-async function runBulkAction(kind) {
-  const ids = Array.from(selectedPhotoIds);
-  if (!ids.length) return showMessage("Select at least one photo first.", "error");
-
-  try {
-    if (kind === "show") await window.photoDataApi.bulkUpdatePhotos(ids, { is_published: true });
-    if (kind === "hide") await window.photoDataApi.bulkUpdatePhotos(ids, { is_published: false });
-    if (kind === "delete") {
-      if (!window.confirm(`Delete ${ids.length} selected photos?`)) return;
-      await window.photoDataApi.bulkDeletePhotos(ids);
-    }
-    selectedPhotoIds = new Set();
-    if (selectAllPhotos) selectAllPhotos.checked = false;
-    await loadPhotos();
-    showMessage(`Bulk ${kind} action complete.`, "success");
-  } catch (error) {
-    showMessage(error.message || "Bulk action failed.", "error");
-  }
-}
 
 bulkPublishBtn?.addEventListener("click", () => runBulkAction("show"));
 bulkHideBtn?.addEventListener("click", () => runBulkAction("hide"));

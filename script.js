@@ -818,40 +818,6 @@ async function loadGalleryFromSupabase() {
 }
 
 
-function applyPortfolioFiltersFromCollections() {
-  const portfolioFiltersNode = document.getElementById("portfolioFilters");
-  if (!portfolioFiltersNode) return;
-  const visibleCollections = (siteCollections || []).filter((item) => item.show_in_nav !== false);
-  if (!visibleCollections.length) return;
-
-  portfolioFiltersNode.innerHTML = '<button class="portfolio-filter-btn active" type="button" data-filter="all">All</button>';
-  visibleCollections.forEach((collection) => {
-    const button = document.createElement("button");
-    button.className = "portfolio-filter-btn";
-    button.type = "button";
-    button.dataset.filter = collection.slug;
-    button.textContent = collection.name;
-    portfolioFiltersNode.appendChild(button);
-  });
-
-  portfolioFiltersNode.querySelectorAll(".portfolio-filter-btn").forEach((button) => {
-    button.addEventListener("click", () => {
-      portfolioFiltersNode.querySelectorAll(".portfolio-filter-btn").forEach((node) => node.classList.toggle("active", node === button));
-      renderForActiveFilter();
-    });
-  });
-}
-
-async function loadCollectionsForSite() {
-  if (!window.photoDataApi?.fetchCollections) return;
-  try {
-    siteCollections = await window.photoDataApi.fetchCollections();
-    applyPortfolioFiltersFromCollections();
-  } catch (error) {
-    console.warn("[gallery] fetchCollections failed. Falling back to static filters.", error);
-  }
-}
-
 const portfolioFilters = document.getElementById("portfolioFilters");
 
 if (portfolioFilters) {
