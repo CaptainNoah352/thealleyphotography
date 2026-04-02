@@ -17,8 +17,13 @@ const cloudinaryFile = document.getElementById("cloudinaryFile");
 const cloudinaryCloudName = document.getElementById("cloudinaryCloudName");
 const cloudinaryUploadPreset = document.getElementById("cloudinaryUploadPreset");
 const siteContentForm = document.getElementById("siteContentForm");
+const resetThemeBtn = document.getElementById("resetThemeBtn");
 const DEFAULT_CLOUDINARY_CLOUD_NAME = "dkcve5kju";
 const DEFAULT_CLOUDINARY_UPLOAD_PRESET = "wgbwc0lj";
+const DEFAULT_THEME_SETTINGS = {
+  theme_primary_color: "#5f6f52",
+  theme_accent_color: "#8a6442",
+};
 
 const fields = {
   id: document.getElementById("photoId"),
@@ -48,35 +53,63 @@ const siteSettingFields = {
   location_text: document.getElementById("setting_location_text"),
   availability_text: document.getElementById("setting_availability_text"),
   response_time_text: document.getElementById("setting_response_time_text"),
+  theme_primary_color: document.getElementById("setting_theme_primary_color"),
+  theme_accent_color: document.getElementById("setting_theme_accent_color"),
 };
 
 const DEFAULT_SITE_SETTINGS = {
-  about_intro: "A self-taught photographer from Connecticut, now based in Ocala, Florida — finding beauty in stillness, wildlife, and the quiet moments in between.",
-  about_paragraph_1:
-    "Long before I ever picked up a camera of my own, photography was already part of my life. My grandmother carried her Canon everywhere — on weekend road trips to Maine, on family vacations to Florida, and through the quiet towns of Connecticut where I grew up. I remember one trip to Disney World when she accidentally shattered a lens, and instead of being upset, she laughed about it the whole drive home. That moment stuck with me. The camera was never really about the gear — it was about being present, about noticing things, about holding onto moments that might have otherwise passed by.",
-  about_paragraph_2:
-    "Growing up in Connecticut, I was surrounded by places that felt like they existed in another time — colonial homes, antique storefronts, weathered wood, and soft light coming through old glass. I didn't think much of it back then, but looking back, that environment shaped the way I see the world. I've always been drawn to moments that feel timeless, the kind that carry a quiet weight without needing to say much.",
-  about_pullquote: "\"A photograph can't stop time, but it can make it linger just a little longer.\"",
-  about_paragraph_3:
-    "Florida was always part of that story too. Those trips with my grandparents stayed with me — the wetlands, the birds, the way the light feels softer and heavier at the same time. It felt different from anything I knew growing up. Now living in Ocala, I find myself surrounded by that same feeling every day. The springs, the wildlife, the stillness in certain places — it all reminds me to slow down and really see what's in front of me.",
-  about_paragraph_4:
-    "Somewhere along the way, photography became my way of doing that. Not in a perfect or technical sense, but in a personal one. It's how I try to hold onto the way something felt in a moment — the light, the atmosphere, the emotion that's easy to miss if you're not paying attention.",
-  about_paragraph_5:
-    "I'm still early in this, still learning and figuring things out as I go, but that's part of what draws me to it. Shooting film on my Canon A-1 has taught me patience and intention, while digital gives me the freedom to move with the moment — especially when I'm chasing wildlife or changing light. No matter what I'm using, the goal stays simple: to create something that makes someone pause, even briefly, and feel something real.",
-  contact_title: "Let's connect",
-  contact_subtitle:
-    "Whether you're interested in prints, have a collaboration in mind, or just want to say hello — I'd love to hear from you.",
-  contact_email: "hello@brandonalley.photography",
-  instagram_url: "https://instagram.com/the.alley.photography",
-  instagram_label: "@the.alley.photography",
-  flickr_url: "https://www.flickr.com/photos/204244048@N05/",
-  location_text: "Ocala, Florida",
-  availability_text: "Open for prints & collaborations",
-  response_time_text: "Usually within 24-48 hours",
+  about_intro: "",
+  about_paragraph_1: "",
+  about_paragraph_2: "",
+  about_pullquote: "",
+  about_paragraph_3: "",
+  about_paragraph_4: "",
+  about_paragraph_5: "",
+  contact_title: "",
+  contact_subtitle: "",
+  contact_email: "",
+  instagram_url: "",
+  instagram_label: "",
+  flickr_url: "",
+  location_text: "",
+  availability_text: "",
+  response_time_text: "",
+  ...DEFAULT_THEME_SETTINGS,
 };
 
 let allPhotos = [];
 let dragSourceId = "";
+const SITE_SETTING_PLACEHOLDERS = {
+  about_intro: "Intro text for the About section",
+  about_paragraph_1: "First About paragraph",
+  about_paragraph_2: "Second About paragraph",
+  about_pullquote: "Short pullquote",
+  about_paragraph_3: "Third About paragraph",
+  about_paragraph_4: "Fourth About paragraph",
+  about_paragraph_5: "Fifth About paragraph",
+  contact_title: "Contact section heading",
+  contact_subtitle: "Contact section supporting text",
+  contact_email: "name@example.com",
+  instagram_url: "https://instagram.com/your-handle",
+  instagram_label: "@your-handle",
+  flickr_url: "https://www.flickr.com/photos/...",
+  location_text: "City, State",
+  availability_text: "Availability note",
+  response_time_text: "Typical response time",
+};
+
+function normalizeHexColor(value, fallback) {
+  if (typeof value !== "string") return fallback;
+  const color = value.trim();
+  return /^#[0-9a-fA-F]{6}$/.test(color) ? color : fallback;
+}
+
+function applyThemePreview(settings) {
+  const root = document.documentElement;
+  if (!root) return;
+  root.style.setProperty("--color-primary", normalizeHexColor(settings?.theme_primary_color, DEFAULT_THEME_SETTINGS.theme_primary_color));
+  root.style.setProperty("--color-accent", normalizeHexColor(settings?.theme_accent_color, DEFAULT_THEME_SETTINGS.theme_accent_color));
+}
 
 function showMessage(text, type = "") {
   if (!adminMessage) return;
@@ -212,15 +245,20 @@ function fillSiteSettingsForm(settings) {
   Object.entries(siteSettingFields).forEach(([key, node]) => {
     if (!node) return;
     const fallbackValue = DEFAULT_SITE_SETTINGS[key] || "";
-    node.value = settings?.[key] || fallbackValue;
-    node.placeholder = fallbackValue;
+    const nextValue = typeof settings?.[key] === "string" ? settings[key] : fallbackValue;
+    node.value = nextValue;
+    node.placeholder = SITE_SETTING_PLACEHOLDERS[key] || fallbackValue;
   });
+  applyThemePreview(settings);
 }
 
 function collectSiteSettingsFormValues() {
   const values = {};
   Object.entries(siteSettingFields).forEach(([key, node]) => {
-    values[key] = node?.value?.trim() || "";
+    const rawValue = node?.value || "";
+    values[key] = key.startsWith("theme_")
+      ? normalizeHexColor(rawValue, DEFAULT_THEME_SETTINGS[key])
+      : rawValue.trim();
   });
   return values;
 }
@@ -380,6 +418,30 @@ if (siteContentForm) {
     } catch (error) {
       showMessage(error.message || "Unable to save site content.", "error");
     }
+  });
+}
+
+["theme_primary_color", "theme_accent_color"].forEach((key) => {
+  const field = siteSettingFields[key];
+  if (!field) return;
+  field.addEventListener("input", () => {
+    applyThemePreview({
+      theme_primary_color: siteSettingFields.theme_primary_color?.value,
+      theme_accent_color: siteSettingFields.theme_accent_color?.value,
+    });
+  });
+});
+
+if (resetThemeBtn) {
+  resetThemeBtn.addEventListener("click", () => {
+    if (siteSettingFields.theme_primary_color) {
+      siteSettingFields.theme_primary_color.value = DEFAULT_THEME_SETTINGS.theme_primary_color;
+    }
+    if (siteSettingFields.theme_accent_color) {
+      siteSettingFields.theme_accent_color.value = DEFAULT_THEME_SETTINGS.theme_accent_color;
+    }
+    applyThemePreview(DEFAULT_THEME_SETTINGS);
+    showMessage("Theme colors reset to defaults. Save Site Content to publish this change.", "success");
   });
 }
 

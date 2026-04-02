@@ -6,11 +6,15 @@
   --bg: #ffffff;
   --bg-soft: #f5f5f5;
   --surface: #ffffff;
-  --sage: #5f6f52;
+  --color-primary: #5f6f52;
+  --color-accent: #8a6442;
+  --color-text: #2f2923;
+  --color-bg: #ffffff;
+  --sage: var(--color-primary);
   --olive-light: #c7cfbe;
-  --earth: #8a6442;
-  --terracotta: #b4704d;
-  --text: #2f2923;
+  --earth: var(--color-accent);
+  --terracotta: #9c7a61;
+  --text: var(--color-text);
   --muted: #62584d;
   --shadow: 0 12px 28px rgba(76, 58, 42, 0.1);
   --header-bg: rgba(255, 255, 255, 0.96);
@@ -44,12 +48,14 @@
     --bg: #0d0e10;
     --bg-soft: #15171a;
     --surface: #171a1e;
-    --text: #ece6df;
+    --color-text: #ece6df;
+    --color-bg: #0d0e10;
+    --text: var(--color-text);
     --muted: #b9b0a5;
-    --sage: #9fb39d;
+    --sage: var(--color-primary);
     --olive-light: #687869;
-    --earth: #c99f7f;
-    --terracotta: #d79a73;
+    --earth: var(--color-accent);
+    --terracotta: #c19b7f;
     --shadow: 0 12px 28px rgba(0, 0, 0, 0.36);
     --header-bg: rgba(13, 14, 16, 0.92);
     --header-border: rgba(255, 255, 255, 0.1);
@@ -235,11 +241,11 @@ p {
 }
 
 .site-nav a:hover {
-  color: var(--sage);
+  color: var(--color-primary);
 }
 
 .site-nav a.active {
-  border-bottom-color: var(--text);
+  border-bottom-color: var(--color-primary);
 }
 
 .inline-link {
@@ -249,7 +255,7 @@ p {
 }
 
 .inline-link:hover {
-  color: var(--sage);
+  color: var(--color-primary);
 }
 
 .nav-social {
@@ -412,7 +418,7 @@ p {
 }
 
 .mobile-menu-nav a:hover {
-  color: var(--sage);
+  color: var(--color-primary);
 }
 
 .mobile-menu-social {
@@ -531,8 +537,9 @@ p {
 
 .portfolio-filter-btn.active,
 .portfolio-filter-btn:hover {
-  background: var(--text);
-  color: var(--bg);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--button-text-on-fill);
 }
 
 .gallery-item.is-broken {
@@ -602,13 +609,13 @@ p {
 .about-pullquote {
   margin: 2.5rem 0;
   padding: 2rem 2.5rem;
-  border-left: 3px solid var(--terracotta);
+  border-left: 3px solid var(--color-accent);
   background: var(--quote-bg);
   font-family: "Poppins", Arial, sans-serif;
   font-size: clamp(1.2rem, 1.8vw, 1.45rem);
   font-style: italic;
   line-height: 1.7;
-  color: var(--earth);
+  color: var(--color-accent);
 }
 
 .about-details {
@@ -725,18 +732,18 @@ p {
 }
 
 .contact-link {
-  color: var(--earth);
+  color: var(--color-accent);
   text-decoration: none;
   font-weight: 600;
   font-size: 0.95rem;
   padding: 0.5rem 1.2rem;
-  border: 1px solid var(--earth);
+  border: 1px solid var(--color-accent);
   transition: all 0.2s ease;
   display: inline-block;
 }
 
 .contact-link:hover {
-  background: var(--earth);
+  background: var(--color-accent);
   color: var(--button-text-on-fill);
 }
 
@@ -796,13 +803,18 @@ p {
 }
 
 .site-footer a {
-  color: var(--sage);
+  color: var(--color-primary);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .site-footer a:hover {
-  color: var(--terracotta);
+  color: var(--color-accent);
+}
+
+.empty-state-copy {
+  color: color-mix(in srgb, var(--muted) 88%, var(--text) 12%);
+  font-style: italic;
 }
 
 .social-links {
