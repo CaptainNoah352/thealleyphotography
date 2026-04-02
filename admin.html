@@ -10,10 +10,12 @@
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="admin.css" />
   </head>
-  <body data-page="admin">
+  <body data-page="admin" class="admin-auth-loading">
     <main class="admin-page">
       <div class="admin-shell">
         <section id="adminMessage" class="admin-message" aria-live="polite"></section>
+
+        <section id="authLoadingIndicator" class="admin-auth-loading-indicator" role="status" aria-live="polite">Checking admin session…</section>
 
         <section id="loginSection" class="admin-card auth-card">
           <h2>Admin Sign In</h2>

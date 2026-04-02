@@ -1,4 +1,6 @@
 const dom = {
+  body: document.body,
+  authLoadingIndicator: document.getElementById("authLoadingIndicator"),
   loginSection: document.getElementById("loginSection"),
   dashboardSection: document.getElementById("dashboardSection"),
   loginForm: document.getElementById("loginForm"),
@@ -121,8 +123,20 @@ function stringToBool(value, fallback = false) {
   return value.toLowerCase() === "true";
 }
 
+function setAuthLoading(isLoading) {
+  dom.body?.classList.toggle("admin-auth-loading", isLoading);
+  if (dom.authLoadingIndicator) dom.authLoadingIndicator.hidden = !isLoading;
+
+  if (isLoading) {
+    if (dom.loginSection) dom.loginSection.hidden = true;
+    if (dom.dashboardSection) dom.dashboardSection.hidden = true;
+    if (dom.logoutBtn) dom.logoutBtn.hidden = true;
+  }
+}
+
 function setAuthUi(session) {
   const loggedIn = Boolean(session);
+  setAuthLoading(false);
   if (dom.loginSection) dom.loginSection.hidden = loggedIn;
   if (dom.dashboardSection) dom.dashboardSection.hidden = !loggedIn;
   if (dom.logoutBtn) dom.logoutBtn.hidden = !loggedIn;
@@ -457,7 +471,10 @@ function buildReorderedPhotoIds(draggedId, targetId, placeAfter) {
 }
 
 async function initializeAdmin() {
+  setAuthLoading(true);
+
   if (!window.photoDataApi?.hasValidSupabaseConfig || !window.photoDataApi.hasValidSupabaseConfig()) {
+    setAuthUi(null);
     showMessage("Add your Supabase URL and anon key in supabase-config.js before using admin.", "error");
     return;
   }
@@ -739,4 +756,7 @@ dom.settingsForm?.addEventListener("submit", async (event) => {
   }
 });
 
-initializeAdmin().catch((error) => showMessage(error.message || "Admin failed to initialize.", "error"));
+initializeAdmin().catch((error) => {
+  setAuthUi(null);
+  showMessage(error.message || "Admin failed to initialize.", "error");
+});

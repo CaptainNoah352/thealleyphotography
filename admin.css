@@ -1,3 +1,27 @@
+[hidden] { display: none !important; }
+
+body.admin-auth-loading #loginSection,
+body.admin-auth-loading #dashboardSection,
+body.admin-auth-loading #logoutBtn {
+  display: none !important;
+}
+
+.admin-auth-loading-indicator {
+  display: none;
+  max-width: 540px;
+  margin: 3rem auto 0;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--admin-bg) 45%, #fff);
+  color: var(--admin-muted);
+  text-align: center;
+}
+
+body.admin-auth-loading .admin-auth-loading-indicator {
+  display: block;
+}
+
 :root {
   --admin-bg: #F7F4EE;
   --admin-surface: #FFFDF9;
