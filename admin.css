@@ -70,7 +70,7 @@
 .admin-table tr.drag-over { outline: 2px dashed var(--admin-primary); outline-offset: -2px; }
 
 .collection-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.55rem; }
-.collection-item { border: 1px solid var(--admin-border); border-radius: 12px; padding: 0.65rem; background: #fff; display: grid; gap: 0.5rem; grid-template-columns: auto 1fr auto auto; align-items: center; }
+.collection-item { border: 1px solid var(--admin-border); border-radius: 12px; padding: 0.65rem; background: #fff; display: grid; gap: 0.5rem; grid-template-columns: auto minmax(130px, 1fr) minmax(120px, 1fr) auto auto; align-items: center; }
 .collection-meta { grid-column: 1 / -1; display: flex; gap: 0.35rem; flex-wrap: wrap; }
 .collection-item input[type="text"] { min-width: 140px; }
 .admin-inline-form { display: flex; gap: 0.55rem; margin-bottom: 0.85rem; }

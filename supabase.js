@@ -245,10 +245,53 @@
     if (!supabaseClient) throw new Error("Supabase client is not configured.");
 
     const nextPayload = { ...payload };
+    const requestedSlug = toSlug(nextPayload.slug || slug);
+    const nextName = (nextPayload.name || "").trim();
+    const nextShowInNav = nextPayload.show_in_nav !== false;
     delete nextPayload.slug;
 
-    const { error } = await supabaseClient.from("collections").update(nextPayload).eq("slug", slug);
-    if (error) throw error;
+    if (!requestedSlug) throw new Error("Collection slug is required.");
+
+    if (requestedSlug === slug) {
+      const { error } = await supabaseClient
+        .from("collections")
+        .update({
+          ...nextPayload,
+          name: nextName || slug,
+          show_in_nav: nextShowInNav,
+        })
+        .eq("slug", slug);
+      if (error) throw error;
+      return requestedSlug;
+    }
+
+    const { data: existingCollection, error: currentCollectionError } = await supabaseClient
+      .from("collections")
+      .select("sort_order")
+      .eq("slug", slug)
+      .maybeSingle();
+    if (currentCollectionError) throw currentCollectionError;
+
+    const { error: insertError } = await supabaseClient.from("collections").insert({
+      slug: requestedSlug,
+      name: nextName || requestedSlug,
+      show_in_nav: nextShowInNav,
+      sort_order: Number.isFinite(nextPayload.sort_order)
+        ? nextPayload.sort_order
+        : (Number.isFinite(existingCollection?.sort_order) ? existingCollection.sort_order : 0),
+    });
+    if (insertError) throw insertError;
+
+    const { error: photosError } = await supabaseClient
+      .from("photos")
+      .update({ category: requestedSlug })
+      .eq("category", slug);
+    if (photosError) throw photosError;
+
+    const { error: deleteError } = await supabaseClient.from("collections").delete().eq("slug", slug);
+    if (deleteError) throw deleteError;
+
+    return requestedSlug;
   }
 
   async function deleteCollection(slug) {
