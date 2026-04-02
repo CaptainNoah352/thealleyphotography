@@ -13,6 +13,28 @@ const lightboxPrevZone = document.getElementById("lightboxPrevZone");
 const lightboxNextZone = document.getElementById("lightboxNextZone");
 const lightboxFigure = document.getElementById("lightboxFigure");
 
+const siteContentNodes = {
+  aboutIntro: document.getElementById("aboutIntro"),
+  aboutParagraph1: document.getElementById("aboutParagraph1"),
+  aboutParagraph2: document.getElementById("aboutParagraph2"),
+  aboutPullquote: document.getElementById("aboutPullquote"),
+  aboutParagraph3: document.getElementById("aboutParagraph3"),
+  aboutParagraph4: document.getElementById("aboutParagraph4"),
+  aboutParagraph5: document.getElementById("aboutParagraph5"),
+  contactTitle: document.getElementById("contact-title"),
+  contactSubtitle: document.getElementById("contactSubtitle"),
+  contactEmailLink: document.getElementById("contactEmailLink"),
+  contactInstagramLink: document.getElementById("contactInstagramLink"),
+  contactFlickrLink: document.getElementById("contactFlickrLink"),
+  headerInstagramLink: document.getElementById("headerInstagramLink"),
+  mobileInstagramLink: document.getElementById("mobileInstagramLink"),
+  headerFlickrLink: document.getElementById("headerFlickrLink"),
+  mobileFlickrLink: document.getElementById("mobileFlickrLink"),
+  contactLocationText: document.getElementById("contactLocationText"),
+  contactAvailabilityText: document.getElementById("contactAvailabilityText"),
+  contactResponseTimeText: document.getElementById("contactResponseTimeText"),
+};
+
 if (yearNode) {
   yearNode.textContent = new Date().getFullYear();
 }
@@ -486,6 +508,72 @@ function renderForActiveFilter() {
   renderGallery(filteredImages);
 }
 
+function applySiteSettingsToHome(settings) {
+  if (!settings) return;
+
+  if (siteContentNodes.aboutIntro) siteContentNodes.aboutIntro.textContent = settings.about_intro || siteContentNodes.aboutIntro.textContent;
+  if (siteContentNodes.aboutParagraph1) siteContentNodes.aboutParagraph1.textContent = settings.about_paragraph_1 || siteContentNodes.aboutParagraph1.textContent;
+  if (siteContentNodes.aboutParagraph2) siteContentNodes.aboutParagraph2.textContent = settings.about_paragraph_2 || siteContentNodes.aboutParagraph2.textContent;
+  if (siteContentNodes.aboutPullquote) siteContentNodes.aboutPullquote.textContent = settings.about_pullquote || siteContentNodes.aboutPullquote.textContent;
+  if (siteContentNodes.aboutParagraph3) siteContentNodes.aboutParagraph3.textContent = settings.about_paragraph_3 || siteContentNodes.aboutParagraph3.textContent;
+  if (siteContentNodes.aboutParagraph4) siteContentNodes.aboutParagraph4.textContent = settings.about_paragraph_4 || siteContentNodes.aboutParagraph4.textContent;
+  if (siteContentNodes.aboutParagraph5) siteContentNodes.aboutParagraph5.textContent = settings.about_paragraph_5 || siteContentNodes.aboutParagraph5.textContent;
+  if (siteContentNodes.contactTitle) siteContentNodes.contactTitle.textContent = settings.contact_title || siteContentNodes.contactTitle.textContent;
+  if (siteContentNodes.contactSubtitle) siteContentNodes.contactSubtitle.textContent = settings.contact_subtitle || siteContentNodes.contactSubtitle.textContent;
+
+  if (siteContentNodes.contactEmailLink && settings.contact_email) {
+    siteContentNodes.contactEmailLink.textContent = settings.contact_email;
+    siteContentNodes.contactEmailLink.href = `mailto:${settings.contact_email}`;
+  }
+
+  const instagramUrl = settings.instagram_url || "";
+  if (siteContentNodes.contactInstagramLink && instagramUrl) {
+    siteContentNodes.contactInstagramLink.href = instagramUrl;
+  }
+  if (siteContentNodes.headerInstagramLink && instagramUrl) {
+    siteContentNodes.headerInstagramLink.href = instagramUrl;
+  }
+  if (siteContentNodes.mobileInstagramLink && instagramUrl) {
+    siteContentNodes.mobileInstagramLink.href = instagramUrl;
+  }
+  if (siteContentNodes.contactInstagramLink && settings.instagram_label) {
+    siteContentNodes.contactInstagramLink.textContent = settings.instagram_label;
+  }
+
+  const flickrUrl = settings.flickr_url || "";
+  if (siteContentNodes.contactFlickrLink && flickrUrl) {
+    siteContentNodes.contactFlickrLink.href = flickrUrl;
+  }
+  if (siteContentNodes.headerFlickrLink && flickrUrl) {
+    siteContentNodes.headerFlickrLink.href = flickrUrl;
+  }
+  if (siteContentNodes.mobileFlickrLink && flickrUrl) {
+    siteContentNodes.mobileFlickrLink.href = flickrUrl;
+  }
+
+  if (siteContentNodes.contactLocationText) {
+    siteContentNodes.contactLocationText.textContent = settings.location_text || siteContentNodes.contactLocationText.textContent;
+  }
+  if (siteContentNodes.contactAvailabilityText) {
+    siteContentNodes.contactAvailabilityText.textContent = settings.availability_text || siteContentNodes.contactAvailabilityText.textContent;
+  }
+  if (siteContentNodes.contactResponseTimeText) {
+    siteContentNodes.contactResponseTimeText.textContent = settings.response_time_text || siteContentNodes.contactResponseTimeText.textContent;
+  }
+}
+
+async function loadSiteSettingsForHome() {
+  if (pageType !== "home") return;
+  if (!window.photoDataApi?.fetchSiteSettings) return;
+
+  try {
+    const settings = await window.photoDataApi.fetchSiteSettings();
+    applySiteSettingsToHome(settings);
+  } catch (error) {
+    console.warn("Unable to load site settings from Supabase. Using static content.", error);
+  }
+}
+
 async function loadGalleryFromSupabase() {
   if (!window.photoDataApi?.hasValidSupabaseConfig || !window.photoDataApi.hasValidSupabaseConfig()) {
     orderedGalleryImages = [...seededFallbackImages];
@@ -517,6 +605,8 @@ if (portfolioFilters) {
 }
 
 (async function initializeGallery() {
+  await loadSiteSettingsForHome();
+
   try {
     await loadGalleryFromSupabase();
   } catch (error) {

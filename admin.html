@@ -45,6 +45,23 @@
               <label>Image URL
                 <input id="imageUrl" type="url" required placeholder="https://..." />
               </label>
+
+              <div class="cloudinary-panel">
+                <p class="cloudinary-title">Cloudinary unsigned upload (optional)</p>
+                <div class="cloudinary-grid">
+                  <label>Cloud name
+                    <input id="cloudinaryCloudName" type="text" placeholder="your-cloud-name" />
+                  </label>
+                  <label>Unsigned upload preset
+                    <input id="cloudinaryUploadPreset" type="text" placeholder="unsigned_preset_name" />
+                  </label>
+                  <label class="cloudinary-file">Select image file
+                    <input id="cloudinaryFile" type="file" accept="image/*" />
+                  </label>
+                  <button id="cloudinaryUploadBtn" class="admin-btn admin-btn-secondary" type="button">Upload to Cloudinary</button>
+                </div>
+              </div>
+
               <label>Image URLs (bulk add)
                 <textarea id="bulkImageUrls" rows="4" placeholder="Paste one image URL per line"></textarea>
               </label>
@@ -80,6 +97,63 @@
           </div>
 
           <div class="admin-card">
+            <h2>Editable Site Content</h2>
+            <form id="siteContentForm" class="admin-form admin-grid-form">
+              <label>About intro
+                <textarea id="setting_about_intro" rows="2"></textarea>
+              </label>
+              <label>About paragraph 1
+                <textarea id="setting_about_paragraph_1" rows="4"></textarea>
+              </label>
+              <label>About paragraph 2
+                <textarea id="setting_about_paragraph_2" rows="4"></textarea>
+              </label>
+              <label>About pullquote
+                <textarea id="setting_about_pullquote" rows="2"></textarea>
+              </label>
+              <label>About paragraph 3
+                <textarea id="setting_about_paragraph_3" rows="4"></textarea>
+              </label>
+              <label>About paragraph 4
+                <textarea id="setting_about_paragraph_4" rows="4"></textarea>
+              </label>
+              <label>About paragraph 5
+                <textarea id="setting_about_paragraph_5" rows="4"></textarea>
+              </label>
+              <label>Contact title
+                <input id="setting_contact_title" type="text" />
+              </label>
+              <label>Contact subtitle
+                <textarea id="setting_contact_subtitle" rows="3"></textarea>
+              </label>
+              <label>Contact email
+                <input id="setting_contact_email" type="email" />
+              </label>
+              <label>Instagram URL
+                <input id="setting_instagram_url" type="url" />
+              </label>
+              <label>Instagram label
+                <input id="setting_instagram_label" type="text" />
+              </label>
+              <label>Flickr URL
+                <input id="setting_flickr_url" type="url" />
+              </label>
+              <label>Location text
+                <input id="setting_location_text" type="text" />
+              </label>
+              <label>Availability text
+                <input id="setting_availability_text" type="text" />
+              </label>
+              <label>Response time text
+                <input id="setting_response_time_text" type="text" />
+              </label>
+              <div class="admin-form-actions">
+                <button id="saveSiteContentBtn" class="admin-btn" type="submit">Save Site Content</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="admin-card">
             <div class="admin-toolbar">
               <h2>Manage Photos</h2>
               <input id="searchInput" type="search" placeholder="Search title" />
@@ -95,6 +169,7 @@
               <table class="admin-table">
                 <thead>
                   <tr>
+                    <th aria-label="Drag handle"></th>
                     <th>Photo</th>
                     <th>Title</th>
                     <th>URL</th>
