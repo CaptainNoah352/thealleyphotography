@@ -15,54 +15,111 @@
       <div class="admin-shell">
         <section id="adminMessage" class="admin-message" aria-live="polite"></section>
 
-        <section id="authLoadingIndicator" class="admin-auth-loading-indicator" role="status" aria-live="polite">Checking admin session…</section>
+        <section id="authLoadingIndicator" class="admin-auth-loading-indicator" role="status" aria-live="polite">
+          <svg class="spinner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/></svg>
+          Checking admin session…
+        </section>
 
+        <!-- ── LOGIN ─────────────────────────────────────── -->
         <section id="loginSection" class="admin-card auth-card">
+          <div class="auth-logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </div>
           <h2>Admin Sign In</h2>
           <p class="section-help">Sign in with your administrator account to access content controls.</p>
           <form id="loginForm" class="admin-form">
             <label>Email<input id="loginEmail" type="email" required autocomplete="email" /></label>
             <label>Password<input id="loginPassword" type="password" required autocomplete="current-password" /></label>
-            <button class="admin-btn" type="submit">Sign In</button>
+            <button class="admin-btn admin-btn-full" type="submit">Sign In</button>
           </form>
         </section>
 
+        <!-- ── DASHBOARD ──────────────────────────────────── -->
         <section id="dashboardSection" class="admin-dashboard" hidden>
-          <aside class="admin-sidebar" aria-label="Admin sections">
-            <div class="brand-block">
-              <p class="eyebrow">The Alley Photography</p>
-              <h1>Admin CMS</h1>
+
+          <!-- Mobile sidebar backdrop -->
+          <div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true"></div>
+
+          <!-- ── SIDEBAR ──────────────────────── -->
+          <aside class="admin-sidebar" id="adminSidebar" aria-label="Admin navigation">
+            <div class="sidebar-header">
+              <div class="brand-block">
+                <p class="eyebrow">The Alley Photography</p>
+                <h1 class="brand-title">Admin CMS</h1>
+              </div>
+              <button class="sidebar-close-btn" id="sidebarCloseBtn" type="button" aria-label="Close menu">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
             </div>
+
             <nav class="admin-nav">
-              <button class="admin-nav-btn active" type="button" data-tab="photos">Photos</button>
-              <button class="admin-nav-btn" type="button" data-tab="collections">Collections</button>
-              <button class="admin-nav-btn" type="button" data-tab="appearance">Appearance</button>
-              <button class="admin-nav-btn" type="button" data-tab="settings">Settings</button>
+              <button class="admin-nav-btn active" type="button" data-tab="photos">
+                <span class="nav-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                </span>
+                <span class="nav-label">Photos</span>
+              </button>
+              <button class="admin-nav-btn" type="button" data-tab="collections">
+                <span class="nav-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                </span>
+                <span class="nav-label">Collections</span>
+              </button>
+              <button class="admin-nav-btn" type="button" data-tab="appearance">
+                <span class="nav-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="1"/><circle cx="17.5" cy="10.5" r="1"/><circle cx="8.5" cy="7.5" r="1"/><circle cx="6.5" cy="12.5" r="1"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 011.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+                </span>
+                <span class="nav-label">Appearance</span>
+              </button>
+              <button class="admin-nav-btn" type="button" data-tab="settings">
+                <span class="nav-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                </span>
+                <span class="nav-label">Settings</span>
+              </button>
             </nav>
+
+            <div class="sidebar-footer">
+              <button id="logoutBtn" class="admin-btn admin-btn-secondary admin-btn-icon" type="button" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Logout
+              </button>
+            </div>
           </aside>
 
+          <!-- ── MAIN CONTENT ─────────────────── -->
           <div class="admin-content-shell">
+
             <header class="admin-topbar">
-              <div>
-                <p class="eyebrow">Dashboard</p>
-                <p id="activeSectionTitle" class="active-section-title">Photos</p>
+              <div class="topbar-left">
+                <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="adminSidebar">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+                <div class="topbar-heading">
+                  <p class="eyebrow">Dashboard</p>
+                  <p id="activeSectionTitle" class="active-section-title">Photos</p>
+                </div>
               </div>
-              <button id="logoutBtn" class="admin-btn admin-btn-secondary" type="button" hidden>Logout</button>
             </header>
 
+            <!-- ── PHOTOS PANEL ───────────────── -->
             <section class="admin-panel" data-panel="photos">
               <div class="admin-grid-two">
+
+                <!-- Add / Edit Photo -->
                 <article class="admin-card">
                   <h2 id="photoFormTitle">Add Photo</h2>
-                  <p class="section-help">Add single images, batch URLs, or upload directly with Cloudinary.</p>
+                  <p class="section-help">Add a single image, upload via Cloudinary, or batch-paste URLs.</p>
+
                   <form id="photoForm" class="admin-form admin-grid-form">
                     <input type="hidden" id="photoId" />
-                    <label>Image URL<input id="imageUrl" type="url" required placeholder="https://..." /></label>
+
+                    <label>Image URL<input id="imageUrl" type="url" required placeholder="https://…" /></label>
                     <label>Title<input id="title" type="text" placeholder="Photo title" /></label>
                     <label class="span-full">Caption<textarea id="caption" rows="2" placeholder="Short caption"></textarea></label>
                     <label>Alt text<input id="altText" type="text" placeholder="Accessible description" /></label>
                     <label>Category<select id="category"></select></label>
-                    <label>Tags (comma separated)<input id="tags" type="text" placeholder="bird, wetlands, sunrise" /></label>
+                    <label>Tags<input id="tags" type="text" placeholder="bird, wetlands, sunrise" /></label>
                     <label>Orientation
                       <select id="orientation">
                         <option value="auto">Auto</option>
@@ -72,38 +129,57 @@
                       </select>
                     </label>
                     <label>Sort order<input id="sortOrder" type="number" value="0" /></label>
-                    <label class="check-row"><input id="showOnHome" type="checkbox" /> Show on homepage</label>
-                    <label class="check-row"><input id="isFeatured" type="checkbox" /> Featured</label>
-                    <label class="check-row"><input id="isPublished" type="checkbox" checked /> Visible on site</label>
 
-                    <div class="cloudinary-panel">
-                      <p class="cloudinary-title">Cloudinary unsigned upload (optional)</p>
-                      <div class="cloudinary-grid">
-                        <label>Cloud name<input id="cloudinaryCloudName" type="text" value="dkcve5kju" /></label>
-                        <label>Unsigned upload preset<input id="cloudinaryUploadPreset" type="text" value="wgbwc0lj" /></label>
-                        <label>Select image file<input id="cloudinaryFile" type="file" accept="image/*" /></label>
-                        <button id="cloudinaryUploadBtn" class="admin-btn admin-btn-secondary" type="button">Upload to Cloudinary</button>
-                      </div>
+                    <div class="check-group span-full">
+                      <label class="check-row"><input id="showOnHome" type="checkbox" /> Show on homepage</label>
+                      <label class="check-row"><input id="isFeatured" type="checkbox" /> Featured</label>
+                      <label class="check-row"><input id="isPublished" type="checkbox" checked /> Visible on site</label>
                     </div>
 
-                    <label class="span-full">Image URLs (bulk add)<textarea id="bulkImageUrls" rows="4" placeholder="One URL per line"></textarea></label>
-                    <button id="addBulkUrlsBtn" class="admin-btn admin-btn-secondary" type="button">Add URLs in Bulk</button>
-
-                    <div class="preview-card">
+                    <div class="preview-card span-full">
                       <p class="preview-title">Live preview</p>
                       <img id="imagePreview" class="admin-preview" alt="Image preview" />
                     </div>
 
-                    <div class="admin-form-actions">
+                    <!-- Cloudinary (collapsible) -->
+                    <details class="collapsible-section span-full">
+                      <summary>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>
+                        Cloudinary upload
+                      </summary>
+                      <div class="cloudinary-panel">
+                        <div class="cloudinary-grid">
+                          <label>Cloud name<input id="cloudinaryCloudName" type="text" value="dkcve5kju" /></label>
+                          <label>Upload preset<input id="cloudinaryUploadPreset" type="text" value="wgbwc0lj" /></label>
+                          <label>Select image file<input id="cloudinaryFile" type="file" accept="image/*" /></label>
+                          <button id="cloudinaryUploadBtn" class="admin-btn admin-btn-secondary" type="button">Upload to Cloudinary</button>
+                        </div>
+                      </div>
+                    </details>
+
+                    <!-- Bulk URLs (collapsible) -->
+                    <details class="collapsible-section span-full">
+                      <summary>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                        Bulk add URLs
+                      </summary>
+                      <div class="bulk-urls-panel">
+                        <label class="span-full">Image URLs — one per line<textarea id="bulkImageUrls" rows="5" placeholder="https://example.com/photo1.jpg&#10;https://example.com/photo2.jpg"></textarea></label>
+                        <button id="addBulkUrlsBtn" class="admin-btn admin-btn-secondary" type="button">Add URLs in Bulk</button>
+                      </div>
+                    </details>
+
+                    <div class="admin-form-actions span-full">
                       <button class="admin-btn" type="submit">Save Photo</button>
                       <button id="cancelEditBtn" class="admin-btn admin-btn-secondary" type="button" hidden>Cancel Edit</button>
                     </div>
                   </form>
                 </article>
 
+                <!-- Photo Library -->
                 <article class="admin-card">
                   <h2>Photo Library</h2>
-                  <p class="section-help">Search, filter, batch-edit visibility, and drag to reorder.</p>
+                  <p class="section-help">Search, filter, batch-edit, and drag to reorder.</p>
 
                   <div class="admin-toolbar">
                     <input id="searchInput" type="search" placeholder="Search title, caption, or tags" />
@@ -115,15 +191,15 @@
                       <option value="square">Square</option>
                       <option value="auto">Auto</option>
                     </select>
-                    <input id="adminTagFilter" type="search" placeholder="Filter tag" />
+                    <input id="adminTagFilter" type="search" placeholder="Filter by tag" />
                   </div>
 
                   <div class="admin-bulk-row">
                     <label class="check-row"><input id="selectAllPhotos" type="checkbox" /> Select all visible</label>
                     <div class="bulk-action-group">
-                      <button id="bulkPublishBtn" class="admin-btn admin-btn-secondary" type="button">Bulk show</button>
-                      <button id="bulkHideBtn" class="admin-btn admin-btn-secondary" type="button">Bulk hide</button>
-                      <button id="bulkDeleteBtn" class="admin-btn admin-btn-danger" type="button">Bulk delete</button>
+                      <button id="bulkPublishBtn" class="admin-btn admin-btn-secondary admin-btn-sm" type="button">Show</button>
+                      <button id="bulkHideBtn" class="admin-btn admin-btn-secondary admin-btn-sm" type="button">Hide</button>
+                      <button id="bulkDeleteBtn" class="admin-btn admin-btn-danger admin-btn-sm" type="button">Delete</button>
                     </div>
                   </div>
 
@@ -138,29 +214,35 @@
                     </table>
                   </div>
                 </article>
+
               </div>
             </section>
 
+            <!-- ── COLLECTIONS PANEL ──────────── -->
             <section class="admin-panel" data-panel="collections" hidden>
               <article class="admin-card">
                 <h2>Collections</h2>
-                <p class="section-help">Control display names, slugs, navigation visibility, and ordering.</p>
+                <p class="section-help">Control display names, slugs, nav visibility, and ordering.</p>
                 <form id="collectionCreateForm" class="admin-inline-form">
                   <input id="newCollectionName" type="text" placeholder="New collection name" required />
-                  <button class="admin-btn" type="submit">Create</button>
+                  <button class="admin-btn" type="submit">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Create
+                  </button>
                 </form>
                 <ul id="collectionList" class="collection-list"></ul>
               </article>
             </section>
 
+            <!-- ── APPEARANCE PANEL ───────────── -->
             <section class="admin-panel" data-panel="appearance" hidden>
               <article class="admin-card">
                 <h2>Appearance</h2>
                 <form id="appearanceForm" class="admin-form section-stack">
-                  <section class="subsection-card">
-                    <h3>Branding</h3>
-                    <p class="section-help">Core text and type choices for your visual identity.</p>
-                    <div class="admin-grid-form">
+
+                  <details class="subsection-card" open>
+                    <summary class="subsection-summary"><h3>Branding</h3><p class="section-help">Site title, intro text, and type choices.</p></summary>
+                    <div class="admin-grid-form subsection-body">
                       <label>Site title<input id="setting_site_title" type="text" /></label>
                       <label class="span-full">Intro / About highlight<textarea id="setting_site_intro_text" rows="3"></textarea></label>
                       <label>Heading font
@@ -170,184 +252,227 @@
                         <select id="setting_body_font"><option>Poppins</option><option>Inter</option><option>Lora</option><option>Source Sans 3</option></select>
                       </label>
                     </div>
-                  </section>
+                  </details>
 
-                  <section class="subsection-card">
-                    <h3>Grid Layout</h3>
-                    <p class="section-help">Tune desktop/mobile density and spacing.</p>
-                    <div class="admin-grid-form">
+                  <details class="subsection-card">
+                    <summary class="subsection-summary"><h3>Grid Layout</h3><p class="section-help">Desktop/mobile density and spacing.</p></summary>
+                    <div class="admin-grid-form subsection-body">
                       <label>Header layout
                         <select id="setting_header_layout"><option value="centered">Centered</option><option value="split">Split</option><option value="compact">Compact</option></select>
                       </label>
                       <label>Desktop photos per row<input id="setting_desktop_columns" type="number" min="2" max="6" /></label>
                       <label>Mobile photos per row<input id="setting_mobile_columns" type="number" min="1" max="4" /></label>
-                      <label>Desktop grid spacing (px)<input id="setting_desktop_grid_gap" type="number" min="0" max="60" /></label>
-                      <label>Mobile grid spacing (px)<input id="setting_mobile_grid_gap" type="number" min="0" max="30" /></label>
-                      <label class="check-row"><input id="setting_keep_original_ratio" type="checkbox" /> Keep original image ratios</label>
+                      <label>Desktop grid gap (px)<input id="setting_desktop_grid_gap" type="number" min="0" max="60" /></label>
+                      <label>Mobile grid gap (px)<input id="setting_mobile_grid_gap" type="number" min="0" max="30" /></label>
+                      <label class="check-row span-full"><input id="setting_keep_original_ratio" type="checkbox" /> Keep original image ratios</label>
                     </div>
-                  </section>
+                  </details>
 
-                  <section class="subsection-card">
-                    <h3>Lightbox</h3>
-                    <p class="section-help">Control navigation controls, captions, and backdrop intensity.</p>
-                    <div class="admin-grid-form">
+                  <details class="subsection-card">
+                    <summary class="subsection-summary"><h3>Lightbox</h3><p class="section-help">Arrows, captions, and backdrop intensity.</p></summary>
+                    <div class="admin-grid-form subsection-body">
                       <label class="check-row"><input id="setting_lightbox_show_arrows" type="checkbox" /> Show lightbox arrows</label>
                       <label>Arrow position
                         <select id="setting_lightbox_arrow_position"><option value="edges">Edge zones</option><option value="near">Near image</option></select>
                       </label>
                       <label class="check-row"><input id="setting_lightbox_show_captions" type="checkbox" /> Show captions</label>
                       <label class="check-row"><input id="setting_lightbox_show_counter" type="checkbox" /> Show image counter</label>
-                      <label>Lightbox background opacity (0.4-1)<input id="setting_lightbox_bg_opacity" type="number" step="0.05" min="0.4" max="1" /></label>
+                      <label>Background opacity (0.4–1)<input id="setting_lightbox_bg_opacity" type="number" step="0.05" min="0.4" max="1" /></label>
                     </div>
-                  </section>
+                  </details>
 
-                  <section class="subsection-card">
-                    <h3>Theme Mode</h3>
-                    <p class="section-help">Pick color accents and preferred dark-mode behavior.</p>
-                    <div class="admin-grid-form">
+                  <details class="subsection-card">
+                    <summary class="subsection-summary"><h3>Theme Mode</h3><p class="section-help">Color accents and dark-mode behavior.</p></summary>
+                    <div class="admin-grid-form subsection-body">
                       <label>Primary color<input id="setting_theme_primary_color" type="color" /></label>
                       <label>Accent color<input id="setting_theme_accent_color" type="color" /></label>
-                      <label>Dark mode behavior
+                      <label>Dark mode
                         <select id="setting_dark_mode_behavior"><option value="system">Follow system</option><option value="light">Force light</option><option value="dark">Force dark</option></select>
                       </label>
                     </div>
-                  </section>
+                  </details>
 
-                  <section class="subsection-card">
-                    <div class="appearance-subsection-header">
-                      <div>
-                        <h3>Site Appearance</h3>
-                        <p class="section-help">Fine-tune global surface, text, icon, and interaction colors.</p>
+                  <details class="subsection-card">
+                    <summary class="subsection-summary">
+                      <div class="subsection-summary-row">
+                        <div>
+                          <h3>Site Colors</h3>
+                          <p class="section-help">Global surface, text, icon, and interaction colors.</p>
+                        </div>
+                        <button id="resetAppearanceBtn" class="admin-btn admin-btn-secondary admin-btn-sm" type="button">Reset defaults</button>
                       </div>
-                      <button id="resetAppearanceBtn" class="admin-btn admin-btn-secondary" type="button">Reset appearance defaults</button>
+                    </summary>
+                    <div class="subsection-body">
+                      <p id="appearanceContrastWarning" class="appearance-contrast-warning" hidden></p>
+                      <div class="appearance-color-grid">
+                        <div class="appearance-color-row">
+                          <label for="setting_site_bg">Site background</label>
+                          <div class="appearance-color-inputs">
+                            <input id="setting_site_bg_picker" type="color" value="#ffffff" />
+                            <input id="setting_site_bg" type="text" inputmode="text" placeholder="#FFFFFF" />
+                            <span id="setting_site_bg_swatch" class="color-swatch" aria-hidden="true"></span>
+                          </div>
+                        </div>
+                        <div class="appearance-color-row">
+                          <label for="setting_header_bg">Header background</label>
+                          <div class="appearance-color-inputs">
+                            <input id="setting_header_bg_picker" type="color" value="#ffffff" />
+                            <input id="setting_header_bg" type="text" inputmode="text" placeholder="#FFFFFF" />
+                            <span id="setting_header_bg_swatch" class="color-swatch" aria-hidden="true"></span>
+                          </div>
+                        </div>
+                        <div class="appearance-color-row">
+                          <label for="setting_header_text">Header text</label>
+                          <div class="appearance-color-inputs">
+                            <input id="setting_header_text_picker" type="color" value="#2f2923" />
+                            <input id="setting_header_text" type="text" inputmode="text" placeholder="#2F2923" />
+                            <span id="setting_header_text_swatch" class="color-swatch" aria-hidden="true"></span>
+                          </div>
+                        </div>
+                        <div class="appearance-color-row">
+                          <label for="setting_footer_bg">Footer background</label>
+                          <div class="appearance-color-inputs">
+                            <input id="setting_footer_bg_picker" type="color" value="#f5f5f5" />
+                            <input id="setting_footer_bg" type="text" inputmode="text" placeholder="#F5F5F5" />
+                            <span id="setting_footer_bg_swatch" class="color-swatch" aria-hidden="true"></span>
+                          </div>
+                        </div>
+                        <div class="appearance-color-row">
+                          <label for="setting_footer_text">Footer text</label>
+                          <div class="appearance-color-inputs">
+                            <input id="setting_footer_text_picker" type="color" value="#62584d" />
+                            <input id="setting_footer_text" type="text" inputmode="text" placeholder="#62584D" />
+                            <span id="setting_footer_text_swatch" class="color-swatch" aria-hidden="true"></span>
+                          </div>
+                        </div>
+                        <div class="appearance-color-row">
+                          <label for="setting_nav_icon">Navigation icon</label>
+                          <div class="appearance-color-inputs">
+                            <input id="setting_nav_icon_picker" type="color" value="#4e5848" />
+                            <input id="setting_nav_icon" type="text" inputmode="text" placeholder="#4E5848" />
+                            <span id="setting_nav_icon_swatch" class="color-swatch" aria-hidden="true"></span>
+                          </div>
+                        </div>
+                        <div class="appearance-color-row">
+                          <label for="setting_body_text">Body text</label>
+                          <div class="appearance-color-inputs">
+                            <input id="setting_body_text_picker" type="color" value="#2f2923" />
+                            <input id="setting_body_text" type="text" inputmode="text" placeholder="#2F2923" />
+                            <span id="setting_body_text_swatch" class="color-swatch" aria-hidden="true"></span>
+                          </div>
+                        </div>
+                        <div class="appearance-color-row">
+                          <label for="setting_filter_icon">Filter icon</label>
+                          <div class="appearance-color-inputs">
+                            <input id="setting_filter_icon_picker" type="color" value="#5f6f52" />
+                            <input id="setting_filter_icon" type="text" inputmode="text" placeholder="#5F6F52" />
+                            <span id="setting_filter_icon_swatch" class="color-swatch" aria-hidden="true"></span>
+                          </div>
+                        </div>
+                        <div class="appearance-color-row">
+                          <label for="setting_accent_color">Accent color</label>
+                          <div class="appearance-color-inputs">
+                            <input id="setting_accent_color_picker" type="color" value="#8a6442" />
+                            <input id="setting_accent_color" type="text" inputmode="text" placeholder="#8A6442" />
+                            <span id="setting_accent_color_swatch" class="color-swatch" aria-hidden="true"></span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <p id="appearanceContrastWarning" class="appearance-contrast-warning" hidden></p>
-                    <div class="appearance-color-grid">
-                      <div class="appearance-color-row">
-                        <label for="setting_site_bg">Site background color</label>
-                        <div class="appearance-color-inputs">
-                          <input id="setting_site_bg_picker" type="color" value="#ffffff" />
-                          <input id="setting_site_bg" type="text" inputmode="text" placeholder="#FFFFFF" />
-                          <span id="setting_site_bg_swatch" class="color-swatch" aria-hidden="true"></span>
-                        </div>
-                      </div>
-                      <div class="appearance-color-row">
-                        <label for="setting_header_bg">Header background color</label>
-                        <div class="appearance-color-inputs">
-                          <input id="setting_header_bg_picker" type="color" value="#ffffff" />
-                          <input id="setting_header_bg" type="text" inputmode="text" placeholder="#FFFFFF" />
-                          <span id="setting_header_bg_swatch" class="color-swatch" aria-hidden="true"></span>
-                        </div>
-                      </div>
-                      <div class="appearance-color-row">
-                        <label for="setting_header_text">Header text color</label>
-                        <div class="appearance-color-inputs">
-                          <input id="setting_header_text_picker" type="color" value="#2f2923" />
-                          <input id="setting_header_text" type="text" inputmode="text" placeholder="#2F2923" />
-                          <span id="setting_header_text_swatch" class="color-swatch" aria-hidden="true"></span>
-                        </div>
-                      </div>
-                      <div class="appearance-color-row">
-                        <label for="setting_footer_bg">Footer background color</label>
-                        <div class="appearance-color-inputs">
-                          <input id="setting_footer_bg_picker" type="color" value="#f5f5f5" />
-                          <input id="setting_footer_bg" type="text" inputmode="text" placeholder="#F5F5F5" />
-                          <span id="setting_footer_bg_swatch" class="color-swatch" aria-hidden="true"></span>
-                        </div>
-                      </div>
-                      <div class="appearance-color-row">
-                        <label for="setting_footer_text">Footer text color</label>
-                        <div class="appearance-color-inputs">
-                          <input id="setting_footer_text_picker" type="color" value="#62584d" />
-                          <input id="setting_footer_text" type="text" inputmode="text" placeholder="#62584D" />
-                          <span id="setting_footer_text_swatch" class="color-swatch" aria-hidden="true"></span>
-                        </div>
-                      </div>
-                      <div class="appearance-color-row">
-                        <label for="setting_nav_icon">Navigation/menu icon color</label>
-                        <div class="appearance-color-inputs">
-                          <input id="setting_nav_icon_picker" type="color" value="#4e5848" />
-                          <input id="setting_nav_icon" type="text" inputmode="text" placeholder="#4E5848" />
-                          <span id="setting_nav_icon_swatch" class="color-swatch" aria-hidden="true"></span>
-                        </div>
-                      </div>
-                      <div class="appearance-color-row">
-                        <label for="setting_body_text">Body text color</label>
-                        <div class="appearance-color-inputs">
-                          <input id="setting_body_text_picker" type="color" value="#2f2923" />
-                          <input id="setting_body_text" type="text" inputmode="text" placeholder="#2F2923" />
-                          <span id="setting_body_text_swatch" class="color-swatch" aria-hidden="true"></span>
-                        </div>
-                      </div>
-                      <div class="appearance-color-row">
-                        <label for="setting_filter_icon">Filter icon/button color</label>
-                        <div class="appearance-color-inputs">
-                          <input id="setting_filter_icon_picker" type="color" value="#5f6f52" />
-                          <input id="setting_filter_icon" type="text" inputmode="text" placeholder="#5F6F52" />
-                          <span id="setting_filter_icon_swatch" class="color-swatch" aria-hidden="true"></span>
-                        </div>
-                      </div>
-                      <div class="appearance-color-row">
-                        <label for="setting_accent_color">Accent color (links/buttons/active states)</label>
-                        <div class="appearance-color-inputs">
-                          <input id="setting_accent_color_picker" type="color" value="#8a6442" />
-                          <input id="setting_accent_color" type="text" inputmode="text" placeholder="#8A6442" />
-                          <span id="setting_accent_color_swatch" class="color-swatch" aria-hidden="true"></span>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
+                  </details>
 
                   <div class="admin-form-actions"><button class="admin-btn" type="submit">Save Appearance</button></div>
                 </form>
               </article>
             </section>
 
+            <!-- ── SETTINGS PANEL ─────────────── -->
             <section class="admin-panel" data-panel="settings" hidden>
               <article class="admin-card">
                 <h2>Settings</h2>
                 <form id="settingsForm" class="admin-form section-stack">
-                  <section class="subsection-card">
-                    <h3>Contact</h3>
-                    <div class="admin-grid-form">
+
+                  <details class="subsection-card" open>
+                    <summary class="subsection-summary"><h3>Contact</h3><p class="section-help">Contact section text and details.</p></summary>
+                    <div class="admin-grid-form subsection-body">
                       <label>Contact title<input id="setting_contact_title" type="text" /></label>
                       <label class="span-full">Contact subtitle<textarea id="setting_contact_subtitle" rows="3"></textarea></label>
                       <label>Contact email<input id="setting_contact_email" type="email" /></label>
-                      <label>Location text<input id="setting_location_text" type="text" /></label>
-                      <label>Availability text<input id="setting_availability_text" type="text" /></label>
-                      <label>Response time text<input id="setting_response_time_text" type="text" /></label>
+                      <label>Location<input id="setting_location_text" type="text" /></label>
+                      <label>Availability<input id="setting_availability_text" type="text" /></label>
+                      <label>Response time<input id="setting_response_time_text" type="text" /></label>
                     </div>
-                  </section>
+                  </details>
 
-                  <section class="subsection-card">
-                    <h3>Social</h3>
-                    <div class="admin-grid-form">
+                  <details class="subsection-card">
+                    <summary class="subsection-summary"><h3>Social</h3><p class="section-help">Social media links and labels.</p></summary>
+                    <div class="admin-grid-form subsection-body">
                       <label>Instagram URL<input id="setting_instagram_url" type="url" /></label>
                       <label>Instagram label<input id="setting_instagram_label" type="text" /></label>
                       <label>Flickr URL<input id="setting_flickr_url" type="url" /></label>
                     </div>
-                  </section>
+                  </details>
 
-                  <section class="subsection-card">
-                    <h3>SEO</h3>
-                    <div class="admin-grid-form">
+                  <details class="subsection-card">
+                    <summary class="subsection-summary"><h3>SEO</h3><p class="section-help">Search engine title and description.</p></summary>
+                    <div class="admin-grid-form subsection-body">
                       <label>SEO title<input id="setting_seo_title" type="text" /></label>
                       <label class="span-full">SEO description<textarea id="setting_seo_description" rows="3"></textarea></label>
                     </div>
-                  </section>
+                  </details>
 
                   <div class="admin-form-actions"><button class="admin-btn" type="submit">Save Settings</button></div>
                 </form>
               </article>
             </section>
-          </div>
-        </section>
-      </div>
+
+          </div><!-- /admin-content-shell -->
+        </section><!-- /dashboardSection -->
+      </div><!-- /admin-shell -->
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="supabase.js"></script>
     <script src="admin.js"></script>
+    <script>
+      /* ── Mobile sidebar toggle ───────────────────────────────── */
+      (function () {
+        const toggle   = document.getElementById("sidebarToggle");
+        const closeBtn = document.getElementById("sidebarCloseBtn");
+        const overlay  = document.getElementById("sidebarOverlay");
+        const sidebar  = document.getElementById("adminSidebar");
+
+        function openSidebar() {
+          document.body.classList.add("sidebar-open");
+          toggle && toggle.setAttribute("aria-expanded", "true");
+          sidebar && sidebar.removeAttribute("inert");
+        }
+
+        function closeSidebar() {
+          document.body.classList.remove("sidebar-open");
+          toggle && toggle.setAttribute("aria-expanded", "false");
+        }
+
+        toggle  && toggle.addEventListener("click", openSidebar);
+        closeBtn && closeBtn.addEventListener("click", closeSidebar);
+        overlay && overlay.addEventListener("click", closeSidebar);
+
+        /* Close sidebar after picking a tab on narrow screens */
+        document.querySelectorAll(".admin-nav-btn").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            if (window.innerWidth < 900) closeSidebar();
+          });
+        });
+
+        /* Keyboard: close on Escape */
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && document.body.classList.contains("sidebar-open")) {
+            closeSidebar();
+            toggle && toggle.focus();
+          }
+        });
+      })();
+    </script>
   </body>
 </html>
