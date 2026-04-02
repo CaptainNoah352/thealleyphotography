@@ -54,6 +54,11 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+.admin-form input[type="color"] {
+  padding: 0.2rem;
+  min-height: 44px;
+}
+
 .admin-form input:focus,
 .admin-form textarea:focus,
 .admin-form select:focus,
@@ -111,6 +116,11 @@
   gap: 0.65rem;
   align-items: center;
   grid-column: 1 / -1;
+}
+
+.admin-theme-reset-wrap {
+  display: flex;
+  align-items: end;
 }
 
 .admin-card-intro {

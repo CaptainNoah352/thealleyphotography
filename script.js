@@ -162,6 +162,61 @@ let touchStartX = 0;
 let touchStartY = 0;
 
 const CONTROL_HIDE_DELAY_MS = 1500;
+const DEFAULT_THEME_SETTINGS = {
+  primary: "#5f6f52",
+  accent: "#8a6442",
+};
+
+const EMPTY_SITE_COPY = {
+  about_intro: "This section is for your introduction and brand story. It’s currently empty.",
+  about_paragraph_1: "This section is for the opening part of your story. It’s currently empty.",
+  about_paragraph_2: "This section is meant for additional background about your work. It’s currently empty.",
+  about_pullquote: "This section is for a short featured quote. It’s currently empty.",
+  about_paragraph_3: "This section is for the middle of your story narrative. It’s currently empty.",
+  about_paragraph_4: "This section is for details about your process and approach. It’s currently empty.",
+  about_paragraph_5: "This section is for a closing note in your story. It’s currently empty.",
+  contact_title: "This section is for your contact heading. It’s currently empty.",
+  contact_subtitle: "This section is meant for contact details or booking information. It’s currently empty.",
+  contact_email: "This section is for your contact email address. It’s currently empty.",
+  instagram_label: "This section is for your Instagram handle or label. It’s currently empty.",
+  flickr_url: "This section is for your Flickr profile link. It’s currently empty.",
+  location_text: "This section is for your location details. It’s currently empty.",
+  availability_text: "This section is for your current availability status. It’s currently empty.",
+  response_time_text: "This section is for your typical response-time note. It’s currently empty.",
+};
+
+function normalizeHexColor(value, fallback) {
+  if (typeof value !== "string") return fallback;
+  const color = value.trim();
+  return /^#[0-9a-fA-F]{6}$/.test(color) ? color : fallback;
+}
+
+function applySiteTheme(settings = {}) {
+  document.documentElement.style.setProperty(
+    "--color-primary",
+    normalizeHexColor(settings.theme_primary_color, DEFAULT_THEME_SETTINGS.primary)
+  );
+  document.documentElement.style.setProperty(
+    "--color-accent",
+    normalizeHexColor(settings.theme_accent_color, DEFAULT_THEME_SETTINGS.accent)
+  );
+}
+
+function setTextContentWithEmptyState(node, value, fallbackText) {
+  if (!node) return;
+  const hasRealContent = typeof value === "string" && value.trim().length > 0;
+  node.textContent = hasRealContent ? value.trim() : fallbackText;
+  node.classList.toggle("empty-state-copy", !hasRealContent);
+}
+
+function setLinkWithEmptyState(node, url, label, fallbackText) {
+  if (!node) return;
+  const hasLabel = typeof label === "string" && label.trim().length > 0;
+  const hasUrl = typeof url === "string" && url.trim().length > 0;
+  const showRealContent = hasLabel || hasUrl;
+  node.textContent = showRealContent ? (hasLabel ? label.trim() : url.trim()) : fallbackText;
+  node.classList.toggle("empty-state-copy", !showRealContent);
+}
 const revealObserver = "IntersectionObserver" in window
   ? new IntersectionObserver(
       (entries, observer) => {
@@ -510,67 +565,70 @@ function renderForActiveFilter() {
 
 function applySiteSettingsToHome(settings) {
   if (!settings) return;
+  setTextContentWithEmptyState(siteContentNodes.aboutIntro, settings.about_intro, EMPTY_SITE_COPY.about_intro);
+  setTextContentWithEmptyState(siteContentNodes.aboutParagraph1, settings.about_paragraph_1, EMPTY_SITE_COPY.about_paragraph_1);
+  setTextContentWithEmptyState(siteContentNodes.aboutParagraph2, settings.about_paragraph_2, EMPTY_SITE_COPY.about_paragraph_2);
+  setTextContentWithEmptyState(siteContentNodes.aboutPullquote, settings.about_pullquote, EMPTY_SITE_COPY.about_pullquote);
+  setTextContentWithEmptyState(siteContentNodes.aboutParagraph3, settings.about_paragraph_3, EMPTY_SITE_COPY.about_paragraph_3);
+  setTextContentWithEmptyState(siteContentNodes.aboutParagraph4, settings.about_paragraph_4, EMPTY_SITE_COPY.about_paragraph_4);
+  setTextContentWithEmptyState(siteContentNodes.aboutParagraph5, settings.about_paragraph_5, EMPTY_SITE_COPY.about_paragraph_5);
+  setTextContentWithEmptyState(siteContentNodes.contactTitle, settings.contact_title, EMPTY_SITE_COPY.contact_title);
+  setTextContentWithEmptyState(siteContentNodes.contactSubtitle, settings.contact_subtitle, EMPTY_SITE_COPY.contact_subtitle);
+  setTextContentWithEmptyState(siteContentNodes.contactLocationText, settings.location_text, EMPTY_SITE_COPY.location_text);
+  setTextContentWithEmptyState(siteContentNodes.contactAvailabilityText, settings.availability_text, EMPTY_SITE_COPY.availability_text);
+  setTextContentWithEmptyState(siteContentNodes.contactResponseTimeText, settings.response_time_text, EMPTY_SITE_COPY.response_time_text);
 
-  if (siteContentNodes.aboutIntro) siteContentNodes.aboutIntro.textContent = settings.about_intro || siteContentNodes.aboutIntro.textContent;
-  if (siteContentNodes.aboutParagraph1) siteContentNodes.aboutParagraph1.textContent = settings.about_paragraph_1 || siteContentNodes.aboutParagraph1.textContent;
-  if (siteContentNodes.aboutParagraph2) siteContentNodes.aboutParagraph2.textContent = settings.about_paragraph_2 || siteContentNodes.aboutParagraph2.textContent;
-  if (siteContentNodes.aboutPullquote) siteContentNodes.aboutPullquote.textContent = settings.about_pullquote || siteContentNodes.aboutPullquote.textContent;
-  if (siteContentNodes.aboutParagraph3) siteContentNodes.aboutParagraph3.textContent = settings.about_paragraph_3 || siteContentNodes.aboutParagraph3.textContent;
-  if (siteContentNodes.aboutParagraph4) siteContentNodes.aboutParagraph4.textContent = settings.about_paragraph_4 || siteContentNodes.aboutParagraph4.textContent;
-  if (siteContentNodes.aboutParagraph5) siteContentNodes.aboutParagraph5.textContent = settings.about_paragraph_5 || siteContentNodes.aboutParagraph5.textContent;
-  if (siteContentNodes.contactTitle) siteContentNodes.contactTitle.textContent = settings.contact_title || siteContentNodes.contactTitle.textContent;
-  if (siteContentNodes.contactSubtitle) siteContentNodes.contactSubtitle.textContent = settings.contact_subtitle || siteContentNodes.contactSubtitle.textContent;
-
-  if (siteContentNodes.contactEmailLink && settings.contact_email) {
-    siteContentNodes.contactEmailLink.textContent = settings.contact_email;
-    siteContentNodes.contactEmailLink.href = `mailto:${settings.contact_email}`;
-  }
-
-  const instagramUrl = settings.instagram_url || "";
-  if (siteContentNodes.contactInstagramLink && instagramUrl) {
-    siteContentNodes.contactInstagramLink.href = instagramUrl;
-  }
-  if (siteContentNodes.headerInstagramLink && instagramUrl) {
-    siteContentNodes.headerInstagramLink.href = instagramUrl;
-  }
-  if (siteContentNodes.mobileInstagramLink && instagramUrl) {
-    siteContentNodes.mobileInstagramLink.href = instagramUrl;
-  }
-  if (siteContentNodes.contactInstagramLink && settings.instagram_label) {
-    siteContentNodes.contactInstagramLink.textContent = settings.instagram_label;
+  const email = (settings.contact_email || "").trim();
+  setTextContentWithEmptyState(siteContentNodes.contactEmailLink, email, EMPTY_SITE_COPY.contact_email);
+  siteContentNodes.contactEmailLink?.classList.toggle("empty-state-copy", !email);
+  if (siteContentNodes.contactEmailLink) {
+    siteContentNodes.contactEmailLink.href = email ? `mailto:${email}` : "#contact";
   }
 
-  const flickrUrl = settings.flickr_url || "";
-  if (siteContentNodes.contactFlickrLink && flickrUrl) {
-    siteContentNodes.contactFlickrLink.href = flickrUrl;
+  const instagramUrl = (settings.instagram_url || "").trim();
+  const instagramLabel = (settings.instagram_label || "").trim();
+  setLinkWithEmptyState(siteContentNodes.contactInstagramLink, instagramUrl, instagramLabel, EMPTY_SITE_COPY.instagram_label);
+  if (siteContentNodes.contactInstagramLink) {
+    siteContentNodes.contactInstagramLink.href = instagramUrl || "#contact";
+    siteContentNodes.contactInstagramLink.target = instagramUrl ? "_blank" : "_self";
   }
-  if (siteContentNodes.headerFlickrLink && flickrUrl) {
-    siteContentNodes.headerFlickrLink.href = flickrUrl;
+  if (siteContentNodes.headerInstagramLink) {
+    siteContentNodes.headerInstagramLink.href = instagramUrl || "#contact";
+    siteContentNodes.headerInstagramLink.target = instagramUrl ? "_blank" : "_self";
   }
-  if (siteContentNodes.mobileFlickrLink && flickrUrl) {
-    siteContentNodes.mobileFlickrLink.href = flickrUrl;
+  if (siteContentNodes.mobileInstagramLink) {
+    siteContentNodes.mobileInstagramLink.href = instagramUrl || "#contact";
+    siteContentNodes.mobileInstagramLink.target = instagramUrl ? "_blank" : "_self";
   }
 
-  if (siteContentNodes.contactLocationText) {
-    siteContentNodes.contactLocationText.textContent = settings.location_text || siteContentNodes.contactLocationText.textContent;
+  const flickrUrl = (settings.flickr_url || "").trim();
+  setTextContentWithEmptyState(siteContentNodes.contactFlickrLink, flickrUrl ? "View on Flickr" : "", EMPTY_SITE_COPY.flickr_url);
+  if (siteContentNodes.contactFlickrLink) {
+    siteContentNodes.contactFlickrLink.href = flickrUrl || "#contact";
+    siteContentNodes.contactFlickrLink.target = flickrUrl ? "_blank" : "_self";
   }
-  if (siteContentNodes.contactAvailabilityText) {
-    siteContentNodes.contactAvailabilityText.textContent = settings.availability_text || siteContentNodes.contactAvailabilityText.textContent;
+  if (siteContentNodes.headerFlickrLink) {
+    siteContentNodes.headerFlickrLink.href = flickrUrl || "#contact";
+    siteContentNodes.headerFlickrLink.target = flickrUrl ? "_blank" : "_self";
   }
-  if (siteContentNodes.contactResponseTimeText) {
-    siteContentNodes.contactResponseTimeText.textContent = settings.response_time_text || siteContentNodes.contactResponseTimeText.textContent;
+  if (siteContentNodes.mobileFlickrLink) {
+    siteContentNodes.mobileFlickrLink.href = flickrUrl || "#contact";
+    siteContentNodes.mobileFlickrLink.target = flickrUrl ? "_blank" : "_self";
   }
 }
 
-async function loadSiteSettingsForHome() {
-  if (pageType !== "home") return;
+async function loadSiteSettingsForSite() {
   if (!window.photoDataApi?.fetchSiteSettings) return;
 
   try {
     const settings = await window.photoDataApi.fetchSiteSettings();
-    applySiteSettingsToHome(settings);
+    applySiteTheme(settings);
+    if (pageType === "home") {
+      applySiteSettingsToHome(settings);
+    }
   } catch (error) {
     console.warn("Unable to load site settings from Supabase. Using static content.", error);
+    applySiteTheme({});
   }
 }
 
@@ -605,7 +663,7 @@ if (portfolioFilters) {
 }
 
 (async function initializeGallery() {
-  await loadSiteSettingsForHome();
+  await loadSiteSettingsForSite();
 
   try {
     await loadGalleryFromSupabase();
