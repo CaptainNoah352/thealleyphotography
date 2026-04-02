@@ -4,6 +4,8 @@ const mobileMenuClose = document.getElementById("mobileMenuClose");
 const yearNode = document.getElementById("year");
 const gallery = document.getElementById("gallery");
 
+const pageType = document.body.dataset.page || "home";
+
 const lightbox = document.getElementById("lightbox");
 const lightboxImage = document.getElementById("lightboxImage");
 const lightboxCaption = document.getElementById("lightboxCaption");
@@ -158,7 +160,6 @@ updateActiveNavLink();
 */
 const galleryImages = [];
 
-const pageType = document.body.dataset.page || "home";
 let seededFallbackImages = [...galleryImages];
 let orderedGalleryImages = [...galleryImages];
 const initialHash = window.location.hash;
@@ -195,6 +196,69 @@ const EMPTY_SITE_COPY = {
   availability_text: "This section is for your current availability status. It’s currently empty.",
   response_time_text: "This section is for your typical response-time note. It’s currently empty.",
 };
+
+const EMPTY_GALLERY_MESSAGES = {
+  home: "No photos published yet. Add published photos with 'Show on Home' enabled to populate this section.",
+  portfolio: "No photos published yet. Publish photos in admin to populate the portfolio.",
+};
+
+function getGalleryEmptyStateMessage() {
+  return pageType === "home" ? EMPTY_GALLERY_MESSAGES.home : EMPTY_GALLERY_MESSAGES.portfolio;
+}
+
+function renderGalleryEmptyState(message) {
+  if (!gallery) return;
+  const emptyState = document.createElement("div");
+  emptyState.className = "gallery-empty-state";
+  emptyState.setAttribute("role", "status");
+  emptyState.setAttribute("aria-live", "polite");
+
+  const title = document.createElement("h3");
+  title.textContent = "No photos published yet";
+
+  const body = document.createElement("p");
+  body.textContent = message;
+
+  emptyState.appendChild(title);
+  emptyState.appendChild(body);
+  gallery.appendChild(emptyState);
+}
+
+function normalizeGalleryImages(images) {
+  if (!Array.isArray(images)) return [];
+
+  return images
+    .map((image) => {
+      const src = image?.image_url || image?.src || "";
+      if (typeof src !== "string" || !src.trim()) return null;
+
+      const normalizedCategory = Array.isArray(image?.tags) && image.tags.length
+        ? image.tags
+        : [image?.category || "wildlife"];
+
+      return {
+        ...image,
+        src: src.trim(),
+        alt: (image?.alt || image?.title || image?.description || "Portfolio photo").toString(),
+        tags: normalizedCategory
+          .map((tag) => (tag || "").toString().trim().toLowerCase())
+          .filter(Boolean),
+      };
+    })
+    .filter(Boolean);
+}
+
+function normalizePublishedPhotosForPage(photos) {
+  const filtered = Array.isArray(photos)
+    ? photos.filter((photo) => {
+        if (!photo || !photo.is_published) return false;
+        if (pageType === "home") return Boolean(photo.show_on_home);
+        return true;
+      })
+    : [];
+
+  return normalizeGalleryImages(filtered);
+}
 
 function normalizeHexColor(value, fallback) {
   if (typeof value !== "string") return fallback;
@@ -395,9 +459,15 @@ function renderGallery(images) {
   if (!gallery) return;
 
   gallery.innerHTML = "";
-  const uniqueImages = images.filter(
+  const normalizedImages = normalizeGalleryImages(images);
+  const uniqueImages = normalizedImages.filter(
     (image, index, collection) => collection.findIndex((entry) => entry.src === image.src) === index
   );
+
+  if (!uniqueImages.length) {
+    renderGalleryEmptyState(getGalleryEmptyStateMessage());
+    return;
+  }
 
   uniqueImages.forEach((image, index) => {
     const article = document.createElement("article");
@@ -638,26 +708,37 @@ async function loadSiteSettingsForSite() {
       applySiteSettingsToHome(settings);
     }
   } catch (error) {
-    console.warn("Unable to load site settings from Supabase. Using static content.", error);
+    console.warn("[gallery] fetchSiteSettings failed. Using static content defaults.", error);
     applySiteTheme({});
   }
 }
 
 async function loadGalleryFromSupabase() {
   if (!window.photoDataApi?.hasValidSupabaseConfig || !window.photoDataApi.hasValidSupabaseConfig()) {
-    orderedGalleryImages = [...seededFallbackImages];
+    console.warn("[gallery] Supabase config is invalid or missing. Falling back to local gallery data.");
+    orderedGalleryImages = normalizeGalleryImages(seededFallbackImages);
     return;
   }
 
   const showOnHomeOnly = pageType === "home";
   const photos = await window.photoDataApi.fetchPublishedPhotos({ showOnHomeOnly });
+  const publishedPhotos = normalizePublishedPhotosForPage(photos);
 
-  if (photos.length) {
-    orderedGalleryImages = photos;
+  if (publishedPhotos.length) {
+    orderedGalleryImages = publishedPhotos;
     return;
   }
 
-  orderedGalleryImages = [...seededFallbackImages];
+  console.warn(
+    `[gallery] fetchPublishedPhotos returned zero rows for ${pageType === "home" ? "home" : "portfolio"} view.`
+  );
+
+  const normalizedFallback = normalizeGalleryImages(seededFallbackImages);
+  orderedGalleryImages = normalizedFallback;
+
+  if (!normalizedFallback.length) {
+    console.warn("[gallery] Fallback galleryImages is empty. Rendering empty-state messaging.");
+  }
 }
 
 const portfolioFilters = document.getElementById("portfolioFilters");
@@ -680,7 +761,7 @@ if (portfolioFilters) {
     await loadGalleryFromSupabase();
   } catch (error) {
     orderedGalleryImages = [...seededFallbackImages];
-    console.warn("Unable to load photos from Supabase. Falling back to local galleryImages.", error);
+    console.warn("[gallery] fetchPublishedPhotos request failed. Falling back to local galleryImages.", error);
   }
 
   renderForActiveFilter();

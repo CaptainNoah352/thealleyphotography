@@ -19,10 +19,10 @@
   --shadow: 0 12px 28px rgba(76, 58, 42, 0.1);
   --header-bg: rgba(255, 255, 255, 0.96);
   --header-border: color-mix(in srgb, var(--color-accent) 18%, transparent);
-  --logo-text: #000000;
+  --logo-text: color-mix(in srgb, var(--color-primary) 78%, #111111 22%);
   --overlay-bg: rgba(255, 255, 255, 0.82);
-  --menu-close-color: #000000;
-  --mobile-nav-text: #000000;
+  --menu-close-color: var(--color-primary);
+  --mobile-nav-text: color-mix(in srgb, var(--color-primary) 82%, #111111 18%);
   --gallery-hover-shadow: 0 16px 28px rgba(77, 62, 48, 0.14);
   --gallery-overlay: linear-gradient(
     to top,
@@ -71,10 +71,10 @@
     --shadow: 0 12px 28px rgba(0, 0, 0, 0.36);
     --header-bg: rgba(13, 14, 16, 0.92);
     --header-border: color-mix(in srgb, var(--color-accent) 26%, transparent);
-    --logo-text: #f5f2ed;
+    --logo-text: color-mix(in srgb, var(--color-primary) 45%, #f5f2ed 55%);
     --overlay-bg: rgba(13, 14, 16, 0.86);
-    --menu-close-color: #f5f2ed;
-    --mobile-nav-text: #f5f2ed;
+    --menu-close-color: color-mix(in srgb, var(--color-primary) 45%, #f5f2ed 55%);
+    --mobile-nav-text: color-mix(in srgb, var(--color-primary) 36%, #f5f2ed 64%);
     --gallery-hover-shadow: 0 16px 28px rgba(0, 0, 0, 0.42);
     --gallery-overlay: linear-gradient(to top, rgba(255, 255, 255, 0.08), transparent 35%);
     --about-hero-bg: linear-gradient(135deg, #15171a 0%, #111316 100%);
@@ -270,8 +270,8 @@ p {
 }
 
 .site-nav a.active {
-  color: var(--color-primary);
-  border-bottom-color: var(--color-primary);
+  color: color-mix(in srgb, var(--color-primary) 88%, var(--color-accent) 12%);
+  border-bottom-color: color-mix(in srgb, var(--color-primary) 82%, var(--color-accent) 18%);
 }
 
 .inline-link {
@@ -296,12 +296,12 @@ p {
   width: 20px;
   height: 20px;
   vertical-align: middle;
-  color: var(--text);
-  transition: opacity 0.2s ease;
+  color: color-mix(in srgb, var(--color-primary) 72%, var(--text) 28%);
+  transition: opacity 0.2s ease, color 0.2s ease;
 }
 
 .social-icon:hover {
-  color: var(--color-accent);
+  color: color-mix(in srgb, var(--color-accent) 86%, var(--color-primary) 14%);
   opacity: 1;
 }
 
@@ -445,7 +445,7 @@ p {
 }
 
 .mobile-menu-nav a:hover {
-  color: var(--color-primary);
+  color: color-mix(in srgb, var(--color-primary) 80%, var(--color-accent) 20%);
 }
 
 .mobile-menu-social {
@@ -556,10 +556,11 @@ p {
 .portfolio-filter-btn {
   border: 1px solid color-mix(in srgb, var(--color-primary) 40%, var(--card-border));
   background: var(--surface);
-  color: var(--text);
+  color: color-mix(in srgb, var(--color-primary) 62%, var(--text) 38%);
   padding: 0.55rem 1rem;
   font: inherit;
   cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .portfolio-filter-btn.active,
@@ -575,6 +576,32 @@ p {
 
 .gallery-item.is-broken {
   display: none;
+}
+
+.gallery-empty-state {
+  column-span: all;
+  max-width: 700px;
+  margin: 1.25rem auto 0;
+  padding: 1.25rem 1.4rem;
+  text-align: center;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 22%, var(--card-border));
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-primary) 8%, var(--surface) 92%),
+    color-mix(in srgb, var(--color-accent) 8%, var(--surface) 92%)
+  );
+  box-shadow: var(--card-shadow-soft);
+}
+
+.gallery-empty-state h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1.05rem;
+  color: color-mix(in srgb, var(--color-primary) 74%, var(--text) 26%);
+}
+
+.gallery-empty-state p {
+  margin: 0;
+  color: var(--muted);
 }
 
 @media (prefers-reduced-motion: reduce) {
