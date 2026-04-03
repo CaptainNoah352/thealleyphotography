@@ -116,6 +116,74 @@
       box-shadow: 0 0 24px rgba(100,255,210,0.2);
     }
 
+    #mobile-controls {
+      display: none;
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .touch-stick {
+      position: absolute;
+      left: 20px;
+      bottom: 20px;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.04);
+      pointer-events: all;
+      touch-action: none;
+    }
+    .touch-stick-knob {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255,255,255,0.18);
+      border: 2px solid rgba(255,255,255,0.35);
+    }
+    .touch-buttons {
+      position: absolute;
+      right: 20px;
+      bottom: 20px;
+      display: flex;
+      gap: 12px;
+      pointer-events: all;
+    }
+    .touch-btn {
+      width: 78px;
+      height: 78px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.9);
+      font-family: inherit;
+      font-size: 12px;
+      letter-spacing: 1px;
+      touch-action: manipulation;
+    }
+    .touch-btn:active { background: rgba(136,255,221,0.25); border-color: rgba(136,255,221,0.8); }
+
+    @media (max-width: 900px), (hover: none) and (pointer: coarse) {
+      #timer { font-size: 34px; letter-spacing: 3px; }
+      #run-info, #best-time { font-size: 11px; letter-spacing: 2px; }
+      #enemy-count { top: 16px; right: 16px; font-size: 10px; letter-spacing: 1px; }
+      #world-name { bottom: 14px; font-size: 11px; letter-spacing: 2px; }
+      #controls-hint { left: 14px; bottom: 172px; font-size: 10px; line-height: 1.6; opacity: 0.45; }
+      #start-screen h1 { font-size: 38px; letter-spacing: 4px; }
+      .s-subtitle { font-size: 11px; letter-spacing: 3px; margin-bottom: 24px; text-align: center; padding: 0 14px; }
+      .ctrl-box { padding: 12px 16px; margin: 0 14px 24px; font-size: 11px; line-height: 2; }
+      #launch-btn { font-size: 15px; letter-spacing: 3px; padding: 12px 30px; }
+      #death-screen h1 { font-size: 52px; letter-spacing: 5px; }
+      .d-stat { font-size: 16px; letter-spacing: 2px; }
+      #new-best-label { font-size: 14px; letter-spacing: 3px; min-height: 20px; }
+      #mobile-controls { display: block; }
+      #lock-hint, #crosshair { display: none; }
+    }
+
     @keyframes flicker {
       0%,93%,100% { opacity:1; } 94% { opacity:0.3; } 96% { opacity:0.8; } 98% { opacity:0.2; }
     }
@@ -138,6 +206,15 @@
   <div id="vignette"></div>
   <div id="lock-hint">CLICK TO ENABLE MOUSE LOOK</div>
   <div id="transition">GENERATING WORLD...</div>
+  <div id="mobile-controls">
+    <div id="touch-stick" class="touch-stick">
+      <div id="touch-stick-knob" class="touch-stick-knob"></div>
+    </div>
+    <div class="touch-buttons">
+      <button id="jump-btn" class="touch-btn">JUMP</button>
+      <button id="dodge-btn" class="touch-btn">DODGE</button>
+    </div>
+  </div>
 
   <div id="death-screen">
     <h1>YOU DIED</h1>
@@ -239,8 +316,19 @@ class Game {
     this.camLookTarget = new THREE.Vector3();
     this.camOrbitAngle = 0;
     this.mouseLocked = false;
+    this.isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 
     this.keys = {};
+    this.mobileInput = {
+      moveX: 0,
+      moveZ: 0,
+      jump: false,
+      dodge: false,
+      lookActive: false,
+      lookTouchId: null,
+      lastLookX: 0,
+      lastLookY: 0,
+    };
 
     this.setupRenderer();
     this.setupInput();
@@ -302,6 +390,103 @@ class Game {
         this.camPitch  = Math.max(0.06, Math.min(0.72, this.camPitch + e.movementY * 0.0022));
       }
     });
+
+    const stick = document.getElementById('touch-stick');
+    const stickKnob = document.getElementById('touch-stick-knob');
+    const touchDeadzone = 0.2;
+    const stickMax = 42;
+    let stickTouchId = null;
+
+    const resetStick = () => {
+      stickTouchId = null;
+      this.mobileInput.moveX = 0;
+      this.mobileInput.moveZ = 0;
+      stickKnob.style.transform = 'translate(-50%, -50%)';
+    };
+    const updateStick = touch => {
+      const rect = stick.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      let dx = touch.clientX - cx;
+      let dy = touch.clientY - cy;
+      const mag = Math.hypot(dx, dy);
+      const clamp = mag > stickMax ? stickMax / mag : 1;
+      dx *= clamp;
+      dy *= clamp;
+      stickKnob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+      const nx = dx / stickMax;
+      const ny = dy / stickMax;
+      this.mobileInput.moveX = Math.abs(nx) < touchDeadzone ? 0 : nx;
+      this.mobileInput.moveZ = Math.abs(ny) < touchDeadzone ? 0 : ny;
+    };
+
+    stick.addEventListener('touchstart', e => {
+      const t = e.changedTouches[0];
+      stickTouchId = t.identifier;
+      updateStick(t);
+      e.preventDefault();
+    }, { passive: false });
+    stick.addEventListener('touchmove', e => {
+      for (const t of e.changedTouches) {
+        if (t.identifier === stickTouchId) {
+          updateStick(t);
+          e.preventDefault();
+          break;
+        }
+      }
+    }, { passive: false });
+    stick.addEventListener('touchend', e => {
+      for (const t of e.changedTouches) {
+        if (t.identifier === stickTouchId) {
+          resetStick();
+          break;
+        }
+      }
+    });
+    stick.addEventListener('touchcancel', resetStick);
+
+    const onLookStart = touch => {
+      this.mobileInput.lookActive = true;
+      this.mobileInput.lookTouchId = touch.identifier;
+      this.mobileInput.lastLookX = touch.clientX;
+      this.mobileInput.lastLookY = touch.clientY;
+    };
+    const onLookMove = touch => {
+      const dx = touch.clientX - this.mobileInput.lastLookX;
+      const dy = touch.clientY - this.mobileInput.lastLookY;
+      this.mobileInput.lastLookX = touch.clientX;
+      this.mobileInput.lastLookY = touch.clientY;
+      this.camYaw -= dx * 0.006;
+      this.camPitch = Math.max(0.06, Math.min(0.72, this.camPitch + dy * 0.006));
+    };
+    window.addEventListener('touchstart', e => {
+      if (!this.isTouchDevice || this.state !== 'playing' || this.mobileInput.lookActive) return;
+      for (const t of e.changedTouches) {
+        if (t.clientX > window.innerWidth * 0.45) {
+          onLookStart(t);
+          break;
+        }
+      }
+    }, { passive: true });
+    window.addEventListener('touchmove', e => {
+      if (!this.mobileInput.lookActive) return;
+      for (const t of e.changedTouches) {
+        if (t.identifier === this.mobileInput.lookTouchId) {
+          onLookMove(t);
+          break;
+        }
+      }
+    }, { passive: true });
+    window.addEventListener('touchend', e => {
+      if (!this.mobileInput.lookActive) return;
+      for (const t of e.changedTouches) {
+        if (t.identifier === this.mobileInput.lookTouchId) {
+          this.mobileInput.lookActive = false;
+          this.mobileInput.lookTouchId = null;
+          break;
+        }
+      }
+    });
   }
 
   setupUIRefs() {
@@ -320,9 +505,23 @@ class Game {
       dEntities:   document.getElementById('death-entities'),
       transition:  document.getElementById('transition'),
       lockHint:    document.getElementById('lock-hint'),
+      controlsHint: document.getElementById('controls-hint'),
+      jumpBtn:     document.getElementById('jump-btn'),
+      dodgeBtn:    document.getElementById('dodge-btn'),
     };
     document.getElementById('launch-btn').addEventListener('click', () => this.startNewRun());
     this.ui.death.addEventListener('click', () => { if (this.state === 'dead') this.startNewRun(); });
+    this.ui.jumpBtn.addEventListener('touchstart', e => {
+      e.preventDefault();
+      this.mobileInput.jump = true;
+    }, { passive: false });
+    this.ui.dodgeBtn.addEventListener('touchstart', e => {
+      e.preventDefault();
+      this.mobileInput.dodge = true;
+    }, { passive: false });
+    if (this.isTouchDevice) {
+      this.ui.controlsHint.innerHTML = 'LEFT PAD · MOVE<br>RIGHT SIDE · LOOK<br>JUMP/DODGE · BUTTONS';
+    }
   }
 
   // ── RUN LIFECYCLE ──────────────────────────────────────────
@@ -338,8 +537,10 @@ class Game {
       this.generateNewWorld();
       this.ui.transition.classList.remove('active');
       this.state = 'playing';
-      this.ui.lockHint.classList.add('visible');
-      this.renderer.domElement.requestPointerLock();
+      if (!this.isTouchDevice) {
+        this.ui.lockHint.classList.add('visible');
+        this.renderer.domElement.requestPointerLock();
+      }
     }, 850);
   }
 
@@ -761,6 +962,12 @@ class Game {
     if (this.keys['KeyS']||this.keys['ArrowDown'])  { mx-=fwd.x;   mz-=fwd.z; }
     if (this.keys['KeyA']||this.keys['ArrowLeft'])  { mx-=right.x; mz-=right.z; }
     if (this.keys['KeyD']||this.keys['ArrowRight']) { mx+=right.x; mz+=right.z; }
+
+    if (this.isTouchDevice) {
+      mx += right.x * this.mobileInput.moveX + fwd.x * -this.mobileInput.moveZ;
+      mz += right.z * this.mobileInput.moveX + fwd.z * -this.mobileInput.moveZ;
+    }
+
     const ml = Math.sqrt(mx*mx+mz*mz);
     if (ml>0) { mx/=ml; mz/=ml; }
 
@@ -771,7 +978,8 @@ class Game {
     } else {
       p.vel.x = mx*p.speed;
       p.vel.z = mz*p.speed;
-      if ((this.keys['ShiftLeft']||this.keys['ShiftRight']) && ml>0 && p.grounded && p.rollCooldown<=0) {
+      const dodgePressed = (this.keys['ShiftLeft']||this.keys['ShiftRight']) || this.mobileInput.dodge;
+      if (dodgePressed && ml>0 && p.grounded && p.rollCooldown<=0) {
         p.rolling=true; p.rollTimer=0.36; p.rollCooldown=1.1;
         p.rollVel.set(mx,0,mz);
         p.invincible=0.44;
@@ -779,7 +987,8 @@ class Game {
       }
     }
 
-    if (this.keys['Space'] && p.grounded) {
+    const jumpPressed = this.keys['Space'] || this.mobileInput.jump;
+    if (jumpPressed && p.grounded) {
       p.vel.y = p.jumpPow; p.grounded=false;
     }
     if (!p.grounded) p.vel.y -= 28*dt;
@@ -829,6 +1038,9 @@ class Game {
     }
     if (p.rolling) p.group.rotation.x += 14*dt;
     else           p.group.rotation.x *= 0.72;
+
+    this.mobileInput.jump = false;
+    this.mobileInput.dodge = false;
   }
 
   updateEnemies(dt) {
