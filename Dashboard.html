@@ -1,96 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Vault - Library</title>
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0; url=dashboard.html">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting...</title>
 </head>
-<body class="dashboard-page">
-    <nav class="navbar">
-        <div class="nav-brand">🎮 Game Vault</div>
-        <div class="nav-user">
-            <span id="welcomeUser">Welcome!</span>
-            <button onclick="logout()" class="btn-logout">Logout</button>
-        </div>
-    </nav>
-
-    <main class="dashboard">
-        <header class="dashboard-header">
-            <h1>Your Games Collection</h1>
-            <p>Add your HTML games to the <code>games/</code> folder</p>
-        </header>
-
-        <div class="games-grid" id="gamesGrid">
-            <!-- Games will be loaded here -->
-            
-            <!-- Example Game Card -->
-            <div class="game-card" onclick="playGame('games/example-game.html')">
-                <div class="game-thumbnail">
-                    <div class="game-icon">🎯</div>
-                </div>
-                <div class="game-info">
-                    <h3>Example Game</h3>
-                    <p>Click to play</p>
-                </div>
-            </div>
-            
-            <!-- Add Game Button -->
-            <div class="game-card add-game" onclick="showAddGame()">
-                <div class="game-thumbnail">
-                    <div class="game-icon">+</div>
-                </div>
-                <div class="game-info">
-                    <h3>Add New Game</h3>
-                    <p>Upload HTML file</p>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Game Player Modal -->
-    <div id="gameModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="gameTitle">Now Playing</h2>
-                <button onclick="closeGame()" class="btn-close">&times;</button>
-            </div>
-            <iframe id="gameFrame" src="" frameborder="0"></iframe>
-        </div>
-    </div>
-
-    <script src="js/auth.js"></script>
-    <script>
-        // Check auth on load
-        checkAuth();
-        
-        // Load games list
-        function loadGames() {
-            // You can dynamically load games here
-            // For now, manually add your games to the HTML above
-        }
-        
-        function playGame(url) {
-            document.getElementById('gameFrame').src = url;
-            document.getElementById('gameModal').style.display = 'flex';
-        }
-        
-        function closeGame() {
-            document.getElementById('gameModal').style.display = 'none';
-            document.getElementById('gameFrame').src = '';
-        }
-        
-        function showAddGame() {
-            alert('To add games:\n1. Upload your HTML game file to the games/ folder\n2. Add a card in dashboard.html\n3. Commit to GitHub');
-        }
-        
-        // Close modal on outside click
-        window.onclick = function(event) {
-            const modal = document.getElementById('gameModal');
-            if (event.target === modal) {
-                closeGame();
-            }
-        }
-    </script>
+<body>
+  <p>Redirecting to <a href="dashboard.html">dashboard.html</a>...</p>
 </body>
 </html>
