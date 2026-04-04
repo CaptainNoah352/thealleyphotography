@@ -18,16 +18,42 @@
     <main class="dashboard">
         <header class="dashboard-header">
             <h1>Your Game Storage Hub</h1>
-            <p>Store game entries in your browser using Local Storage.</p>
+            <p>Add files to your repository's <code>games/</code> folder and auto-load them here.</p>
         </header>
 
         <section class="add-game-panel">
-            <h2>Add a game</h2>
+            <h2>Repository game sync</h2>
             <p class="import-help">
-                Games stored in other folders on your computer should be copied into this project's
-                <code>games/</code> directory first, then added here with a relative path like
-                <code>games/my-game/index.html</code>.
+                Configure your GitHub repository once. After that, any <code>.html</code> file you add under
+                <code>games/</code> is automatically listed in this portal.
             </p>
+            <form id="repoConfigForm" class="add-game-form">
+                <div class="field-group">
+                    <label for="repoOwner">GitHub Owner</label>
+                    <input id="repoOwner" type="text" required placeholder="your-github-username">
+                </div>
+                <div class="field-group">
+                    <label for="repoName">Repository Name</label>
+                    <input id="repoName" type="text" required placeholder="your-repo-name">
+                </div>
+                <div class="field-group">
+                    <label for="repoBranch">Branch</label>
+                    <input id="repoBranch" type="text" value="main" placeholder="main">
+                </div>
+                <div class="field-group">
+                    <label for="gamesPath">Games Folder</label>
+                    <input id="gamesPath" type="text" value="games" placeholder="games">
+                </div>
+                <button type="submit" class="btn-primary">Save Repository Settings</button>
+            </form>
+            <div class="card-actions" style="margin-top: 0.75rem;">
+                <button id="syncRepoGamesBtn" class="btn-card" type="button">Sync Repository Games</button>
+            </div>
+            <p class="storage-note" id="repoSyncStatus">Set your repo details, then click sync.</p>
+        </section>
+
+        <section class="add-game-panel">
+            <h2>Add a manual game link</h2>
             <form id="addGameForm" class="add-game-form">
                 <div class="field-group">
                     <label for="gameName">Game Name</label>
@@ -43,7 +69,7 @@
                 </div>
                 <button type="submit" class="btn-primary">Save Game</button>
             </form>
-            <p class="storage-note">Tip: Your games are saved per browser/device.</p>
+            <p class="storage-note">Tip: Manual links are also saved per browser/device.</p>
         </section>
 
         <div class="games-grid" id="gamesGrid"></div>
@@ -61,10 +87,33 @@
 
     <script src="js/auth.js"></script>
     <script>
-        const STORAGE_KEY = 'gameVaultGames';
+        const MANUAL_STORAGE_KEY = 'gameVaultGames';
+        const REPO_STORAGE_KEY = 'gameVaultRepoConfig';
 
         checkAuth();
+        initRepoConfigForm();
         loadGames();
+
+        document.getElementById('repoConfigForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const config = {
+                owner: document.getElementById('repoOwner').value.trim(),
+                repo: document.getElementById('repoName').value.trim(),
+                branch: document.getElementById('repoBranch').value.trim() || 'main',
+                gamesPath: normalizeFolder(document.getElementById('gamesPath').value.trim() || 'games')
+            };
+
+            if (!config.owner || !config.repo) {
+                return;
+            }
+
+            localStorage.setItem(REPO_STORAGE_KEY, JSON.stringify(config));
+            setRepoStatus('Repository settings saved. Click sync to refresh your games.');
+        });
+
+        document.getElementById('syncRepoGamesBtn').addEventListener('click', async function() {
+            await loadGames(true);
+        });
 
         document.getElementById('addGameForm').addEventListener('submit', function(event) {
             event.preventDefault();
@@ -77,21 +126,48 @@
                 return;
             }
 
-            const games = getGames();
+            const games = getManualGames();
             games.push({
-                id: Date.now(),
+                id: `manual-${Date.now()}`,
                 name,
                 url,
-                icon
+                icon,
+                source: 'manual'
             });
 
-            saveGames(games);
+            saveManualGames(games);
             this.reset();
             loadGames();
         });
 
-        function getGames() {
-            const raw = localStorage.getItem(STORAGE_KEY);
+        function initRepoConfigForm() {
+            const config = getRepoConfig();
+            document.getElementById('repoOwner').value = config.owner || '';
+            document.getElementById('repoName').value = config.repo || '';
+            document.getElementById('repoBranch').value = config.branch || 'main';
+            document.getElementById('gamesPath').value = config.gamesPath || 'games';
+        }
+
+        function getRepoConfig() {
+            try {
+                const parsed = JSON.parse(localStorage.getItem(REPO_STORAGE_KEY) || '{}');
+                return {
+                    owner: parsed.owner || '',
+                    repo: parsed.repo || '',
+                    branch: parsed.branch || 'main',
+                    gamesPath: normalizeFolder(parsed.gamesPath || 'games')
+                };
+            } catch (error) {
+                return { owner: '', repo: '', branch: 'main', gamesPath: 'games' };
+            }
+        }
+
+        function normalizeFolder(path) {
+            return path.replace(/^\/+|\/+$/g, '');
+        }
+
+        function getManualGames() {
+            const raw = localStorage.getItem(MANUAL_STORAGE_KEY);
             if (!raw) {
                 return [];
             }
@@ -105,43 +181,105 @@
             }
         }
 
-        function saveGames(games) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(games));
+        function saveManualGames(games) {
+            localStorage.setItem(MANUAL_STORAGE_KEY, JSON.stringify(games));
         }
 
-        function loadGames() {
-            const games = getGames();
+        async function loadGames(forceSync = false) {
             const grid = document.getElementById('gamesGrid');
+            const manualGames = getManualGames();
+            let repoGames = [];
+
+            try {
+                repoGames = await fetchRepositoryGames(forceSync);
+            } catch (error) {
+                console.error('Repository sync failed:', error);
+            }
+
+            const games = [...repoGames, ...manualGames];
 
             if (games.length === 0) {
                 grid.innerHTML = `
                     <article class="empty-state">
-                        <h3>No games saved yet</h3>
-                        <p>Add your first game with the form above.</p>
+                        <h3>No games available yet</h3>
+                        <p>Sync your repository or add a manual game link above.</p>
                     </article>
                 `;
                 return;
             }
 
             grid.innerHTML = games.map(game => `
-                <article class="game-card" data-id="${game.id}">
-                    <div class="game-thumbnail" onclick="playGame(${game.id})">
-                        <div class="game-icon">${escapeHtml(game.icon)}</div>
+                <article class="game-card" data-id="${escapeHtml(String(game.id))}">
+                    <div class="game-thumbnail" onclick="playGame('${escapeJs(game.id)}')">
+                        <div class="game-icon">${escapeHtml(game.icon || '🎮')}</div>
                     </div>
                     <div class="game-info">
                         <h3>${escapeHtml(game.name)}</h3>
                         <p>${escapeHtml(game.url)}</p>
                         <div class="card-actions">
-                            <button class="btn-card" onclick="playGame(${game.id})">Play</button>
-                            <button class="btn-card btn-danger" onclick="removeGame(${game.id})">Remove</button>
+                            <button class="btn-card" onclick="playGame('${escapeJs(game.id)}')">Play</button>
+                            ${game.source === 'manual' ? `<button class="btn-card btn-danger" onclick="removeGame('${escapeJs(game.id)}')">Remove</button>` : '<span class="storage-note">Synced</span>'}
                         </div>
                     </div>
                 </article>
             `).join('');
+
+            window.__gameVaultGames = games;
+        }
+
+        async function fetchRepositoryGames(forceSync) {
+            const config = getRepoConfig();
+            if (!config.owner || !config.repo) {
+                setRepoStatus('Set repository owner and name to enable automatic game sync.');
+                return [];
+            }
+
+            setRepoStatus('Syncing repository games...');
+
+            const apiUrl = `https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/git/trees/${encodeURIComponent(config.branch)}?recursive=1`;
+            const response = await fetch(apiUrl, {
+                headers: {
+                    Accept: 'application/vnd.github+json'
+                },
+                cache: forceSync ? 'no-store' : 'default'
+            });
+
+            if (!response.ok) {
+                setRepoStatus(`Sync failed (${response.status}). Check repo owner/name/branch.`);
+                return [];
+            }
+
+            const data = await response.json();
+            const folderPrefix = `${config.gamesPath}/`;
+            const htmlFiles = (data.tree || [])
+                .filter(item => item.type === 'blob' && item.path && item.path.startsWith(folderPrefix) && item.path.toLowerCase().endsWith('.html'))
+                .sort((a, b) => a.path.localeCompare(b.path));
+
+            const syncedGames = htmlFiles.map(file => ({
+                id: `repo-${file.path}`,
+                name: toTitle(file.path.split('/').pop().replace('.html', '')),
+                url: `https://${config.owner}.github.io/${config.repo}/${file.path}`,
+                icon: '🕹️',
+                source: 'repo'
+            }));
+
+            if (syncedGames.length === 0) {
+                setRepoStatus(`Sync complete, but no .html files found under ${config.gamesPath}/.`);
+            } else {
+                setRepoStatus(`Sync complete: found ${syncedGames.length} game file(s) in ${config.gamesPath}/.`);
+            }
+
+            return syncedGames;
+        }
+
+        function toTitle(value) {
+            return value
+                .replace(/[-_]+/g, ' ')
+                .replace(/\b\w/g, char => char.toUpperCase());
         }
 
         function playGame(id) {
-            const game = getGames().find(item => item.id === id);
+            const game = (window.__gameVaultGames || []).find(item => item.id === id);
             if (!game) {
                 return;
             }
@@ -157,15 +295,23 @@
         }
 
         function removeGame(id) {
-            const games = getGames().filter(game => game.id !== id);
-            saveGames(games);
+            const games = getManualGames().filter(game => game.id !== id);
+            saveManualGames(games);
             loadGames();
+        }
+
+        function setRepoStatus(message) {
+            document.getElementById('repoSyncStatus').textContent = message;
         }
 
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
+        }
+
+        function escapeJs(value) {
+            return String(value).replace(/'/g, "\\'");
         }
 
         window.onclick = function(event) {

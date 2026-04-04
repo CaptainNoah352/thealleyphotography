@@ -1,14 +1,15 @@
 # 🎮 Game Vault
 
-A lightweight game storage hub for your personal HTML5 games.
+A lightweight game storage hub for your personal HTML5 games with repository auto-sync.
 
 ## Features
 
 - Simple login gate (`user` / `pass` by default)
-- Add game entries from the dashboard
-- Save game list in browser local storage
-- Launch any saved game path/URL in a modal player
-- Remove games from your hub with one click
+- Auto-sync `.html` games from your GitHub repository's `games/` folder
+- Add optional manual game entries from the dashboard
+- Save settings and manual entries in browser local storage
+- Launch any saved/synced game in a modal player
+- Remove manual games from your hub with one click
 
 ## Setup
 
@@ -19,28 +20,16 @@ A lightweight game storage hub for your personal HTML5 games.
 
 ## Adding Games
 
-You can add games directly in the dashboard form:
+### Recommended: repository auto-sync
 
-1. Enter a game name
-2. Enter a local path like `games/my-game.html` or a full URL
-3. (Optional) add an emoji icon
-4. Click **Save Game**
+1. Copy your game files/folders into this repo under `games/`
+2. Open `dashboard.html` and set your GitHub owner, repo name, branch, and games folder
+3. Click **Sync Repository Games**
+4. Every `.html` file under `games/` will appear automatically in the portal
 
-### If your games are in other folders on your computer
+### Optional: manual link entry
 
-Browsers cannot reliably load random folders from your computer into this site.
-The most reliable workflow is:
-
-1. Create a `games/` folder in this repo (if it does not exist yet).
-2. Copy each game folder from your computer into `games/`.
-3. In the dashboard, add the entry URL/path to that game's main HTML file.
-
-Examples:
-
-- `games/flappy-bird/index.html`
-- `games/racing/index.html`
-
-Tip: Keep each game's assets (images, js, css, audio) in the same copied folder so relative links keep working.
+You can still add a manual game URL/path in the dashboard form if needed.
 
 ## Demo Credentials
 
