@@ -1,25 +1,36 @@
 # 🎮 Game Vault
 
-Your personal HTML5 games collection with authentication.
+A lightweight game storage hub for your personal HTML5 games.
+
+## Features
+
+- Simple login gate (`user` / `pass` by default)
+- Add game entries from the dashboard
+- Save game list in browser local storage
+- Launch any saved game path/URL in a modal player
+- Remove games from your hub with one click
 
 ## Setup
 
 1. Fork/clone this repository
-2. Add your HTML games to the `games/` folder
-3. Update `dashboard.html` to include your games
-4. Deploy to GitHub Pages or Netlify
+2. (Optional) Add HTML games to the `games/` folder
+3. Open `index.html`
+4. Sign in with demo credentials and start adding games in `dashboard.html`
 
 ## Adding Games
 
-1. Drop your `.html` game files into the `games/` folder
-2. Copy a game card in `dashboard.html` and update:
-   - The `onclick` path
-   - The game title
-   - The emoji/icon
+You can add games directly in the dashboard form:
+
+1. Enter a game name
+2. Enter a local path like `games/my-game.html` or a full URL
+3. (Optional) add an emoji icon
+4. Click **Save Game**
 
 ## Demo Credentials
+
 - Username: `user`
 - Password: `pass`
 
 ## Security Note
-This uses client-side authentication (not secure). For production, use a backend service like Firebase Auth, Auth0, or Netlify Identity.
+
+This uses client-side authentication and local storage only. For production, use a backend auth system and database.

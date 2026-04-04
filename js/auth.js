@@ -5,12 +5,17 @@ const VALID_USERS = [
 
 // Check if user is logged in
 function checkAuth() {
-    const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
     const currentUser = sessionStorage.getItem('currentUser');
-    
-    if (!isLoggedIn && !window.location.href.includes('index.html')) {
+    const path = window.location.pathname.toLowerCase();
+    const onLoginPage = path.endsWith('/index.html') || path.endsWith('/');
+
+    if (!isLoggedIn && !onLoginPage) {
         window.location.href = 'index.html';
-    } else if (isLoggedIn && currentUser) {
+        return;
+    }
+
+    if (isLoggedIn && currentUser) {
         const welcomeEl = document.getElementById('welcomeUser');
         if (welcomeEl) {
             welcomeEl.textContent = `Welcome, ${currentUser}!`;
@@ -21,20 +26,19 @@ function checkAuth() {
 // Handle login
 function handleLogin(e) {
     e.preventDefault();
-    
+
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-    
-    const user = VALID_USERS.find(u => 
+
+    const user = VALID_USERS.find(u =>
         u.username === username && u.password === password
     );
-    
+
     if (user) {
         sessionStorage.setItem('isLoggedIn', 'true');
         sessionStorage.setItem('currentUser', username);
         window.location.href = 'dashboard.html';
     } else {
-        // Show error
         let errorDiv = document.querySelector('.error-msg');
         if (!errorDiv) {
             errorDiv = document.createElement('div');
@@ -45,7 +49,7 @@ function handleLogin(e) {
         errorDiv.textContent = 'Invalid username or password';
         errorDiv.style.display = 'block';
     }
-    
+
     return false;
 }
 
