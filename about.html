@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="Learn more about Brandon Alley Photography." />
+    <title>About | Brandon Alley Photography</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body data-page="about">
+    <header class="site-header" id="top">
+      <div class="header-shell">
+        <div class="header-inner">
+          <a href="index.html#top" class="logo">Brandon Alley Photography</a>
+
+          <nav class="site-nav" aria-label="Main navigation">
+            <a href="index.html#top">Home</a>
+            <a href="portfolio.html">Portfolio</a>
+            <a href="projects.html">Projects</a>
+            <a href="locations.html">Locations</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+          </nav>
+
+          <div class="nav-social" aria-label="Social links">
+            <a href="https://instagram.com/brandonalley.photography" target="_blank" rel="noreferrer" aria-label="Instagram">
+              <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="https://www.flickr.com/photos/204244048@N05/" target="_blank" rel="noreferrer" aria-label="Flickr">
+              <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor"><circle cx="7" cy="12" r="4.5"/><circle cx="17" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+            </a>
+          </div>
+
+          <button class="header-burger-btn burger" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
+            <div class="burger-box">
+              <div class="burger-inner">
+                <div class="top-bun"></div>
+                <div class="patty"></div>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="mobile-menu-overlay" id="mobileMenu" aria-hidden="true">
+      <button class="mobile-menu-close" id="mobileMenuClose" type="button" aria-label="Close menu">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <nav class="mobile-menu-nav" aria-label="Mobile navigation">
+        <a href="index.html#top">Home</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="projects.html">Projects</a>
+        <a href="locations.html">Locations</a>
+        <a href="about.html">About</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+
+    <main>
+      <section id="about" class="about-section scroll-reveal-section" aria-labelledby="about-title">
+        <div class="about-hero scroll-reveal">
+          <div class="about-hero-inner scroll-reveal">
+            <p class="eyebrow">About</p>
+            <h1 id="about-title">The story behind the lens</h1>
+            <p class="about-intro">For me, photography is about slowing down in a world that constantly pushes us to move faster.</p>
+          </div>
+        </div>
+        <div class="container about-content">
+
+          <div class="about-portrait-row scroll-reveal">
+
+            <figure class="about-portrait-fig scroll-reveal">
+              <img
+                class="about-portrait-img"
+                src="https://live.staticflickr.com/65535/55250254275_f0fc9c0970_b.jpg"
+                alt="Brandon Alley — photographer"
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+
+            <div class="about-portrait-copy scroll-reveal">
+              <p class="eyebrow">Meet the photographer</p>
+              <div class="about-story-text">
+                <p>For me, photography is about slowing down in a world that constantly pushes us to move faster. We live in such an instant, convenient, fast-paced time, where so much is consumed quickly and forgotten just as fast. Photography gives me a reason to pause, look closer, and appreciate the beauty that's still right in front of us.</p>
+                <p>I've always been drawn to things with character: old buildings, soft light, quiet streets, nature, animals, texture, color, and the small details most people walk past without noticing. There's something powerful about preserving a moment that might otherwise fade away.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="about-story scroll-reveal">
+            <blockquote class="about-pullquote scroll-reveal">"Photography gives me a reason to pause, look closer, and appreciate the beauty that's still right in front of us."</blockquote>
+            <div class="about-story-text scroll-reveal">
+              <p>My love for photography grew through vintage cameras, film, and the slower process of learning how light, composition, and emotion come together. Shooting film taught me to be more intentional. Digital photography gave me the freedom to keep exploring. Together, they shaped the way I see: patient, nostalgic, and always searching for feeling.</p>
+              <p>I do photography today because it helps me connect with people, with nature, with places, and with the overlooked moments that make life feel meaningful. My goal is to create images that feel warm, honest, and timeless; photographs that don't just show what happened, but remind you how it felt.</p>
+              <p>Brandon Alley Photography is my way of turning everyday moments into lasting memories with a love for the natural, the vintage, the imperfect, and the beautifully overlooked.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>&copy; <span id="year"></span> Brandon | Brandon Alley Photography</p>
+      </div>
+    </footer>
+
+    <script src="photo-data.js"></script>
+    <script src="js/site-core.js"></script>
+    <script src="js/lightbox.js"></script>
+    <script src="js/gallery.js"></script>
+    <script src="js/carousel.js"></script>
+    <script src="js/locations.js"></script>
+    <script src="js/projects.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

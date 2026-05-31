@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="description"
+      content="Browse place-based photo collections by Brandon Alley, beginning with Sweetwater Wetland Preserve in Gainesville, Florida."
+    />
+    <title>Locations | Brandon Alley Photography</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body data-page="locations">
+    <header class="site-header" id="top">
+      <div class="header-shell">
+        <div class="header-inner">
+          <a href="index.html#top" class="logo">Brandon Alley Photography</a>
+
+          <nav class="site-nav" aria-label="Main navigation">
+            <a href="index.html#top">Home</a>
+            <a href="portfolio.html">Portfolio</a>
+            <a href="projects.html">Projects</a>
+            <a href="locations.html">Locations</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+          </nav>
+
+          <div class="nav-social" aria-label="Social links">
+            <a href="https://instagram.com/brandonalley.photography" target="_blank" rel="noreferrer" aria-label="Instagram">
+              <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="https://www.flickr.com/photos/204244048@N05/" target="_blank" rel="noreferrer" aria-label="Flickr">
+              <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor"><circle cx="7" cy="12" r="4.5"/><circle cx="17" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+            </a>
+          </div>
+
+          <button class="header-burger-btn burger" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
+            <div class="burger-box">
+              <div class="burger-inner">
+                <div class="top-bun"></div>
+                <div class="patty"></div>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="mobile-menu-overlay" id="mobileMenu" aria-hidden="true">
+      <button class="mobile-menu-close" id="mobileMenuClose" type="button" aria-label="Close menu">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <nav class="mobile-menu-nav" aria-label="Mobile navigation">
+        <a href="index.html#top">Home</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="projects.html">Projects</a>
+        <a href="locations.html">Locations</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <div class="mobile-menu-social">
+          <a href="https://instagram.com/brandonalley.photography" target="_blank" rel="noreferrer" aria-label="Instagram">
+            <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="https://www.flickr.com/photos/204244048@N05/" target="_blank" rel="noreferrer" aria-label="Flickr">
+            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor"><circle cx="7" cy="12" r="4.5"/><circle cx="17" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+          </a>
+        </div>
+      </nav>
+    </div>
+
+    <main>
+      <section class="locations-page-hero" aria-labelledby="locations-title">
+        <div class="locations-page-hero-inner scroll-reveal">
+          <p class="eyebrow">Locations</p>
+          <h1 id="locations-title">Photos by place</h1>
+          <p class="locations-page-intro">Collections from wetlands, trails, preserves, and other wild spaces I return to with a camera.</p>
+        </div>
+      </section>
+
+      <section class="locations-directory" aria-label="Location collections">
+        <div class="container locations-directory-inner">
+          <div class="locations-grid" id="locationsGrid"></div>
+        </div>
+      </section>
+
+      <section class="location-gallery-section" aria-labelledby="locationGalleryTitle">
+        <div class="container">
+          <div class="location-gallery-header scroll-reveal">
+            <p class="eyebrow">Selected location</p>
+            <h2 id="locationGalleryTitle">Sweetwater Wetland Preserve</h2>
+            <p id="locationGalleryIntro">A place-based gallery from Gainesville, Florida.</p>
+            <span class="location-gallery-count" id="locationGalleryCount" aria-live="polite"></span>
+          </div>
+          <div class="gallery" id="location-gallery" aria-live="polite"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>&copy; <span id="year"></span> Brandon | Brandon Alley Photography</p>
+      </div>
+    </footer>
+
+    <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Gallery lightbox">
+      <button class="lightbox-control lightbox-close" id="lightboxClose" type="button" aria-label="Close fullscreen image">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <button class="lightbox-tap-zone lightbox-tap-zone-prev" id="lightboxPrevZone" type="button" aria-label="Previous image"></button>
+      <button class="lightbox-tap-zone lightbox-tap-zone-next" id="lightboxNextZone" type="button" aria-label="Next image"></button>
+      <figure class="lightbox-figure" id="lightboxFigure">
+        <img id="lightboxImage" src="" alt="" />
+        <figcaption class="lightbox-meta">
+          <p id="lightboxCaption"></p>
+          <p class="lightbox-counter" id="lightboxCounter" aria-live="polite"></p>
+          <a class="lightbox-flickr-link" id="lightboxFlickrLink" href="#" target="_blank" rel="noreferrer noopener" aria-label="View on Flickr">
+            <svg class="lightbox-flickr-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="7" cy="12" r="4.5"/><circle cx="17" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+            <span>View on Flickr</span>
+          </a>
+        </figcaption>
+      </figure>
+    </div>
+
+    <script src="photo-data.js"></script>
+    <script src="js/site-core.js"></script>
+    <script src="js/lightbox.js"></script>
+    <script src="js/gallery.js"></script>
+    <script src="js/carousel.js"></script>
+    <script src="js/locations.js"></script>
+    <script src="js/projects.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

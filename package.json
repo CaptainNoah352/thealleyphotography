@@ -1,0 +1,14 @@
+{
+  "name": "the-alley-photography",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Local preview workflow for the static Brandon Alley Photography site.",
+  "scripts": {
+    "preview": "python -m http.server 3000",
+    "check:js": "node --check script.js",
+    "fetch:flickr-metadata": "node tools/fetch-flickr-metadata.js",
+    "intake:flickr": "node tools/intake-flickr-to-sheet.mjs",
+    "sync:sheet": "node tools/sync-google-sheet.mjs",
+    "sync:sheet:apply": "node tools/sync-google-sheet.mjs --apply"
+  }
+}

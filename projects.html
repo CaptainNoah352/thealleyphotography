@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="description"
+      content="Long-form photography projects by Brandon Alley — documenting the herons of Florida, one species at a time."
+    />
+    <title>Projects | Brandon Alley Photography</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body data-page="projects">
+    <header class="site-header" id="top">
+      <div class="header-shell">
+        <div class="header-inner">
+          <a href="index.html#top" class="logo">Brandon Alley Photography</a>
+
+          <nav class="site-nav" aria-label="Main navigation">
+            <a href="index.html#top">Home</a>
+            <a href="portfolio.html">Portfolio</a>
+            <a href="projects.html">Projects</a>
+            <a href="locations.html">Locations</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+          </nav>
+
+          <div class="nav-social" aria-label="Social links">
+            <a href="https://instagram.com/brandonalley.photography" target="_blank" rel="noreferrer" aria-label="Instagram">
+              <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="https://www.flickr.com/photos/204244048@N05/" target="_blank" rel="noreferrer" aria-label="Flickr">
+              <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor"><circle cx="7" cy="12" r="4.5"/><circle cx="17" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+            </a>
+          </div>
+
+          <button class="header-burger-btn burger" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
+            <div class="burger-box">
+              <div class="burger-inner">
+                <div class="top-bun"></div>
+                <div class="patty"></div>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="mobile-menu-overlay" id="mobileMenu" aria-hidden="true">
+      <button class="mobile-menu-close" id="mobileMenuClose" type="button" aria-label="Close menu">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <nav class="mobile-menu-nav" aria-label="Mobile navigation">
+        <a href="index.html#top">Home</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="projects.html">Projects</a>
+        <a href="locations.html">Locations</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <div class="mobile-menu-social">
+          <a href="https://instagram.com/brandonalley.photography" target="_blank" rel="noreferrer" aria-label="Instagram">
+            <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="https://www.flickr.com/photos/204244048@N05/" target="_blank" rel="noreferrer" aria-label="Flickr">
+            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor"><circle cx="7" cy="12" r="4.5"/><circle cx="17" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+          </a>
+        </div>
+      </nav>
+    </div>
+
+    <main>
+      <section class="projects-page-section" aria-labelledby="projects-title">
+
+        <div class="projects-page-hero scroll-reveal">
+          <div class="projects-page-hero-inner">
+            <p class="eyebrow">Projects</p>
+            <h1 id="projects-title">Long-form work</h1>
+            <p class="projects-page-intro">Focused series that go beyond a single photograph — documenting species, places, and stories with patience and depth.</p>
+          </div>
+        </div>
+
+        <div class="container projects-body">
+
+          <article class="project-card scroll-reveal" aria-labelledby="project-herons-title">
+            <div class="project-card-header">
+              <div class="project-card-meta">
+                <span class="project-status project-status--active">In Progress</span>
+                <span class="project-year">2026 &ndash; ongoing</span>
+              </div>
+              <h2 id="project-herons-title" class="project-card-title">Herons of Florida</h2>
+              <p class="project-card-desc">Florida is home to eleven species of herons and egrets — birds that share the same ancient family but each occupy their own corner of the wetlands. This project is a slow, deliberate effort to photograph every one of them in the wild and create a detailed infographic for each species: range, behavior, field marks, and the story behind the encounter.</p>
+            </div>
+
+            <div class="project-progress-block scroll-reveal">
+              <div class="project-progress-label">
+                <span class="project-progress-count" id="heronProgressCount">0 of 12 species documented</span>
+              </div>
+              <div class="project-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="12" aria-label="Species documented">
+                <div class="project-progress-fill" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <div class="project-gallery-section scroll-reveal">
+              <p class="eyebrow project-gallery-eyebrow">Photos</p>
+              <div class="gallery" id="project-gallery" aria-live="polite"></div>
+            </div>
+
+            <p class="eyebrow species-grid-eyebrow">Species Checklist</p>
+            <ul class="species-grid scroll-reveal" aria-label="Florida heron species checklist">
+              <li class="species-card species-card--pending" data-species="Ardea herodias">
+                <div class="species-status-dot" aria-hidden="true"></div>
+                <div class="species-card-body">
+                  <p class="species-common">Great Blue Heron</p>
+                  <p class="species-scientific">Ardea herodias</p>
+                </div>
+              </li>
+              <li class="species-card species-card--pending" data-species="Ardea alba">
+                <div class="species-status-dot" aria-hidden="true"></div>
+                <div class="species-card-body">
+                  <p class="species-common">Great Egret</p>
+                  <p class="species-scientific">Ardea alba</p>
+                </div>
+              </li>
+              <li class="species-card species-card--pending" data-species="Egretta thula">
+                <div class="species-status-dot" aria-hidden="true"></div>
+                <div class="species-card-body">
+                  <p class="species-common">Snowy Egret</p>
+                  <p class="species-scientific">Egretta thula</p>
+                </div>
+              </li>
+              <li class="species-card species-card--pending" data-species="Egretta caerulea">
+                <div class="species-status-dot" aria-hidden="true"></div>
+                <div class="species-card-body">
+                  <p class="species-common">Little Blue Heron</p>
+                  <p class="species-scientific">Egretta caerulea</p>
+                </div>
+              </li>
+              <li class="species-card species-card--pending" data-species="Egretta tricolor">
+                <div class="species-status-dot" aria-hidden="true"></div>
+                <div class="species-card-body">
+                  <p class="species-common">Tricolored Heron</p>
+                  <p class="species-scientific">Egretta tricolor</p>
+                </div>
+              </li>
+              <li class="species-card species-card--pending" data-species="Egretta rufescens">
+                <div class="species-status-dot" aria-hidden="true"></div>
+                <div class="species-card-body">
+                  <p class="species-common">Reddish Egret</p>
+                  <p class="species-scientific">Egretta rufescens</p>
+                </div>
+              </li>
+              <li class="species-card species-card--pending" data-species="Bubulcus ibis">
+                <div class="species-status-dot" aria-hidden="true"></div>
+                <div class="species-card-body">
+                  <p class="species-common">Cattle Egret</p>
+                  <p class="species-scientific">Bubulcus ibis</p>
+                </div>
+              </li>
+              <li class="species-card species-card--pending" data-species="Butorides virescens">
+                <div class="species-status-dot" aria-hidden="true"></div>
+                <div class="species-card-body">
+                  <p class="species-common">Green Heron</p>
+                  <p class="species-scientific">Butorides virescens</p>
+                </div>
+              </li>
+              <li class="species-card species-card--pending" data-species="Nycticorax nycticorax">
+                <div class="species-status-dot" aria-hidden="true"></div>
+                <div class="species-card-body">
+                  <p class="species-common">Black-crowned Night-Heron</p>
+                  <p class="species-scientific">Nycticorax nycticorax</p>
+                </div>
+              </li>
+              <li class="species-card species-card--pending" data-species="Nyctanassa violacea">
+                <div class="species-status-dot" aria-hidden="true"></div>
+                <div class="species-card-body">
+                  <p class="species-common">Yellow-crowned Night-Heron</p>
+                  <p class="species-scientific">Nyctanassa violacea</p>
+                </div>
+              </li>
+              <li class="species-card species-card--pending" data-species="Ardea herodias occidentalis">
+                <div class="species-status-dot" aria-hidden="true"></div>
+                <div class="species-card-body">
+                  <p class="species-common">Great White Heron</p>
+                  <p class="species-scientific">Ardea herodias occidentalis</p>
+                </div>
+              </li>
+              <li class="species-card species-card--pending" data-species="Ixobrychus exilis">
+                <div class="species-status-dot" aria-hidden="true"></div>
+                <div class="species-card-body">
+                  <p class="species-common">Least Bittern</p>
+                  <p class="species-scientific">Ixobrychus exilis</p>
+                </div>
+              </li>
+            </ul>
+
+          </article>
+
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>&copy; <span id="year"></span> Brandon | Brandon Alley Photography</p>
+      </div>
+    </footer>
+
+    <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Gallery lightbox">
+      <button class="lightbox-control lightbox-close" id="lightboxClose" type="button" aria-label="Close fullscreen image">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <button class="lightbox-tap-zone lightbox-tap-zone-prev" id="lightboxPrevZone" type="button" aria-label="Previous image"></button>
+      <button class="lightbox-tap-zone lightbox-tap-zone-next" id="lightboxNextZone" type="button" aria-label="Next image"></button>
+      <figure class="lightbox-figure" id="lightboxFigure">
+        <img id="lightboxImage" src="" alt="" />
+        <figcaption class="lightbox-meta">
+          <p id="lightboxCaption"></p>
+          <p class="lightbox-counter" id="lightboxCounter" aria-live="polite"></p>
+          <a class="lightbox-flickr-link" id="lightboxFlickrLink" href="#" target="_blank" rel="noreferrer noopener" aria-label="View on Flickr">
+            <svg class="lightbox-flickr-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="7" cy="12" r="4.5"/><circle cx="17" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+            <span>View on Flickr</span>
+          </a>
+        </figcaption>
+      </figure>
+    </div>
+
+    <div class="species-modal" id="speciesModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="speciesModalTitle">
+      <div class="species-modal-backdrop" id="speciesModalBackdrop"></div>
+      <div class="species-modal-panel">
+        <button class="species-modal-close" id="speciesModalClose" type="button" aria-label="Close species details">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="species-modal-body">
+          <div class="species-modal-header-row">
+            <div class="species-modal-name-col">
+              <p class="species-modal-scientific" id="speciesModalScientific"></p>
+              <h2 class="species-modal-title" id="speciesModalTitle"></h2>
+              <div class="species-modal-badges">
+                <span class="species-modal-conservation" id="speciesModalConservation"></span>
+                <span class="species-modal-documented" id="speciesModalDocumented"></span>
+              </div>
+            </div>
+            <div class="species-modal-photo-wrap" id="speciesModalPhotoWrap"></div>
+          </div>
+          <dl class="species-modal-details" id="speciesModalDetails"></dl>
+        </div>
+      </div>
+    </div>
+
+    <script src="photo-data.js"></script>
+    <script src="js/site-core.js"></script>
+    <script src="js/lightbox.js"></script>
+    <script src="js/gallery.js"></script>
+    <script src="js/carousel.js"></script>
+    <script src="js/locations.js"></script>
+    <script src="js/projects.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

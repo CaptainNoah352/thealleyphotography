@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin — Brandon Alley Photography</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="admin.css" />
+    <meta name="robots" content="noindex, nofollow" />
+  </head>
+  <body>
+    <header class="admin-header">
+      <a class="admin-header-logo" href="index.html">Brandon Alley Photography</a>
+      <span class="admin-header-sep" aria-hidden="true">/</span>
+      <span class="admin-header-label">Admin Reference Panel</span>
+    </header>
+
+    <div class="admin-controls">
+      <label class="admin-filter-label" for="filterProject">Project</label>
+      <select id="filterProject" class="admin-select">
+        <option value="all">All projects</option>
+      </select>
+
+      <label class="admin-filter-label" for="filterFeatured">Featured</label>
+      <select id="filterFeatured" class="admin-select">
+        <option value="all">All photos</option>
+        <option value="true">Featured only</option>
+        <option value="false">Not featured</option>
+      </select>
+
+      <span class="admin-count" id="adminCount"></span>
+    </div>
+
+    <main>
+      <div class="admin-grid" id="adminGrid"></div>
+    </main>
+
+    <footer class="admin-footer">
+      <p>To update a photo, tell Claude: <strong>"Update photo #[number]: [what to change]"</strong></p>
+      <p>Photo data lives in <code>photo-data.js</code>. The admin panel is read-only.</p>
+    </footer>
+
+    <script src="photo-data.js"></script>
+    <script src="admin.js"></script>
+  </body>
+</html>

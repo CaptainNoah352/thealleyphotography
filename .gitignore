@@ -1,0 +1,7 @@
+node_modules/
+.claude/
+.DS_Store
+Thumbs.db
+*.log
+outputs/photo-organizer/Export_Sync.from-google.csv
+outputs/photo-organizer/Flickr_Intake.tsv
