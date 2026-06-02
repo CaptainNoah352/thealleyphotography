@@ -57,6 +57,13 @@ function getArgValue(name) {
   return index >= 0 ? process.argv[index + 1] : null;
 }
 
+function getListArgValue(name) {
+  return String(getArgValue(name) || "")
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean);
+}
+
 function parseCsv(text) {
   const rows = [];
   let row = [];
@@ -225,10 +232,13 @@ async function fetchPhoto(link, feedItem) {
 }
 
 const limit = Number(getArgValue("--limit") || 20);
+const forcedUrls = getListArgValue("--urls");
 const { ids, urls } = await existingSheetIds();
 const feed = await fetch(publicFeedUrl).then((response) => response.json());
 const items = Array.isArray(feed.items) ? feed.items.slice(0, limit) : [];
-const newItems = items.filter((item) => {
+const feedItemByLink = new Map(items.map((item) => [item.link, item]));
+const forcedItems = forcedUrls.map((link) => feedItemByLink.get(link) || { link, title: "", description: "", tags: "" });
+const newItems = forcedItems.length ? forcedItems : items.filter((item) => {
   const id = flickrIdFromUrl(item.link);
   return id && !ids.has(id) && !urls.has(item.link);
 });

@@ -123,6 +123,12 @@ When the user asks to update the spreadsheet from Flickr:
 
 The intake helper compares Flickr IDs against the current sheet export and does not prepare duplicate rows.
 
+If a pasted row needs to be repaired, regenerate rows for specific Flickr URLs:
+
+```powershell
+npm.cmd run intake:flickr -- --urls "FLICKR_URL_1,FLICKR_URL_2"
+```
+
 #### Manual Review Fields
 
 The spreadsheet controls publishing through these fields:
