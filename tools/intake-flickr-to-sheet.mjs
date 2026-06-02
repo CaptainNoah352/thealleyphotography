@@ -18,28 +18,16 @@ const organizerHeaders = [
   "Preview Image",
   "Resolved Image URL",
   "Photo ID",
-  "Publish Status",
+  "Notes",
   "Featured",
   "Project",
   "Species",
-  "Category",
-  "Homepage Order",
-  "Portfolio Order",
-  "Alt Text",
-  "Caption",
-  "Display Title",
-  "Notes",
   "Full Image URL",
   "Flickr ID",
   "Title",
-  "Description",
-  "Date Uploaded",
   "Date Taken",
-  "Tags",
   "Width",
   "Height",
-  "Orientation",
-  "Aspect Ratio",
   "Camera",
   "Lens",
   "Shutter",
@@ -50,6 +38,18 @@ const organizerHeaders = [
   "Metering",
   "White Balance",
   "Flash",
+  "Publish Status",
+  "Category",
+  "Homepage Order",
+  "Portfolio Order",
+  "Alt Text",
+  "Caption",
+  "Display Title",
+  "Description",
+  "Date Uploaded",
+  "Tags",
+  "Orientation",
+  "Aspect Ratio",
 ];
 
 function getArgValue(name) {
@@ -195,6 +195,7 @@ async function fetchPhoto(link, feedItem) {
   }
 
   const row = Object.fromEntries(organizerHeaders.map((header) => [header, ""]));
+  row["Folder (Location)"] = "Unassigned";
   row["Flickr URL"] = link;
   row["Resolved Image URL"] = thumbUrl(imageUrl);
   row["Publish Status"] = "Needs Review";

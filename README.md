@@ -117,7 +117,7 @@ When the user asks to update the spreadsheet from Flickr:
 4. New Flickr rows must keep these defaults:
    - `Publish Status`: `Needs Review`
    - `Featured`: `FALSE`
-   - `Folder (Location)`: blank unless the user explicitly provided it
+   - `Folder (Location)`: `Unassigned` unless the user explicitly provided it
    - `Project`, `Species`, `Category`: blank unless the user explicitly provided them
    - `Photo ID`: blank until repo sync publishes the row
 
