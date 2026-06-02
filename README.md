@@ -114,6 +114,8 @@ When the user asks to update the spreadsheet from Flickr:
 
 2. Review `outputs/photo-organizer/Flickr_Intake.tsv`.
 3. Append the prepared rows to the live Google Sheet `Photo Organizer` tab.
+   - The TSV is ordered for the current `Photo Organizer` columns.
+   - The `Preview Image` cell includes a Google Sheets `IMAGE()` formula so thumbnails render after paste.
 4. New Flickr rows must keep these defaults:
    - `Publish Status`: `Needs Review`
    - `Featured`: `FALSE`

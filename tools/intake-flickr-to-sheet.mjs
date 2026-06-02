@@ -142,6 +142,10 @@ function thumbUrl(value) {
   return String(value || "").replace(/_[a-z]\.jpg$/i, "_m.jpg");
 }
 
+function previewFormula() {
+  return '=IF(INDIRECT("D"&ROW())="","",IMAGE(INDIRECT("D"&ROW()),4,110,140))';
+}
+
 function shutterFromExposure(value) {
   return (String(value || "").match(/\(([^)]+)\)/) || [])[1] || String(value || "").replace(/\s*sec.*/i, "").trim();
 }
@@ -204,6 +208,7 @@ async function fetchPhoto(link, feedItem) {
   const row = Object.fromEntries(organizerHeaders.map((header) => [header, ""]));
   row["Folder (Location)"] = "Unassigned";
   row["Flickr URL"] = link;
+  row["Preview Image"] = previewFormula();
   row["Resolved Image URL"] = thumbUrl(imageUrl);
   row["Publish Status"] = "Needs Review";
   row.Featured = "FALSE";

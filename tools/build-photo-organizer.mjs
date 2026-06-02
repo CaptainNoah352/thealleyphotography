@@ -97,28 +97,16 @@ const organizerHeaders = [
   "Preview Image",
   "Resolved Image URL",
   "Photo ID",
-  "Publish Status",
+  "Notes",
   "Featured",
   "Project",
   "Species",
-  "Category",
-  "Homepage Order",
-  "Portfolio Order",
-  "Alt Text",
-  "Caption",
-  "Display Title",
-  "Notes",
   "Full Image URL",
   "Flickr ID",
   "Title",
-  "Description",
-  "Date Uploaded",
   "Date Taken",
-  "Tags",
   "Width",
   "Height",
-  "Orientation",
-  "Aspect Ratio",
   "Camera",
   "Lens",
   "Shutter",
@@ -129,6 +117,18 @@ const organizerHeaders = [
   "Metering",
   "White Balance",
   "Flash",
+  "Publish Status",
+  "Category",
+  "Homepage Order",
+  "Portfolio Order",
+  "Alt Text",
+  "Caption",
+  "Display Title",
+  "Description",
+  "Date Uploaded",
+  "Tags",
+  "Orientation",
+  "Aspect Ratio",
 ];
 organizer.getRangeByIndexes(0, 0, 1, organizerHeaders.length).values = [organizerHeaders];
 styleHeader(organizer.getRangeByIndexes(0, 0, 1, organizerHeaders.length));
@@ -138,13 +138,14 @@ organizer.getRange("B:B").format.columnWidthPx = 350;
 organizer.getRange("C:C").format.columnWidthPx = 150;
 organizer.getRange("D:D").format.columnWidthPx = 330;
 organizer.getRange("E:E").format.columnWidthPx = 80;
-organizer.getRange("F:F").format.columnWidthPx = 130;
+organizer.getRange("F:F").format.columnWidthPx = 220;
 organizer.getRange("G:G").format.columnWidthPx = 100;
-organizer.getRange("H:J").format.columnWidthPx = 150;
-organizer.getRange("K:L").format.columnWidthPx = 120;
-organizer.getRange("M:P").format.columnWidthPx = 220;
-organizer.getRange("Q:Q").format.columnWidthPx = 330;
-organizer.getRange("R:AK").format.columnWidthPx = 150;
+organizer.getRange("H:I").format.columnWidthPx = 150;
+organizer.getRange("J:J").format.columnWidthPx = 330;
+organizer.getRange("K:Y").format.columnWidthPx = 150;
+organizer.getRange("Z:Z").format.columnWidthPx = 130;
+organizer.getRange("AA:AF").format.columnWidthPx = 160;
+organizer.getRange("AG:AK").format.columnWidthPx = 150;
 organizer.getRange(`A2:AK${maxRows + 1}`).format = {
   wrapText: true,
   verticalAlignment: "middle",
@@ -163,30 +164,16 @@ const seededRows = gallery
       null,
       thumbUrl(photo.src),
       photo.id,
-      "Published",
+      "",
       Boolean(photo.is_featured),
       photo.project || "",
       photo.species || "",
-      photo.project || "",
-      "",
-      "",
-      photo.alt || "",
-      photo.alt || "",
-      photoMetadata.title || photo.alt || "",
-      "",
       photo.src || "",
       photoMetadata.flickrId || "",
       photoMetadata.title || "",
-      photoMetadata.description || "",
-      photoMetadata.datePosted || "",
       photoMetadata.dateTaken || "",
-      photoMetadata.tags || "",
       photoMetadata.width || "",
       photoMetadata.height || "",
-      photoMetadata.width && photoMetadata.height
-        ? (Number(photoMetadata.width) >= Number(photoMetadata.height) ? "Landscape" : "Portrait")
-        : "",
-      photoMetadata.width && photoMetadata.height ? `${photoMetadata.width}:${photoMetadata.height}` : "",
       photoCameraMetadata.camera || "",
       photoCameraMetadata.lens || "",
       photoCameraMetadata.shutter || "",
@@ -197,6 +184,20 @@ const seededRows = gallery
       photoCameraMetadata.meteringMode || "",
       photoCameraMetadata.whiteBalance || "",
       photoCameraMetadata.flash || "",
+      "Published",
+      photo.project || "",
+      "",
+      "",
+      photo.alt || "",
+      photo.alt || "",
+      photoMetadata.title || photo.alt || "",
+      photoMetadata.description || "",
+      photoMetadata.datePosted || "",
+      photoMetadata.tags || "",
+      photoMetadata.width && photoMetadata.height
+        ? (Number(photoMetadata.width) >= Number(photoMetadata.height) ? "Landscape" : "Portrait")
+        : "",
+      photoMetadata.width && photoMetadata.height ? `${photoMetadata.width}:${photoMetadata.height}` : "",
     ];
   });
 
@@ -237,7 +238,7 @@ organizer.getRange(`A2:A${maxRows + 1}`).dataValidation = {
   inCellDropDown: true,
 };
 
-organizer.getRange(`F2:F${maxRows + 1}`).dataValidation = {
+organizer.getRange(`Z2:Z${maxRows + 1}`).dataValidation = {
   rule: { type: "list", formula1: '"Needs Review,Approved,Published,Hidden,Do Not Publish"' },
   prompt: { title: "Publish Status", message: "Only Approved or Published rows are eligible for repo sync.", show: true },
   errorAlert: { title: "Unknown status", message: "Use Needs Review, Approved, Published, Hidden, or Do Not Publish.", show: true },
@@ -250,30 +251,18 @@ const exportHeaders = [
   "Flickr URL",
   "Resolved Image URL",
   "Photo ID",
-  "Publish Status",
+  "Notes",
   "Folder Slug",
   "Ready",
   "Featured",
   "Project",
   "Species",
-  "Category",
-  "Homepage Order",
-  "Portfolio Order",
-  "Alt Text",
-  "Caption",
-  "Display Title",
-  "Notes",
   "Full Image URL",
   "Flickr ID",
   "Title",
-  "Description",
-  "Date Uploaded",
   "Date Taken",
-  "Tags",
   "Width",
   "Height",
-  "Orientation",
-  "Aspect Ratio",
   "Camera",
   "Lens",
   "Shutter",
@@ -284,6 +273,18 @@ const exportHeaders = [
   "Metering",
   "White Balance",
   "Flash",
+  "Publish Status",
+  "Category",
+  "Homepage Order",
+  "Portfolio Order",
+  "Alt Text",
+  "Caption",
+  "Display Title",
+  "Description",
+  "Date Uploaded",
+  "Tags",
+  "Orientation",
+  "Aspect Ratio",
 ];
 exportSheet.getRangeByIndexes(0, 0, 1, exportHeaders.length).values = [exportHeaders];
 styleHeader(exportSheet.getRangeByIndexes(0, 0, 1, exportHeaders.length));
@@ -340,10 +341,7 @@ exportSheet.getRange("E:E").format.columnWidthPx = 130;
 exportSheet.getRange("F:F").format.columnWidthPx = 180;
 exportSheet.getRange("G:G").format.columnWidthPx = 130;
 exportSheet.getRange("H:H").format.columnWidthPx = 100;
-exportSheet.getRange("I:K").format.columnWidthPx = 150;
-exportSheet.getRange("L:M").format.columnWidthPx = 120;
-exportSheet.getRange("N:Q").format.columnWidthPx = 220;
-exportSheet.getRange("R:AL").format.columnWidthPx = 150;
+exportSheet.getRange("I:AL").format.columnWidthPx = 150;
 exportSheet.tables.add(`A1:AL${maxRows + 1}`, true, "PhotoSyncExportTable");
 
 guideSheet.getRange("A1:F1").merge();
