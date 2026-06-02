@@ -118,6 +118,7 @@ var SPECIES_DATA = {
 // - project:     project slug, e.g. "herons" — adds photo to that project gallery
 // - species:     scientific name, e.g. "Ardea herodias" — links photo to species card
 // - location:    location slug, e.g. "sweetwater-wetland-preserve" — adds photo to a place gallery
+// - usage:       special page use, e.g. "about" — keeps a photo in admin but out of public galleries
 var LOCATIONS_DATA = [
   {
     slug: "sweetwater-wetland-preserve",
@@ -186,8 +187,9 @@ var GALLERY_IMAGES = [
   {
     id: 7,
     src: "https://live.staticflickr.com/65535/55250254275_f0fc9c0970_b.jpg",
-    alt: "Photography by Brandon Alley",
-    is_featured: true,
+    alt: "Brandon Alley - photographer",
+    is_featured: false,
+    usage: "about",
   },
   {
     id: 8,

@@ -31,6 +31,10 @@ function alignInitialHashTarget() {
   state.hasAlignedInitialHash = true;
 }
 
+function getPublicGalleryImages() {
+  return GALLERY_IMAGES.filter((image) => image.usage !== "about");
+}
+
 function initializeGallery() {
   if (dom.yearNode) dom.yearNode.textContent = new Date().getFullYear();
 
@@ -41,7 +45,7 @@ function initializeGallery() {
     window.addEventListener("hashchange", renderLocationsPage);
   }
 
-  state.orderedGalleryImages = normalizeGalleryImages(seededShuffle(GALLERY_IMAGES, "v1"));
+  state.orderedGalleryImages = normalizeGalleryImages(seededShuffle(getPublicGalleryImages(), "v1"));
 
   renderCurrentPageGallery();
   initializeScrollReveal();

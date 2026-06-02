@@ -42,6 +42,11 @@
     return 'Update photo #' + photo.id + ': ';
   }
 
+  function getUsageLabel(photo) {
+    if (photo.usage === 'about') return 'About page';
+    return 'Gallery photo';
+  }
+
   const selectedPhotoIds = new Set();
 
   function getProjectOptions() {
@@ -140,6 +145,9 @@
   function buildBadges(photo) {
     const badges = [];
     badges.push('<span class="admin-badge admin-badge--location">' + escapeHtml(getLocationName(photo.location)) + '</span>');
+    if (photo.usage === 'about') {
+      badges.push('<span class="admin-badge admin-badge--usage">About page</span>');
+    }
     if (photo.is_featured) {
       badges.push('<span class="admin-badge admin-badge--featured">Featured</span>');
     }
@@ -169,6 +177,7 @@
       article.dataset.project = photo.project || '';
       article.dataset.location = photo.location || '';
       article.dataset.featured = photo.is_featured ? 'true' : 'false';
+      article.dataset.usage = photo.usage || 'gallery';
 
       const thumb = thumbUrl(photo.src);
       const flickrUrl = getFlickrUrl(photo);
@@ -196,6 +205,7 @@
             '<div><dt>Location</dt><dd>' + escapeHtml(getLocationName(photo.location)) + '</dd></div>' +
             '<div><dt>Project</dt><dd>' + escapeHtml(photo.project || 'None') + '</dd></div>' +
             '<div><dt>Featured</dt><dd>' + (photo.is_featured ? 'Yes' : 'No') + '</dd></div>' +
+            '<div><dt>Use</dt><dd>' + escapeHtml(getUsageLabel(photo)) + '</dd></div>' +
           '</dl>' +
           '<div class="admin-copy-actions">' +
             '<button class="admin-copy-btn admin-add-prompt-btn" type="button" data-photo-id="' + photo.id + '">Add to prompt</button>' +

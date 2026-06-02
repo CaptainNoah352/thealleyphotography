@@ -315,6 +315,11 @@ body {
   color: var(--a-sage-dark);
 }
 
+.admin-badge--usage {
+  background: rgba(28, 16, 6, 0.12);
+  color: var(--a-text);
+}
+
 .admin-meta-species {
   font-size: 0.78rem;
   color: var(--a-muted);

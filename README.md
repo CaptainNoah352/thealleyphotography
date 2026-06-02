@@ -40,13 +40,14 @@ The panel is **read-only** — it shows what's in `photo-data.js`. To change any
 
 **Filters:**
 - **Project** — show only photos in a specific project (e.g., "herons")
+- **Location** — show only photos assigned to a specific location
 - **Featured** — show only photos marked as carousel-featured
 
 ---
 
 ## Photo Reference Numbers
 
-Every photo has a stable `id` number (1–25 for the current set). These numbers:
+Every photo has a stable `id` number. These numbers:
 
 - **Never change** — even if you reorder or delete other photos
 - **Are never reused** — a deleted photo's number stays retired
@@ -68,6 +69,8 @@ All photo data lives in the `GALLERY_IMAGES` array in `photo-data.js`.
 | `is_featured` | No | `true` = included in the homepage carousel |
 | `project` | No | Project slug (e.g. `"herons"`) — adds the photo to that project gallery |
 | `species` | No | Scientific name (e.g. `"Ardea herodias"`) — links the photo to its species card in Projects |
+| `location` | No | Location slug (e.g. `"sweetwater-wetland-preserve"`) — adds the photo to that location gallery |
+| `usage` | No | Special page use. Use `"about"` for the About-page portrait so it stays visible in admin but out of public galleries. |
 
 **Example:**
 ```js
@@ -78,8 +81,11 @@ All photo data lives in the `GALLERY_IMAGES` array in `photo-data.js`.
   is_featured: true,
   project: "herons",
   species: "Ardea herodias",
+  location: "sweetwater-wetland-preserve",
 },
 ```
+
+Photo #7 is the About-page portrait. Keep `usage: "about"` on that photo and do not use it as a normal featured/gallery photo unless the About portrait is being changed.
 
 ---
 
