@@ -85,91 +85,34 @@ All photo data lives in the `GALLERY_IMAGES` array in `photo-data.js`.
 
 ## Workflows
 
-### Controlled Photo Publishing Workflow
+### Photo Publishing Workflow
 
-Use this workflow whenever the user says **"update photos"**, **"update spreadsheet from Flickr"**, or **"update repo from the sheet"**.
-
-```text
-Lightroom -> Flickr -> Spreadsheet Intake -> Manual Review -> Repo Sync -> Admin/Site Verification -> Report
-```
-
-Flickr is only the intake source. The Google Sheet is the control center. The repo should only publish photos that the spreadsheet explicitly marks as approved.
-
-Live Google Sheet:
+Use this workflow whenever the user says **"update photos"**.
 
 ```text
-Brandon_Alley_Photo_Organizer
-https://docs.google.com/spreadsheets/d/1dShWCUHNf5BEVv39rSGAmKBccVjT7gfL815aFy_ibtk/edit
+Lightroom -> Flickr -> Repo Photo Data -> Admin Review -> Codex Prompt Builder -> Site Verification -> Report
 ```
 
-#### Command: Update Spreadsheet From Flickr
+Flickr is the image host. `photo-data.js` is the source of truth. `admin.html` is the visual organizer and prompt builder.
 
-When the user asks to update the spreadsheet from Flickr:
+#### Command: Update Photos From Flickr
 
-1. Run the Flickr intake helper:
+When the user asks to update photos:
 
-   ```powershell
-   npm.cmd run intake:flickr
-   ```
-
-2. Review `outputs/photo-organizer/Flickr_Intake.tsv`.
-3. Append the prepared rows to the live Google Sheet `Photo Organizer` tab.
-   - The TSV is ordered for the current `Photo Organizer` columns.
-   - The `Preview Image` cell includes a Google Sheets `IMAGE()` formula so thumbnails render after paste.
-4. New Flickr rows must keep these defaults:
-   - `Publish Status`: `Needs Review`
-   - `Featured`: `FALSE`
-   - `Folder (Location)`: `Unassigned` unless the user explicitly provided it
-   - `Project`, `Species`, `Category`: blank unless the user explicitly provided them
-   - `Photo ID`: blank until repo sync publishes the row
-
-The intake helper compares Flickr IDs against the current sheet export and does not prepare duplicate rows.
-
-If a pasted row needs to be repaired, regenerate rows for specific Flickr URLs:
-
-```powershell
-npm.cmd run intake:flickr -- --urls "FLICKR_URL_1,FLICKR_URL_2"
-```
-
-#### Manual Review Fields
-
-The spreadsheet controls publishing through these fields:
-
-| Column | Purpose |
-|---|---|
-| `Publish Status` | `Needs Review`, `Approved`, `Published`, `Hidden`, or `Do Not Publish` |
-| `Folder (Location)` | Website location gallery |
-| `Category` | Optional category/section label |
-| `Featured` | Homepage featured carousel control |
-| `Homepage Order` | Optional manual ordering |
-| `Portfolio Order` | Optional manual ordering |
-| `Alt Text` | Preferred site alt text |
-| `Caption` | Preferred photo caption |
-| `Display Title` | Optional display title |
-| `Project` | Project gallery slug, e.g. `herons` |
-| `Species` | Species link, e.g. `Ardea herodias` |
-| EXIF columns | Camera/settings data displayed on the site |
-
-Only rows with `Publish Status` set to `Approved` or `Published` are eligible for repo sync. Rows marked `Needs Review`, `Hidden`, or `Do Not Publish` are skipped.
-
-#### Command: Update Repo From Sheet
-
-When the user asks to update the repo from the sheet:
-
-1. Preview the Google Sheet changes:
+1. Pull new Flickr photos directly into the repo:
 
    ```powershell
-   npm.cmd run sync:sheet
+   npm.cmd run update:photos
    ```
 
-2. Review the JSON report for new photos, updated photos, skipped rows, and missing required fields.
-3. Apply only if the preview is correct:
+2. New Flickr photos are added with these defaults:
+   - `is_featured: false`
+   - no `location`
+   - no `project`
+   - no `species`
+   - metadata and camera settings are saved when Flickr exposes them
 
-   ```powershell
-   npm.cmd run sync:sheet:apply
-   ```
-
-4. Run checks:
+3. Run checks:
 
    ```powershell
    node --check photo-data.js
@@ -183,44 +126,22 @@ When the user asks to update the repo from the sheet:
    node --check script.js
    ```
 
-5. Verify the admin panel and site sections:
-   - approved photos appear in `admin.html`
-   - approved location photos appear in `locations.html`
-   - approved project/species photos appear in `projects.html`
-   - featured photos appear in the homepage carousel only when `Featured` is true
-   - skipped rows remain unpublished
+4. Verify the admin panel and site sections:
+   - new photos appear in `admin.html`
+   - unassigned photos can be found with the Location filter
+   - location photos appear in `locations.html` after a location is assigned
+   - project/species photos appear in `projects.html` after project/species fields are assigned
+   - featured photos appear in the homepage carousel only when `is_featured` is true
 
-6. Give the user a short report with:
+5. Give the user a short report with:
    - new Flickr photos found
-   - rows added to the sheet
-   - photos needing review
-   - approved photos published
-   - skipped rows and reasons
+   - photo numbers added
+   - default status/placement
    - duplicate photos found
    - broken image URLs or missing required fields
    - files changed
 
-#### Google Sheet CSV Access
-
-The sync scripts read the public `Export_Sync` CSV from Google Sheets. If access breaks, make sure the sheet is shared as **Viewer** for anyone with the link, or publish only the `Export_Sync` tab to the web as CSV.
-
-With a custom published CSV URL:
-
-```powershell
-node tools/sync-google-sheet.mjs --csv-url "PASTE_CSV_URL_HERE" --apply
-```
-
-### Legacy Direct Flickr Add
-
-1. Upload your photos to Flickr as usual.
-2. Copy the Flickr page URLs for the new photos (e.g. `https://www.flickr.com/photos/204244048@N05/12345678901/`).
-3. Tell Claude:
-
-   > "Add new photos from my Flickr. Here are the photo page URLs: [paste URLs]"
-
-This direct-to-repo workflow is no longer preferred. Use **Update Spreadsheet From Flickr** first, then publish only reviewed and approved rows from the spreadsheet.
-
-**Tip:** You can also paste the direct `_b.jpg` image URLs if you already have them from Flickr's "All sizes" page or the embed code.
+After new photos are added, open `admin.html`, select photos visually, choose one or more prompt actions, and copy the generated Codex prompt.
 
 ---
 

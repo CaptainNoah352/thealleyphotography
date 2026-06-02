@@ -92,7 +92,18 @@
       <p>Photo data lives in <code>photo-data.js</code>. This admin panel is a visual reference and prompt builder for Codex.</p>
     </footer>
 
-    <script src="photo-data.js"></script>
-    <script src="admin.js"></script>
+    <script>
+      (function () {
+        var cacheBust = String(Date.now());
+        var dataScript = document.createElement("script");
+        dataScript.src = "photo-data.js?v=" + cacheBust;
+        dataScript.onload = function () {
+          var adminScript = document.createElement("script");
+          adminScript.src = "admin.js?v=" + cacheBust;
+          document.body.appendChild(adminScript);
+        };
+        document.body.appendChild(dataScript);
+      }());
+    </script>
   </body>
 </html>

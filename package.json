@@ -7,6 +7,7 @@
     "preview": "python -m http.server 3000",
     "check:js": "node --check script.js",
     "fetch:flickr-metadata": "node tools/fetch-flickr-metadata.js",
+    "update:photos": "node tools/update-photos-from-flickr.mjs --apply",
     "intake:flickr": "node tools/intake-flickr-to-sheet.mjs",
     "sync:sheet": "node tools/sync-google-sheet.mjs",
     "sync:sheet:apply": "node tools/sync-google-sheet.mjs --apply"

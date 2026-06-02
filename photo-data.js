@@ -436,6 +436,36 @@ var GALLERY_IMAGES = [
     is_featured: true,
     location: "sweetwater-wetland-preserve",
   },
+  {
+    id: 43,
+    src: "https://live.staticflickr.com/65535/55305852735_69175cfc76_b.jpg",
+    alt: "Photography by Brandon Alley",
+    is_featured: false,
+  },
+  {
+    id: 44,
+    src: "https://live.staticflickr.com/65535/55304540062_e03d7d65eb_b.jpg",
+    alt: "Photography by Brandon Alley",
+    is_featured: false,
+  },
+  {
+    id: 45,
+    src: "https://live.staticflickr.com/65535/55305852450_36b2693b9b_b.jpg",
+    alt: "Photography by Brandon Alley",
+    is_featured: false,
+  },
+  {
+    id: 46,
+    src: "https://live.staticflickr.com/65535/55305677989_996cc83289_b.jpg",
+    alt: "Photography by Brandon Alley",
+    is_featured: false,
+  },
+  {
+    id: 47,
+    src: "https://live.staticflickr.com/65535/55305597813_f25081a18e_b.jpg",
+    alt: "Photography by Brandon Alley",
+    is_featured: false,
+  },
 ];
 
 var FLICKR_METADATA = {
@@ -481,6 +511,11 @@ var FLICKR_METADATA = {
   40: { flickrId: "55283878268", title: "BrandonAlleyPhotography_SweetwaterWetlandPark_2026051771.jpg", dateTaken: "2026-05-17 15:02:58", width: "1024", height: "683" },
   41: { flickrId: "55283735431", title: "BrandonAlleyPhotography_SweetwaterWetlandPark_2026051751.jpg", dateTaken: "2026-05-17 15:00:09", width: "1024", height: "683" },
   42: { flickrId: "55283878123", title: "BrandonAlleyPhotography_SweetwaterWetlandPark_2026051740.jpg", dateTaken: "2026-05-17 14:59:48", width: "1024", height: "683" },
+  43: { flickrId: "55305852735", title: "BrandonAlleyPhotography_untitled shoot_202605211418.jpg", dateTaken: "2026-05-21 19:22:19", width: "819", height: "1024" },
+  44: { flickrId: "55304540062", title: "BrandonAlleyPhotography_untitled shoot_202605211263.jpg", dateTaken: "2026-05-21 19:11:43", width: "1024", height: "683" },
+  45: { flickrId: "55305852450", title: "BrandonAlleyPhotography_untitled shoot_20260521767.jpg", dateTaken: "2026-05-21 15:20:02", width: "683", height: "1024" },
+  46: { flickrId: "55305677989", title: "BrandonAlleyPhotography_untitled shoot_20260521511.jpg", dateTaken: "2026-05-21 15:07:54", width: "1024", height: "683" },
+  47: { flickrId: "55305597813", title: "BrandonAlleyPhotography_untitled shoot_20260521500.jpg", dateTaken: "2026-05-21 15:07:39", width: "1024", height: "683" },
 };
 
 var FLICKR_CAMERA_METADATA = {
@@ -526,4 +561,9 @@ var FLICKR_CAMERA_METADATA = {
   40: { camera: "Canon EOS R100", shutter: "1/250", iso: "100", flash: "Flash (off, did not fire)", exposureMode: "Auto", meteringMode: "Multi-segment", whiteBalance: "Auto" },
   41: { camera: "Canon EOS R100", shutter: "1/200", iso: "500", flash: "Flash (off, did not fire)", exposureMode: "Manual", meteringMode: "Multi-segment", whiteBalance: "Auto" },
   42: { camera: "Canon EOS R100", shutter: "1/200", iso: "500", flash: "Flash (off, did not fire)", exposureMode: "Manual", meteringMode: "Multi-segment", whiteBalance: "Auto" },
+  43: { camera: "Canon EOS R100", lens: "RF50mm F1.8 STM", shutter: "1/80", aperture: "f/22.0", iso: "160", focalLength: "50 mm", flash: "Flash (off, did not fire)", exposureMode: "Auto", meteringMode: "Multi-segment", whiteBalance: "Auto" },
+  44: { camera: "Canon EOS R100", lens: "RF50mm F1.8 STM", shutter: "1/640", aperture: "f/2.8", iso: "100", focalLength: "50 mm", flash: "Flash (off, did not fire)", exposureMode: "Manual", meteringMode: "Multi-segment", whiteBalance: "Auto" },
+  45: { camera: "Canon EOS R100", shutter: "1/4000", iso: "250", flash: "Flash (off, did not fire)", exposureMode: "Auto", meteringMode: "Multi-segment", whiteBalance: "Auto" },
+  46: { camera: "Canon EOS R100", shutter: "1/4000", iso: "125", flash: "Flash (off, did not fire)", exposureMode: "Auto", meteringMode: "Multi-segment", whiteBalance: "Auto" },
+  47: { camera: "Canon EOS R100", shutter: "1/4000", iso: "100", flash: "Flash (off, did not fire)", exposureMode: "Auto", meteringMode: "Multi-segment", whiteBalance: "Auto" },
 };
