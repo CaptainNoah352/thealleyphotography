@@ -42,6 +42,18 @@
     return 'Update photo #' + photo.id + ': ';
   }
 
+  const selectedPhotoIds = new Set();
+
+  function getProjectOptions() {
+    if (typeof GALLERY_IMAGES === 'undefined') return ['herons'];
+    return [...new Set(GALLERY_IMAGES.map(function (photo) { return photo.project || ''; }))].sort();
+  }
+
+  function getLocationOptions() {
+    if (typeof GALLERY_IMAGES === 'undefined') return [''];
+    return [...new Set(GALLERY_IMAGES.map(function (photo) { return photo.location || ''; }))].sort();
+  }
+
   function formatFlickrDate(value) {
     if (!value) return '';
     const date = new Date(String(value).replace(' ', 'T'));
@@ -116,7 +128,7 @@
     const select = document.getElementById('filterLocation');
     if (!select || typeof GALLERY_IMAGES === 'undefined') return;
 
-    const locations = [...new Set(GALLERY_IMAGES.map(function (photo) { return photo.location || ''; }))].sort();
+    const locations = getLocationOptions();
     locations.forEach(function (location) {
       const option = document.createElement('option');
       option.value = location;
@@ -186,6 +198,7 @@
             '<div><dt>Featured</dt><dd>' + (photo.is_featured ? 'Yes' : 'No') + '</dd></div>' +
           '</dl>' +
           '<div class="admin-copy-actions">' +
+            '<button class="admin-copy-btn admin-add-prompt-btn" type="button" data-photo-id="' + photo.id + '">Add to prompt</button>' +
             '<button class="admin-copy-btn" type="button" data-copy-text="' + escapeAttr(String(photo.id)) + '">Copy #</button>' +
             '<button class="admin-copy-btn" type="button" data-copy-text="' + escapeAttr(codexPrompt) + '">Copy prompt</button>' +
             (flickrUrl ? '<button class="admin-copy-btn" type="button" data-copy-text="' + escapeAttr(flickrUrl) + '">Copy Flickr</button>' : '') +
@@ -233,6 +246,79 @@
     if (el) el.textContent = 'Showing ' + visible + ' of ' + total + ' photos';
   }
 
+  // Prompt builder
+
+  function setPromptValueOptions() {
+    const action = document.getElementById('promptAction');
+    const value = document.getElementById('promptValue');
+    if (!action || !value) return;
+
+    let options = [];
+    if (action.value === 'project') {
+      options = getProjectOptions().map(function (project) {
+        return { value: project, label: project || 'No project' };
+      });
+    } else if (action.value === 'location') {
+      options = getLocationOptions().map(function (location) {
+        return { value: location, label: getLocationName(location) };
+      });
+    } else {
+      options = [
+        { value: 'true', label: 'Featured' },
+        { value: 'false', label: 'Not featured' }
+      ];
+    }
+
+    value.innerHTML = options.map(function (option) {
+      return '<option value="' + escapeAttr(option.value) + '">' + escapeHtml(option.label) + '</option>';
+    }).join('');
+  }
+
+  function selectedIdsText() {
+    return Array.from(selectedPhotoIds)
+      .sort(function (a, b) { return Number(a) - Number(b); })
+      .map(function (id) { return '#' + id; })
+      .join(', ');
+  }
+
+  function buildGroupPrompt() {
+    const action = document.getElementById('promptAction');
+    const value = document.getElementById('promptValue');
+    if (!action || !value || !selectedPhotoIds.size) return '';
+
+    const ids = selectedIdsText();
+    if (action.value === 'project') {
+      return 'Update photos ' + ids + ': set project to ' + (value.value || 'none') + '.';
+    }
+    if (action.value === 'location') {
+      return 'Update photos ' + ids + ': set location to ' + getLocationName(value.value) + '.';
+    }
+    return 'Update photos ' + ids + ': set featured to ' + (value.value === 'true' ? 'true' : 'false') + '.';
+  }
+
+  function updatePromptPanel() {
+    const count = document.getElementById('promptCount');
+    const text = document.getElementById('promptText');
+    if (count) count.textContent = selectedPhotoIds.size + ' selected';
+    if (text) text.value = buildGroupPrompt();
+
+    document.querySelectorAll('.admin-card').forEach(function (card) {
+      const isSelected = selectedPhotoIds.has(card.dataset.id);
+      card.dataset.selected = isSelected ? 'true' : 'false';
+      const button = card.querySelector('.admin-add-prompt-btn');
+      if (button) button.textContent = isSelected ? 'Remove from prompt' : 'Add to prompt';
+    });
+  }
+
+  function togglePromptPhoto(photoId) {
+    if (selectedPhotoIds.has(photoId)) {
+      selectedPhotoIds.delete(photoId);
+    } else {
+      selectedPhotoIds.add(photoId);
+    }
+    updatePromptPanel();
+  }
+
   // Interactions
 
   function flashCopied(btn) {
@@ -265,6 +351,12 @@
       return;
     }
 
+    const addPromptBtn = event.target.closest('.admin-add-prompt-btn');
+    if (addPromptBtn) {
+      togglePromptPhoto(addPromptBtn.dataset.photoId);
+      return;
+    }
+
     const copyBtn = event.target.closest('.admin-copy-btn');
     if (!copyBtn) return;
     const text = copyBtn.dataset.copyText;
@@ -290,11 +382,47 @@
   const filterProject = document.getElementById('filterProject');
   const filterLocation = document.getElementById('filterLocation');
   const filterFeatured = document.getElementById('filterFeatured');
+  const promptAction = document.getElementById('promptAction');
+  const promptValue = document.getElementById('promptValue');
+  const copyPromptGroup = document.getElementById('copyPromptGroup');
+  const clearPromptGroup = document.getElementById('clearPromptGroup');
   if (filterProject) filterProject.addEventListener('change', applyFilters);
   if (filterLocation) filterLocation.addEventListener('change', applyFilters);
   if (filterFeatured) filterFeatured.addEventListener('change', applyFilters);
+  if (promptAction) {
+    promptAction.addEventListener('change', function () {
+      setPromptValueOptions();
+      updatePromptPanel();
+    });
+  }
+  if (promptValue) promptValue.addEventListener('change', updatePromptPanel);
+  if (copyPromptGroup) {
+    copyPromptGroup.addEventListener('click', function () {
+      const text = document.getElementById('promptText');
+      if (!text || !text.value) return;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text.value).then(function () {
+          flashCopied(copyPromptGroup);
+        }).catch(function () {
+          copyTextFallback(text.value);
+          flashCopied(copyPromptGroup);
+        });
+        return;
+      }
+      copyTextFallback(text.value);
+      flashCopied(copyPromptGroup);
+    });
+  }
+  if (clearPromptGroup) {
+    clearPromptGroup.addEventListener('click', function () {
+      selectedPhotoIds.clear();
+      updatePromptPanel();
+    });
+  }
 
   buildProjectFilter();
   buildLocationFilter();
+  setPromptValueOptions();
   renderCards();
+  updatePromptPanel();
 }());

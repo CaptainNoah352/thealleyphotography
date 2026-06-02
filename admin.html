@@ -45,6 +45,34 @@
       <div class="admin-grid" id="adminGrid"></div>
     </main>
 
+    <aside class="admin-prompt-panel" aria-label="Codex prompt builder">
+      <div class="admin-prompt-header">
+        <div>
+          <p class="admin-prompt-eyebrow">Codex prompt</p>
+          <h2>Selected photos</h2>
+        </div>
+        <span class="admin-prompt-count" id="promptCount">0 selected</span>
+      </div>
+
+      <label class="admin-filter-label" for="promptAction">Action</label>
+      <select id="promptAction" class="admin-select admin-prompt-select">
+        <option value="project">Set project</option>
+        <option value="location">Set location</option>
+        <option value="featured">Set featured</option>
+      </select>
+
+      <label class="admin-filter-label" for="promptValue">Value</label>
+      <select id="promptValue" class="admin-select admin-prompt-select"></select>
+
+      <label class="admin-filter-label" for="promptText">Prompt</label>
+      <textarea id="promptText" class="admin-prompt-text" rows="4" readonly></textarea>
+
+      <div class="admin-prompt-actions">
+        <button class="admin-copy-btn" type="button" id="copyPromptGroup">Copy prompt</button>
+        <button class="admin-copy-btn" type="button" id="clearPromptGroup">Clear</button>
+      </div>
+    </aside>
+
     <footer class="admin-footer">
       <p>To update a photo, tell Claude: <strong>"Update photo #[number]: [what to change]"</strong></p>
       <p>Photo data lives in <code>photo-data.js</code>. The admin panel is read-only.</p>

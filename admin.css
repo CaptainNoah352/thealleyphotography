@@ -127,6 +127,11 @@ body {
   box-shadow: 0 4px 16px rgba(196, 82, 42, 0.12);
 }
 
+.admin-card[data-selected="true"] {
+  border-color: var(--a-terracotta);
+  box-shadow: 0 0 0 2px rgba(196, 82, 42, 0.2);
+}
+
 .admin-card[hidden] {
   display: none;
 }
@@ -352,6 +357,12 @@ body {
   gap: 0.35rem;
 }
 
+.admin-add-prompt-btn {
+  background: var(--a-sage);
+  border-color: var(--a-sage);
+  color: #fff;
+}
+
 /* URL actions */
 .admin-meta-url {
   margin-top: auto;
@@ -398,6 +409,78 @@ body {
 .admin-copy-btn:focus-visible {
   outline: 2px solid var(--a-terracotta);
   outline-offset: 2px;
+}
+
+/* Floating prompt builder */
+.admin-prompt-panel {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 20;
+  width: min(25rem, calc(100vw - 2rem));
+  background: var(--a-card-bg);
+  border: 1px solid rgba(46, 66, 40, 0.28);
+  box-shadow: 0 12px 32px rgba(28, 16, 6, 0.18);
+  padding: 0.9rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.admin-prompt-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.admin-prompt-eyebrow {
+  color: var(--a-muted);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.admin-prompt-header h2 {
+  color: var(--a-text);
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.admin-prompt-count {
+  color: var(--a-terracotta);
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.admin-prompt-select {
+  width: 100%;
+}
+
+.admin-prompt-text {
+  width: 100%;
+  min-height: 5.25rem;
+  resize: vertical;
+  background: rgba(238, 228, 210, 0.72);
+  border: 1px solid rgba(196, 82, 42, 0.3);
+  color: var(--a-text);
+  font-family: var(--a-mono);
+  font-size: 0.72rem;
+  line-height: 1.45;
+  padding: 0.5rem;
+}
+
+.admin-prompt-text:focus {
+  outline: 2px solid var(--a-terracotta);
+  outline-offset: 1px;
+}
+
+.admin-prompt-actions {
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
 }
 
 /* Empty / error state */
@@ -454,5 +537,13 @@ body {
 
   .admin-header {
     padding: 0.75rem 1rem;
+  }
+
+  .admin-prompt-panel {
+    position: sticky;
+    right: auto;
+    bottom: auto;
+    width: auto;
+    margin: 1rem;
   }
 }
