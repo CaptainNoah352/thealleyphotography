@@ -305,10 +305,51 @@ body {
   color: #fff;
 }
 
+.admin-badge--location {
+  background: rgba(46, 66, 40, 0.12);
+  color: var(--a-sage-dark);
+}
+
 .admin-meta-species {
   font-size: 0.78rem;
   color: var(--a-muted);
   font-style: italic;
+}
+
+/* Organizer details */
+.admin-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem;
+  padding: 0.55rem 0;
+  border-top: 1px solid var(--a-card-border);
+  border-bottom: 1px solid var(--a-card-border);
+}
+
+.admin-details div {
+  min-width: 0;
+}
+
+.admin-details dt {
+  color: var(--a-muted);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.admin-details dd {
+  color: var(--a-text);
+  font-size: 0.78rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.admin-copy-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
 }
 
 /* URL actions */
@@ -338,6 +379,13 @@ body {
   cursor: pointer;
   letter-spacing: 0.06em;
   transition: background 0.12s ease, color 0.12s ease;
+}
+
+.admin-copy-btn--header {
+  border-color: rgba(255, 255, 255, 0.72);
+  color: #fff;
+  flex-shrink: 0;
+  padding: 0.22rem 0.55rem;
 }
 
 .admin-copy-btn:hover,
