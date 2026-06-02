@@ -459,6 +459,30 @@ body {
   width: 100%;
 }
 
+.admin-prompt-options {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.admin-prompt-option {
+  display: grid;
+  grid-template-columns: auto 4.7rem minmax(0, 1fr);
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.admin-prompt-option input {
+  accent-color: var(--a-terracotta);
+}
+
+.admin-prompt-option span {
+  color: var(--a-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .admin-prompt-text {
   width: 100%;
   min-height: 5.25rem;

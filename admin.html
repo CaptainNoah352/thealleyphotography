@@ -54,15 +54,28 @@
         <span class="admin-prompt-count" id="promptCount">0 selected</span>
       </div>
 
-      <label class="admin-filter-label" for="promptAction">Action</label>
-      <select id="promptAction" class="admin-select admin-prompt-select">
-        <option value="project">Set project</option>
-        <option value="location">Set location</option>
-        <option value="featured">Set featured</option>
-      </select>
+      <div class="admin-prompt-options" aria-label="Prompt actions">
+        <label class="admin-prompt-option">
+          <input type="checkbox" id="promptUseProject" />
+          <span>Project</span>
+          <select id="promptProjectValue" class="admin-select admin-prompt-select"></select>
+        </label>
 
-      <label class="admin-filter-label" for="promptValue">Value</label>
-      <select id="promptValue" class="admin-select admin-prompt-select"></select>
+        <label class="admin-prompt-option">
+          <input type="checkbox" id="promptUseLocation" />
+          <span>Location</span>
+          <select id="promptLocationValue" class="admin-select admin-prompt-select"></select>
+        </label>
+
+        <label class="admin-prompt-option">
+          <input type="checkbox" id="promptUseFeatured" />
+          <span>Featured</span>
+          <select id="promptFeaturedValue" class="admin-select admin-prompt-select">
+            <option value="true">Featured</option>
+            <option value="false">Not featured</option>
+          </select>
+        </label>
+      </div>
 
       <label class="admin-filter-label" for="promptText">Prompt</label>
       <textarea id="promptText" class="admin-prompt-text" rows="4" readonly></textarea>
@@ -74,8 +87,8 @@
     </aside>
 
     <footer class="admin-footer">
-      <p>Use <strong>Add to prompt</strong> to group photos, choose an action, then copy the Codex prompt.</p>
-      <p>Examples: <strong>"set project to herons"</strong>, <strong>"set location to Silver River"</strong>, or <strong>"set featured to true"</strong>.</p>
+      <p>Use <strong>Add to prompt</strong> to group photos, choose one or more actions, then copy the Codex prompt.</p>
+      <p>Examples: <strong>"set location to Silver River; set featured to true"</strong> or <strong>"set project to herons"</strong>.</p>
       <p>Photo data lives in <code>photo-data.js</code>. This admin panel is a visual reference and prompt builder for Codex.</p>
     </footer>
 

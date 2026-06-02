@@ -248,30 +248,27 @@
 
   // Prompt builder
 
-  function setPromptValueOptions() {
-    const action = document.getElementById('promptAction');
-    const value = document.getElementById('promptValue');
-    if (!action || !value) return;
-
-    let options = [];
-    if (action.value === 'project') {
-      options = getProjectOptions().map(function (project) {
-        return { value: project, label: project || 'No project' };
-      });
-    } else if (action.value === 'location') {
-      options = getLocationOptions().map(function (location) {
-        return { value: location, label: getLocationName(location) };
-      });
-    } else {
-      options = [
-        { value: 'true', label: 'Featured' },
-        { value: 'false', label: 'Not featured' }
-      ];
-    }
-
-    value.innerHTML = options.map(function (option) {
+  function setSelectOptions(select, options) {
+    if (!select) return;
+    select.innerHTML = options.map(function (option) {
       return '<option value="' + escapeAttr(option.value) + '">' + escapeHtml(option.label) + '</option>';
     }).join('');
+  }
+
+  function setPromptValueOptions() {
+    setSelectOptions(
+      document.getElementById('promptProjectValue'),
+      getProjectOptions().map(function (project) {
+        return { value: project, label: project || 'No project' };
+      })
+    );
+
+    setSelectOptions(
+      document.getElementById('promptLocationValue'),
+      getLocationOptions().map(function (location) {
+        return { value: location, label: getLocationName(location) };
+      })
+    );
   }
 
   function selectedIdsText() {
@@ -282,18 +279,29 @@
   }
 
   function buildGroupPrompt() {
-    const action = document.getElementById('promptAction');
-    const value = document.getElementById('promptValue');
-    if (!action || !value || !selectedPhotoIds.size) return '';
+    if (!selectedPhotoIds.size) return '';
 
     const ids = selectedIdsText();
-    if (action.value === 'project') {
-      return 'Update photos ' + ids + ': set project to ' + (value.value || 'none') + '.';
+    const actions = [];
+    const useProject = document.getElementById('promptUseProject');
+    const projectValue = document.getElementById('promptProjectValue');
+    const useLocation = document.getElementById('promptUseLocation');
+    const locationValue = document.getElementById('promptLocationValue');
+    const useFeatured = document.getElementById('promptUseFeatured');
+    const featuredValue = document.getElementById('promptFeaturedValue');
+
+    if (useProject && useProject.checked && projectValue) {
+      actions.push('set project to ' + (projectValue.value || 'none'));
     }
-    if (action.value === 'location') {
-      return 'Update photos ' + ids + ': set location to ' + getLocationName(value.value) + '.';
+    if (useLocation && useLocation.checked && locationValue) {
+      actions.push('set location to ' + getLocationName(locationValue.value));
     }
-    return 'Update photos ' + ids + ': set featured to ' + (value.value === 'true' ? 'true' : 'false') + '.';
+    if (useFeatured && useFeatured.checked && featuredValue) {
+      actions.push('set featured to ' + (featuredValue.value === 'true' ? 'true' : 'false'));
+    }
+
+    if (!actions.length) return '';
+    return 'Update photos ' + ids + ': ' + actions.join('; ') + '.';
   }
 
   function updatePromptPanel() {
@@ -382,20 +390,22 @@
   const filterProject = document.getElementById('filterProject');
   const filterLocation = document.getElementById('filterLocation');
   const filterFeatured = document.getElementById('filterFeatured');
-  const promptAction = document.getElementById('promptAction');
-  const promptValue = document.getElementById('promptValue');
+  const promptControls = [
+    document.getElementById('promptUseProject'),
+    document.getElementById('promptProjectValue'),
+    document.getElementById('promptUseLocation'),
+    document.getElementById('promptLocationValue'),
+    document.getElementById('promptUseFeatured'),
+    document.getElementById('promptFeaturedValue')
+  ];
   const copyPromptGroup = document.getElementById('copyPromptGroup');
   const clearPromptGroup = document.getElementById('clearPromptGroup');
   if (filterProject) filterProject.addEventListener('change', applyFilters);
   if (filterLocation) filterLocation.addEventListener('change', applyFilters);
   if (filterFeatured) filterFeatured.addEventListener('change', applyFilters);
-  if (promptAction) {
-    promptAction.addEventListener('change', function () {
-      setPromptValueOptions();
-      updatePromptPanel();
-    });
-  }
-  if (promptValue) promptValue.addEventListener('change', updatePromptPanel);
+  promptControls.forEach(function (control) {
+    if (control) control.addEventListener('change', updatePromptPanel);
+  });
   if (copyPromptGroup) {
     copyPromptGroup.addEventListener('click', function () {
       const text = document.getElementById('promptText');
